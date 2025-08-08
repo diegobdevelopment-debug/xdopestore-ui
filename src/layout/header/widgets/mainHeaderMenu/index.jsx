@@ -14,13 +14,8 @@ const MainHeaderMenu = () => {
     select: (res) => {
       // Extract the menu items from the API response
       const originalData = res.data.data;
-      // Define the menu items we want to keep
-      const allowedMenuTitles = ["Home"]
-      // Filter the original data to keep only allowed menu items
-      const filteredData = originalData.filter((item) => allowedMenuTitles.includes(item.title));
-
-      // Optionally add or update properties on the remaining items. Not well understood 
-      const modifiedData = filteredData.map((item) => ({
+      // Optionally add or update properties on the remaining items. Not well understood
+      const modifiedData = originalData.map((item) => ({
         ...item,
         class: "0",
       }));
