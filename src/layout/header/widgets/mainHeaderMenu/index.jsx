@@ -12,12 +12,15 @@ const MainHeaderMenu = () => {
     fetchStatus,
   } = useFetchQuery(["menu"], () => request({ url: "/menu" }), {
     select: (res) => {
+      // Extract the menu items from the API response
       const originalData = res.data.data;
+      // Optionally add or update properties on the remaining items. Not well understood
       const modifiedData = originalData.map((item) => ({
         ...item,
-        class: `${["Product", "Mega Menu"].includes(item.title) ? 1 : 0}`,
+        class: "0",
       }));
 
+      // Return filtered and modified list of menu items
       return modifiedData;
     },
     refetchOnWindowFocus: true,
