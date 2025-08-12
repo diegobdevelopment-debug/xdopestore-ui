@@ -70,9 +70,6 @@ const HeaderOne = () => {
                     <div className="icon-nav">
                       <ul>
                         <li className="onhover-div">
-                          <HeaderSearchbar />
-                        </li>
-                        <li className="onhover-div">
                           <Link href={isAuthenticated ? "/wishlist" : Href} onClick={handleWishlistClick}>
                             <RiHeartLine />
                           </Link>
