@@ -17,7 +17,7 @@ const HeaderLogo = ({ extraClass }) => {
     let logo = themeOption?.logo?.header_logo;
     if (theme) {
       if (theme == "fashion_one" || theme == "tools" || theme == "left_sidebar") {
-        logo = { original_url: `${ImagePath}/icon/logo/12.png` };
+        logo = { original_url: `${ImagePath}/icon/logo/51.png` };
       } else if (theme == "full_page") {
         logo = { original_url: `${ImagePath}/icon/logo/2.png` };
       } else if (theme == "fashion_two") {
