@@ -1,4 +1,3 @@
-import CurrencyContext from "@/context/currencyContext";
 import SettingContext from "@/context/settingContext";
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import { Href } from "@/utils/constants";
@@ -28,7 +27,6 @@ const HeaderSeven = () => {
   // For Updating Currency
   const [activeCurr, setActiveCurr] = useState();
   const { setSelectedCurrency } = useContext(SettingContext);
-  const { currencyState } = useContext(CurrencyContext);
 
   useEffect(() => {
     let getDefaultCurrency = JSON.parse(localStorage.getItem("selectedCurrency"));
