@@ -10,7 +10,8 @@ const SettingProvider = (props) => {
   const [selectedCurrency, setSelectedCurrency] = useState({});
   const [settingState, setSettingData] = useState({});
   const [settingObj, setSettingObj] = useState({});
-  const { data: settingData, isLoading, refetch } = useFetchQuery([SettingAPI], () => request({ url: SettingAPI }), { enabled: false, refetchOnWindowFocus: false, select: (res) => res?.data?.values});
+  const { data: settingData, isLoading, refetch } = useFetchQuery([SettingAPI], () => request({ url: SettingAPI }),
+     { enabled: false, refetchOnWindowFocus: false, select: (res) => res?.data?.values});
 
   useEffect(() => {
     refetch(); // 🔁 Fetch settings when component mounts

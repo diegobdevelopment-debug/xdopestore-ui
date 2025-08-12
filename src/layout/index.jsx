@@ -7,7 +7,6 @@ import BrandIdsProvider from "@/context/brandIdsContext/BrandIdsProvider";
 import CartProvider from "@/context/cartContext/CartProvider";
 import CategoryProvider from "@/context/categoryContext/CategoryProvider";
 import CompareProvider from "@/context/compareContext/CompareProvider";
-import CurrencyProvider from "@/context/currencyContext/CurrencyProvider";
 import ProductProvider from "@/context/productContext/ProductProvider";
 import ProductIdsProvider from "@/context/productIdsContext/ProductIdsProvider";
 import SettingProvider from "@/context/settingContext/SettingProvider";
@@ -30,7 +29,6 @@ const MainLayout = ({ children }) => {
                 <BlogProvider>
                   <ThemeOptionProvider>
                     <BrandProvider>
-                      <CurrencyProvider>
                         <ProductIdsProvider>
                           <AccountProvider>
                             <CartProvider>
@@ -46,7 +44,6 @@ const MainLayout = ({ children }) => {
                             </CartProvider>
                           </AccountProvider>
                         </ProductIdsProvider>
-                      </CurrencyProvider>
                     </BrandProvider>
                   </ThemeOptionProvider>
                 </BlogProvider>

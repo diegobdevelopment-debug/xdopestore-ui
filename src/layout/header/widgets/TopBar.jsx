@@ -3,7 +3,6 @@ import ThemeOptionContext from "@/context/themeOptionsContext";
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Col, Row } from "reactstrap";
-import HeaderCurrency from "./HeaderCurrency";
 import HeaderLanguage from "./HeaderLanguage";
 
 const TopBar = ({ classes }) => {
@@ -22,7 +21,12 @@ const TopBar = ({ classes }) => {
                   {t("WelcomeTo")} {settingData?.general?.site_name}
                 </li>
                 <li>
-                  <i className="ri-phone-fill"></i> {t("CallUs")} : {themeOption?.header?.support_number}
+                  <i
+                    className="ri-phone-fill"
+                    style={{ color: "#25D366"}} // WhatsApp color
+                    aria-hidden="true"
+                  />
+                  {t("WhatsApp")} : {themeOption?.header?.support_number}
                 </li>
               </ul>
             </div>
@@ -31,9 +35,6 @@ const TopBar = ({ classes }) => {
             <ul className="right-nav-about">
               <li className="right-nav-list">
                 <HeaderLanguage />
-              </li>
-              <li className="right-nav-list">
-                <HeaderCurrency />
               </li>
             </ul>
           </Col>

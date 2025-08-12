@@ -1,13 +1,16 @@
-export const fallbackLng = "en";
-export const languages = [fallbackLng, , "ar", "fr", "es"];
+export const fallbackLng = "es";
+// Only EN, ES
+export const languages = ["es", "en"];
 export const defaultNS = "translation";
 
 export function getOptions(lng = fallbackLng, ns = defaultNS) {
   return {
     // debug: true,
     supportedLngs: languages,
-    // preload: languages,
     fallbackLng,
+    // preload: languages,
+    load: "languageOnly",
+    nonExplicitSupportedLngs: true,
     lng,
     fallbackNS: defaultNS,
     defaultNS,
