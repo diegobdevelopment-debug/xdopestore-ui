@@ -37,7 +37,11 @@ const HeaderOne = () => {
 
   return (
     <header
-      className={`${themeOption?.header?.sticky_header_enable && UpScroll ? 'sticky fixed' : ''}`}
+      className={`${
+        themeOption?.header?.sticky_header_enable && UpScroll
+          ? 'sticky fixed'
+          : ''
+      }`}
     >
       {themeOption?.header?.page_top_bar_enable && <TopBar />}
       <div className="metro">
@@ -63,7 +67,9 @@ const HeaderOne = () => {
                       <div className="header-nav-middle">
                         <div className="main-nav navbar navbar-expand-xl navbar-light navbar-sticky">
                           <div
-                            className={`offcanvas offcanvas-collapse order-xl-2 ${mobileSideBar ? 'show' : ''} `}
+                            className={`offcanvas offcanvas-collapse order-xl-2 ${
+                              mobileSideBar ? 'show' : ''
+                            } `}
                           >
                             <div className="offcanvas-header navbar-shadow">
                               <h5>{t('Menu')}</h5>
@@ -90,9 +96,6 @@ const HeaderOne = () => {
                   <div>
                     <div className="icon-nav">
                       <ul>
-                        <li className="onhover-div">
-                          <HeaderSearchbar />
-                        </li>
                         <li className="onhover-div">
                           <Link
                             href={isAuthenticated ? '/wishlist' : Href}
