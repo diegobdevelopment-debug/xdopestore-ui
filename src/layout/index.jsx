@@ -1,7 +1,5 @@
 'use client'
 import AccountProvider from '@/context/accountContext/AccountProvider'
-import BlogProvider from '@/context/blogContext/BlogProvider'
-import BlogIdsProvider from '@/context/blogIdsContext/BlogIdsProvider'
 import BrandProvider from '@/context/brandContext/BrandProvider'
 import BrandIdsProvider from '@/context/brandIdsContext/BrandIdsProvider'
 import CartProvider from '@/context/cartContext/CartProvider'
@@ -30,27 +28,23 @@ const MainLayout = ({ children }) => {
           <SettingProvider>
             <CompareProvider>
               <CategoryProvider>
-                <BlogProvider>
-                  <ThemeOptionProvider>
-                    <BrandProvider>
-                      <ProductIdsProvider>
-                        <AccountProvider>
-                          <CartProvider>
-                            <WishlistProvider>
-                              <BrandIdsProvider>
-                                <BlogIdsProvider>
-                                  <ProductProvider>
-                                    <SubLayout children={children} />
-                                  </ProductProvider>
-                                </BlogIdsProvider>
-                              </BrandIdsProvider>
-                            </WishlistProvider>
-                          </CartProvider>
-                        </AccountProvider>
-                      </ProductIdsProvider>
-                    </BrandProvider>
-                  </ThemeOptionProvider>
-                </BlogProvider>
+                <ThemeOptionProvider>
+                  <BrandProvider>
+                    <ProductIdsProvider>
+                      <AccountProvider>
+                        <CartProvider>
+                          <WishlistProvider>
+                            <BrandIdsProvider>
+                              <ProductProvider>
+                                <SubLayout children={children} />
+                              </ProductProvider>
+                            </BrandIdsProvider>
+                          </WishlistProvider>
+                        </CartProvider>
+                      </AccountProvider>
+                    </ProductIdsProvider>
+                  </BrandProvider>
+                </ThemeOptionProvider>
               </CategoryProvider>
             </CompareProvider>
           </SettingProvider>

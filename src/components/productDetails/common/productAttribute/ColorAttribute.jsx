@@ -19,7 +19,7 @@ const ColorAttribute = ({ elem, soldOutAttributesIds, productState, setVariant, 
                   <ColorTooltip target={value?.value} title={value?.value} toggle={() => toggle(value?.value)} tooltipOpen={tooltipOpen[value?.value] || false} />
                 </li>
               ) : (
-                <li onClick={() => setVariant(productState?.product?.variations, value, "click")} onMouseOver={() => setVariant(productState?.product?.variations, value, "hover")} onMouseOut={() => setVariant(productState?.product?.variations, value, "out")} className={`bg-light ${soldOutAttributesIds.includes(value.id) ? "disabled" : ""} ${productState?.variantIds?.includes(value.id) ? "active" : ""}`}>
+                <li onClick={() => setVariant(productState?.product?.variations, value, "click")} className={`bg-light ${soldOutAttributesIds.includes(value.id) ? "disabled" : ""} ${productState?.variantIds?.includes(value.id) ? "active" : ""}`}>
                   <span id={value?.value} style={{ backgroundColor: value?.hex_color }} />
                   <ColorTooltip target={value?.value} title={value?.value} toggle={() => toggle(value?.value)} tooltipOpen={tooltipOpen[value?.value] || false} />
                 </li>

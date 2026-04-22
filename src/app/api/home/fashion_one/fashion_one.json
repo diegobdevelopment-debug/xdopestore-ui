@@ -1,10 +1,6 @@
 {
   "id": 1,
   "content": {
-    "brand": {
-      "status": true,
-      "brand_ids": [8, 7, 6, 10, 9]
-    },
     "banner": {
       "status": true,
       "image_url": "/assets/images/theme/fashion_one/fashion_one_5.png",

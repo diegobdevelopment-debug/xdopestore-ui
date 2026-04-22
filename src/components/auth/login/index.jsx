@@ -21,8 +21,8 @@ const LoginContainer = () => {
               <div className="theme-card">
                 <Formik
                   initialValues={{
-                    email: "john.customer@example.com",
-                    password: "123456789",
+                    email: "consumer@xdope.com",
+                    password: "Consumer@123",
                   }}
                   validationSchema={YupObject({
                     email: emailSchema,

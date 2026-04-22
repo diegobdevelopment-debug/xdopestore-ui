@@ -1,68 +1,96 @@
-import SettingContext from "@/context/settingContext";
+"use client";
 import Btn from "@/elements/buttons/Btn";
 import { Href } from "@/utils/constants";
-import useHandleLogin from "@/utils/hooks/useLogin";
-import { YupObject, emailSchema, passwordSchema, recaptchaSchema } from "@/utils/validation/ValidationSchema";
+import ThemeOptionContext from "@/context/themeOptionsContext";
+import { YupObject, emailSchema, passwordSchema } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useContext, useRef, useState } from "react";
+import Cookies from "js-cookie";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Label } from "reactstrap";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useRouter } from "next/navigation";
+
+const API_URL = process.env.API_PROD_URL || "http://localhost:5000";
 
 const LoginForm = ({ setState }) => {
-  const [showBoxMessage, setShowBoxMessage] = useState();
-  const { mutate, isLoading } = useHandleLogin(setShowBoxMessage);
+  const [showBoxMessage, setShowBoxMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation("common");
-  const { settingData } = useContext(SettingContext);
+  const { setOpenAuthModal } = useContext(ThemeOptionContext);
+  const router = useRouter();
 
-  const reCaptchaRef = useRef();
+  const handleSubmit = async (values) => {
+    setIsSubmitting(true);
+    setShowBoxMessage("");
+    try {
+      const res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(values),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const token = data?.access_token || data?.token;
+        Cookies.set("uat", token, { path: "/", expires: 7 });
+        Cookies.set("account", JSON.stringify(data?.data || {}));
+        localStorage.setItem("account", JSON.stringify(data?.data || {}));
+        setOpenAuthModal && setOpenAuthModal(false);
+        const callbackUrl = Cookies.get("CallBackUrl");
+        if (callbackUrl) {
+          Cookies.remove("CallBackUrl");
+          router.push(callbackUrl);
+        } else {
+          router.refresh();
+        }
+      } else {
+        setShowBoxMessage(data?.message || "Invalid credentials");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setShowBoxMessage(`Login failed: ${err.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <Formik
       initialValues={{
-        email: "john.customer@example.com",
-        password: "123456789",
-        recaptcha: "",
+        email: "consumer@xdope.com",
+        password: "Consumer@123",
       }}
       validationSchema={YupObject({
         email: emailSchema,
         password: passwordSchema,
-        recaptcha: settingData?.google_reCaptcha?.status ? recaptchaSchema : "",
       })}
-      onSubmit={mutate}
+      onSubmit={handleSubmit}
     >
-      {({ errors, touched, setFieldValue }) => (
+      {({ errors, touched }) => (
         <Form className="auth-form-box">
           {showBoxMessage && (
-            <div role="alert" className="alert alert-danger login-alert ">
+            <div role="alert" className="alert alert-danger login-alert">
               <i className="ri-error-warning-line"></i> {showBoxMessage}
             </div>
           )}
           <div className="auth-box mb-3">
             <Label htmlFor="email">{t("Email")}</Label>
-            <Field name="email" className="form-control" id="email" placeholder={t("Email")} required />
-            {errors.email && touched.email && <ErrorMessage name="email" render={(msg) => <div className="invalid-feedback d-block">{errors.email}</div>} />}
+            <Field name="email" className="form-control" id="email" placeholder={t("Email")} />
+            {errors.email && touched.email && (
+              <div className="invalid-feedback d-block">{errors.email}</div>
+            )}
           </div>
           <div className="auth-box mb-3">
-            <Label htmlFor="review">{t("Password")}</Label>
-            <Field name="password" type="password" className="form-control" id="review" placeholder={t("EnterYourPassword")} required />
+            <Label htmlFor="password">{t("Password")}</Label>
+            <Field name="password" type="password" className="form-control" id="password" placeholder={t("EnterYourPassword")} />
+            {errors.password && touched.password && (
+              <div className="invalid-feedback d-block">{errors.password}</div>
+            )}
             <a href={Href} className="forgot" onClick={() => setState("forgot")}>
               {t("ForgotYourPassword")}?
             </a>
           </div>
-          {settingData?.google_reCaptcha?.status && (
-            <div>
-              <ReCAPTCHA
-                ref={reCaptchaRef}
-                sitekey={settingData?.google_reCaptcha?.site_key}
-                onChange={(value) => {
-                  setFieldValue("recaptcha", value);
-                }}
-              />
-              {errors.recaptcha && touched.recaptcha && <ErrorMessage name="recaptcha" render={(msg) => <div className="invalid-feedback d-block">{errors.recaptcha}</div>} />}
-            </div>
-          )}
-          <Btn loading={isLoading} type="submit">
-            {t("Login")}
+          <Btn loading={isSubmitting} type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Logging in..." : t("Login")}
           </Btn>
         </Form>
       )}

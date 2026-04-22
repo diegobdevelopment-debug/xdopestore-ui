@@ -97,7 +97,7 @@ const ProductContent = ({ productState, setProductState, productAccordion, noDet
               <p>{productState?.selectedVariation?.short_description ?? productState?.product?.short_description}</p>
             </div>
           )}
-          {productState?.product.status && !productAccordion && <>{productState?.product?.type == "classified" && <ProductAttribute productState={productState} setProductState={setProductState} />}</>}
+          {productState?.product.status && !productAccordion && <>{(productState?.product?.variations?.length > 0 && productState?.product?.attributes?.length > 0) && <ProductAttribute productState={productState} setProductState={setProductState} />}</>}
         </>
       )}
       {!productAccordion && (
