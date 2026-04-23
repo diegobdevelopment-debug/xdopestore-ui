@@ -13,7 +13,7 @@ const AddToCartButton = ({ productState, addToCart, isLoading, buyNow, extraOpti
     <div className="product-buy-btn-group">
       {!productState?.product?.is_external ? (
         <>
-          {productState?.product?.type == "simple" ? (
+          {!productState?.product?.variations?.length ? (
             <Btn color="transparent" className={`btn-animation btn-solid hover-solid buy-button ${productState?.product?.status === 0 || productState?.product?.stock_status == "out_of_stock" || productState?.product?.quantity < productState?.productQty ? "btn-md scroll-button" : "bg-theme btn-md scroll-button"}`} onClick={addToCart} disabled={productState?.product?.status === 0 || productState?.product?.stock_status == "out_of_stock" || productState?.product?.quantity < productState?.productQty}>
               {productState?.product?.stock_status == "out_of_stock" || productState?.product?.quantity < productState?.productQty ? null : (
                 <div className="d-inline-block ring-animation">
@@ -33,7 +33,7 @@ const AddToCartButton = ({ productState, addToCart, isLoading, buyNow, extraOpti
             </Btn>
           )}
           {extraOption !== false ? (
-            productState?.product?.type == "simple" ? (
+            !productState?.product?.variations?.length ? (
               <Btn className="btn-solid buy-button" onClick={buyNow} disabled={productState?.product?.status === 0 || productState?.product?.stock_status == "out_of_stock" || productState?.product?.quantity < productState?.productQty ? true : false}>
                 {t("BuyNow")}
               </Btn>

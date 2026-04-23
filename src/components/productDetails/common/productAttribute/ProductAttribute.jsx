@@ -48,26 +48,37 @@ const ProductAttribute = ({ productState, setProductState, stickyAddToCart, noHo
     }
 
     if (firstAvailableVariant) {
-      firstAvailableVariant.attribute_values.forEach((attribute_val) => {
-        setVariant(productObj?.variations, attribute_val, "default");
+      (firstAvailableVariant.attribute_values || []).forEach((attribute_val) => {
+        // Enrich with attribute_id from the product's attributes definition,
+        // since variation.attribute_values don't store attribute_id directly.
+        const attrDef = productObj?.attributes?.find((attr) =>
+          attr.attribute_values?.some((av) => String(av.id) === String(attribute_val.id || attribute_val._id))
+        );
+        const enriched = {
+          ...attribute_val,
+          attribute_id: attrDef?.id ?? attribute_val.attribute_id ?? attribute_val.name,
+        };
+        setVariant(productObj?.variations, enriched, "default");
       });
     }
 
     // Set Variation Image
-    productObj?.variations?.forEach((variation) => {
-      let attrValues = variation?.attribute_values?.map((attribute_value) => attribute_value?.id);
-      productObj?.attributes.filter((attribute) => {
-        if (attribute.style == "image") {
-          attribute.attribute_values.filter((attribute_value) => {
-            if (productState?.attributeValues?.includes(attribute_value.id)) {
-              if (attrValues.includes(attribute_value.id)) {
-                attribute_value.variation_image = variation.variation_image;
+    if (productObj?.attributes?.length) {
+      productObj.variations?.forEach((variation) => {
+        let attrValues = variation?.attribute_values?.map((attribute_value) => attribute_value?.id);
+        productObj.attributes.forEach((attribute) => {
+          if (attribute.style == "image") {
+            attribute.attribute_values?.forEach((attribute_value) => {
+              if (productState?.attributeValues?.includes(attribute_value.id)) {
+                if (attrValues?.includes(attribute_value.id)) {
+                  attribute_value.variation_image = variation.variation_image;
+                }
               }
-            }
-          });
-        }
+            });
+          }
+        });
       });
-    });
+    }
   };
 
   const checkStockAvailable = () => {
@@ -118,9 +129,9 @@ const ProductAttribute = ({ productState, setProductState, stickyAddToCart, noHo
     let tempSoldOutAttributesIds = [];
     setSoldOutAttributesIds((prev) => tempSoldOutAttributesIds);
 
-    const index = tempSelected?.findIndex((item) => Number(item.attribute_id) === Number(tempVal?.attribute_id));
+    const index = tempSelected?.findIndex((item) => String(item.attribute_id) === String(tempVal?.attribute_id));
     if (index === -1) {
-      tempSelected.push({ id: Number(tempVal?.id), attribute_id: Number(tempVal?.attribute_id) });
+      tempSelected.push({ id: tempVal?.id, attribute_id: tempVal?.attribute_id });
       setSelectedOptions(tempSelected);
     } else {
       tempSelected[index].id = tempVal?.id;
@@ -173,7 +184,7 @@ const ProductAttribute = ({ productState, setProductState, stickyAddToCart, noHo
       {productState?.product?.attributes?.map((elem, i) => (
         <div className="variation-box" key={i}>
           <h4 className="sub-title">{elem?.name}:</h4>
-          {stickyAddToCart ? <DropdownAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : <>{elem?.style == "radio" ? <RadioAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : elem?.style == "dropdown" ? <DropdownAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : elem?.style == "color" ? <ColorAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} productState={productState} noHoverEffect={noHoverEffect} /> : <ImageOtherAttributes elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} productState={productState} noHoverEffect={noHoverEffect} />}</>}
+          {stickyAddToCart ? <DropdownAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : <>{elem?.style == "radio" || elem?.style == "rectangle" ? <RadioAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : elem?.style == "dropdown" ? <DropdownAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : elem?.style == "color" || elem?.style == "circle" ? <ColorAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} productState={productState} noHoverEffect={noHoverEffect} /> : <ImageOtherAttributes elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} productState={productState} noHoverEffect={noHoverEffect} />}</>}
         </div>
       ))}
     </>

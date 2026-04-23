@@ -12,24 +12,17 @@ const MainHeaderMenu = () => {
     fetchStatus,
   } = useFetchQuery(["menu"], () => request({ url: "/menu" }), {
     select: (res) => {
-      // Extract the menu items from the API response
-      const originalData = res.data.data;
-      // Optionally add or update properties on the remaining items. Not well understood
-      const modifiedData = originalData.map((item) => ({
-        ...item,
-        class: "0",
-      }));
-
-      // Return filtered and modified list of menu items
-      return modifiedData;
+      const originalData = res?.data?.data;
+      if (!Array.isArray(originalData)) return [];
+      return originalData.map((item) => ({ ...item, class: "0" }));
     },
     refetchOnWindowFocus: true,
     enabled: false,
   });
 
   useEffect(() => {
-    isLoading && refetch();
-  }, [isLoading]);
+    refetch();
+  }, []);
 
   return (
     <>

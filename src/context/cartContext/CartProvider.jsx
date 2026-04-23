@@ -65,14 +65,14 @@ const CartProvider = (props) => {
   useEffect(() => {
     if (isCookie) {
       if (CartAPIData) {
-        setCartProducts(CartAPIData?.items);
-        setCartTotal(CartAPIData?.total);
+        setCartProducts(CartAPIData?.items ?? []);
+        setCartTotal(CartAPIData?.total ?? 0);
       }
     } else {
       const isCartAvailable = JSON.parse(localStorage.getItem("cart"));
       if (isCartAvailable?.items?.length > 0) {
-        setCartProducts(isCartAvailable?.items);
-        setCartTotal(isCartAvailable?.total);
+        setCartProducts(isCartAvailable?.items ?? []);
+        setCartTotal(isCartAvailable?.total ?? 0);
       }
     }
   }, [getCartLoading]);

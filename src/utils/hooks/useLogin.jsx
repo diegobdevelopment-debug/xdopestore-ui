@@ -30,27 +30,25 @@ const transformLocalStorageData = (localStorageData) => {
 
 const LoginHandle = (responseData, router, refetch, compareRefetch, CallBackUrl, mutate, cartRefetch, setShowBoxMessage, addToWishlist, compareCartMutate, setOpenAuthModal) => {
   if (responseData.status === 200 || responseData.status === 201) {
-    Cookies.set("uat", responseData.data?.access_token, { path: "/", expires: new Date(Date.now() + 24 * 60 * 6000) });
-    const ISSERVER = typeof window === "undefined";
+    const token = responseData.data?.access_token || responseData.data?.token;
+    Cookies.set("uat", token, { path: "/", expires: new Date(Date.now() + 24 * 60 * 6000) });
     if (typeof window !== "undefined") {
       Cookies.set("account", JSON.stringify(responseData.data));
       localStorage.setItem("account", JSON.stringify(responseData.data));
     }
     router.push(`${CallBackUrl}`);
-
     refetch();
     compareRefetch();
-    setOpenAuthModal(false);
+    setOpenAuthModal && setOpenAuthModal(false);
     cartRefetch();
     const wishListID = Cookies.get("wishListID");
-    const CompareId = Cookies.get("compareId");
-    const productObj = { id: wishListID };
-    wishListID ? addToWishlist(productObj) : null;
+    wishListID ? addToWishlist({ id: wishListID }) : null;
     Cookies.remove("wishListID");
     Cookies.remove("compareId");
     localStorage.removeItem("cart");
   } else {
-    setShowBoxMessage(responseData.response.data.message);
+    const msg = responseData?.response?.data?.message || "Invalid credentials";
+    setShowBoxMessage && setShowBoxMessage(msg);
   }
 };
 

@@ -15,12 +15,12 @@ const CartButton = ({ productState, text, classes, iconClass = true, quantity = 
   const [isOpen, setIsOpen] = useState(false);
 
   const getSelectedVariant = useMemo(() => {
-    return cartProducts.find((elem) => (elem?.variation_id ? elem?.variation_id == productState?.selectedVariation?.id : elem.product_id === productState?.product?.id));
+    return (cartProducts ?? []).find((elem) => (elem?.variation_id ? elem?.variation_id == productState?.selectedVariation?.id : elem.product_id === productState?.product?.id));
   }, [cartProducts, productState]);
 
   useEffect(() => {
     setProductQty(0);
-    const foundProduct = cartProducts.find((elem) => (elem?.variation_id ? elem?.variation_id == getSelectedVariant?.variation_id : elem?.product_id === productState?.product?.id));
+    const foundProduct = (cartProducts ?? []).find((elem) => (elem?.variation_id ? elem?.variation_id == getSelectedVariant?.variation_id : elem?.product_id === productState?.product?.id));
     if (foundProduct) {
       if (foundProduct?.quantity || !isOpen) {
         setProductQty(foundProduct?.quantity);
