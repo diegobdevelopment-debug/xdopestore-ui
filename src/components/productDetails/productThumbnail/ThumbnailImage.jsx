@@ -27,13 +27,19 @@ const ThumbnailProductImage = ({ productState, slideToShow }) => {
     });
   }, []);
   useEffect(() => {
-    var index =
-      productState?.product?.product_galleries &&
-      productState?.product?.product_galleries.findIndex((object) => {
-        return object.id === productState?.selectedVariation.variation_image?.id;
-      });
-    productState?.selectedVariation.variation_image?.id && slider1.current.slickGoTo(index);
-  }, [productState?.selectedVariation.variation_image?.id, productState]);
+    if (!slider1.current) return;
+    const variation = productState?.selectedVariation;
+    if (!variation) return;
+    if (variation.variation_galleries?.length) {
+      // Variation has its own images — go to first slide
+      slider1.current.slickGoTo(0);
+    } else if (variation.variation_image?.id) {
+      const index = productState?.product?.product_galleries?.findIndex(
+        (object) => object.id === variation.variation_image.id
+      );
+      if (index >= 0) slider1.current.slickGoTo(index);
+    }
+  }, [productState?.selectedVariation?.id]);
 
   let thumbnailSlider = {
     loop: false,
@@ -79,7 +85,7 @@ const ThumbnailProductImage = ({ productState, slideToShow }) => {
                   {productState?.product.is_featured ? <li className="featured">{t("Featured")}</li> : ""}
                 </ul>
               ) : null}
-              <Slider adaptiveHeight={true} asNavFor={nav2} ref={slider1} prevArrow={<SlickArrowLeft />} nextArrow={<SlickArrowRight />}>
+              <Slider asNavFor={nav2} ref={slider1} prevArrow={<SlickArrowLeft />} nextArrow={<SlickArrowRight />}>
                 {currentVariation?.map((image, i) => (
                   <div key={i}>
                     <div className="slider-image">

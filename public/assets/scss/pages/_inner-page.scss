@@ -8559,6 +8559,13 @@
   li {
     padding: 6px 10px;
     background-color: $top-header !important;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover:not(.disabled):not(.active) {
+      background-color: darken($top-header, 6%) !important;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    }
 
     &.active {
       background-color: white !important;
@@ -8629,6 +8636,11 @@
         height: 20px;
         border-radius: 100%;
         display: block;
+        transition: transform 0.2s ease;
+      }
+
+      &:hover:not(.disabled) span {
+        transform: scale(1.2);
       }
     }
   }

@@ -1,13 +1,26 @@
 "use client";
-import ImageLink from "@/components/widgets/imageLink";
 import { homeBannerSettings } from "@/data/sliderSetting/SliderSetting";
 import { ImagePath, storageURL } from "@/utils/constants";
+import Link from "next/link";
 import Slider from "react-slick";
 
-const HomeSlider = ({ bannerData, height, width, sliderClass }) => {
-  const videoType = ["mp4", "webm", "ogg"];
+const resolveUrl = (banner) => {
+  if (banner?.image_url) return storageURL + banner.image_url;
+  if (banner?.original_url) return banner.original_url;
+  return `${ImagePath}/banner.png`;
+};
+
+const SliderSlide = ({ banner, height, width }) => {
+  const src = resolveUrl(banner);
+  const hasText = banner?.title || banner?.subtitle;
+  const href = banner?.redirect_link?.link
+    ? banner.redirect_link.link_type === "collection"
+      ? `/category/${banner.redirect_link.link}`
+      : banner.redirect_link.link
+    : "/collections";
 
   return (
+<<<<<<< HEAD
     <>
       <div className="position-relative">
         {bannerData?.banners?.length > 1 ? (
@@ -62,13 +75,46 @@ const HomeSlider = ({ bannerData, height, width, sliderClass }) => {
                     </span>
                   </p>
                 </div>
+=======
+    <div
+      className="home"
+      style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center" }}
+    >
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-7 col-sm-10 col-12">
+            <div className="slider-contain">
+              <div>
+                {banner?.subtitle && <h4>{banner.subtitle}</h4>}
+                {banner?.title && <h1>{banner.title}</h1>}
+                <Link href={href} className="btn btn-solid hover-solid btn-md">
+                  {banner?.button_text || "Shop Now"}
+                </Link>
+>>>>>>> 073ecc6aa46337a1439684b407e3b9c79bd93edc
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
+};
+
+const HomeSlider = ({ bannerData, height, width, sliderClass }) => {
+  const banners = bannerData?.banners ?? [];
+
+  if (banners.length > 1) {
+    return (
+      <Slider {...homeBannerSettings} className={sliderClass || ""}>
+        {banners.map((banner, i) => (
+          <SliderSlide key={i} banner={banner} height={height} width={width} />
+        ))}
+      </Slider>
+    );
+  }
+
+  const single = banners[0] ?? bannerData;
+  return <SliderSlide banner={single} height={height} width={width} />;
 };
 
 export default HomeSlider;

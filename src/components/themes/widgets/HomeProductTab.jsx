@@ -102,7 +102,7 @@ const HomeProductTab = ({ categoryIds, slider, style, tab_title_class, tabStyle,
             <ul className='tabs tab-title w-bg'>
               {filteredCategories?.map((category, index) => (
                 <li key={category.id} className={activeTab === index ? "current" : ""}>
-                  <a href={Href} onClick={() => changeTab(index, category)}>
+                  <a href={Href} onClick={(e) => { e.preventDefault(); changeTab(index, category); }}>
                     {category.name}
                   </a>
                 </li>
@@ -115,7 +115,7 @@ const HomeProductTab = ({ categoryIds, slider, style, tab_title_class, tabStyle,
             <ul className='tabs tab-title'>
               {filteredCategories?.map((category, index) => (
                 <li key={category.id} className={activeTab === index ? "current" : ""}>
-                  <a href={Href} onClick={() => changeTab(index, category)}>
+                  <a href={Href} onClick={(e) => { e.preventDefault(); changeTab(index, category); }}>
                     {category.name}
                   </a>
                 </li>
@@ -131,7 +131,7 @@ const HomeProductTab = ({ categoryIds, slider, style, tab_title_class, tabStyle,
             <ul className='tabs tab-title'>
               {filteredCategories?.map((category, index) => (
                 <li key={category.id} className={activeTab === index ? "current" : ""}>
-                  <a href={Href} onClick={() => changeTab(index, category)}>
+                  <a href={Href} onClick={(e) => { e.preventDefault(); changeTab(index, category); }}>
                     {category.name}
                   </a>
                 </li>
@@ -142,7 +142,7 @@ const HomeProductTab = ({ categoryIds, slider, style, tab_title_class, tabStyle,
           <ul className={`tabs ${tab_title_class ? tab_title_class : "tab-title"}`}>
             {filteredCategories?.map((category, index) => (
               <li key={category.id} className={activeTab === index ? "current" : ""}>
-                <a href={Href} onClick={() => changeTab(index, category)}>
+                <a href={Href} onClick={(e) => { e.preventDefault(); changeTab(index, category); }}>
                   {category.name}
                 </a>
               </li>
