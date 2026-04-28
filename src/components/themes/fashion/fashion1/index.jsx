@@ -19,6 +19,15 @@ import HomeSlider from '../../widgets/HomeSlider'
 import HomeSocialMedia from '../../widgets/HomeSocialMedia'
 import HomeTitle from '../../widgets/HomeTitle'
 
+const offerBannerPositionClass = (pos) => {
+  switch (pos) {
+    case 'right': return ' p-right';
+    case 'top-left': return ' p-top';
+    case 'top-right': return ' p-top p-right';
+    default: return '';
+  }
+};
+
 const Fashion1 = () => {
   const { data, isLoading, refetch, fetchStatus } = useCustomDataQuery({
     params: 'fashion_one',
@@ -79,7 +88,7 @@ const Fashion1 = () => {
           <Row className="g-sm-4 g-3">
             {data?.offer_banner?.banner_1?.status && (
               <div className={data?.offer_banner?.banner_2?.status ? 'col-6' : 'col-12'}>
-                <div className="collection-banner position-relative overflow-hidden d-block" style={{ height: '260px' }}>
+                <div className={`collection-banner position-relative overflow-hidden d-block${offerBannerPositionClass(data?.offer_banner?.banner_1?.text_position)}`} style={{ height: '260px' }}>
                   <div className="img-part" style={{ height: '100%' }}>
                     <ImageLink
                       imgUrl={data?.offer_banner?.banner_1}
@@ -90,7 +99,7 @@ const Fashion1 = () => {
                   </div>
                   {(data?.offer_banner?.banner_1?.title || data?.offer_banner?.banner_1?.subtitle) && (
                     <div className="contain-banner banner-3" style={{ pointerEvents: 'none' }}>
-                      <div>
+                      <div style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
                         {data?.offer_banner?.banner_1?.subtitle && <h4>{data.offer_banner.banner_1.subtitle}</h4>}
                         {data?.offer_banner?.banner_1?.title && <h2 className="font-smaller">{data.offer_banner.banner_1.title}</h2>}
                       </div>
@@ -101,7 +110,7 @@ const Fashion1 = () => {
             )}
             {data?.offer_banner?.banner_2?.status && (
               <div className={data?.offer_banner?.banner_1?.status ? 'col-6' : 'col-12'}>
-                <div className="collection-banner position-relative overflow-hidden d-block" style={{ height: '260px' }}>
+                <div className={`collection-banner position-relative overflow-hidden d-block${offerBannerPositionClass(data?.offer_banner?.banner_2?.text_position)}`} style={{ height: '260px' }}>
                   <div className="img-part" style={{ height: '100%' }}>
                     <ImageLink
                       imgUrl={data?.offer_banner?.banner_2}
@@ -112,7 +121,7 @@ const Fashion1 = () => {
                   </div>
                   {(data?.offer_banner?.banner_2?.title || data?.offer_banner?.banner_2?.subtitle) && (
                     <div className="contain-banner banner-3" style={{ pointerEvents: 'none' }}>
-                      <div>
+                      <div style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
                         {data?.offer_banner?.banner_2?.subtitle && <h4>{data.offer_banner.banner_2.subtitle}</h4>}
                         {data?.offer_banner?.banner_2?.title && <h2 className="font-smaller">{data.offer_banner.banner_2.title}</h2>}
                       </div>

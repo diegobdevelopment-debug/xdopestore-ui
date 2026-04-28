@@ -10,6 +10,14 @@ const resolveUrl = (banner) => {
   return `${ImagePath}/banner.png`;
 };
 
+const colClass = (pos) => {
+  switch (pos) {
+    case "right": return "col-lg-7 col-sm-10 col-12 ms-auto text-end";
+    case "center": return "col-lg-7 col-sm-10 col-12 mx-auto text-center";
+    default: return "col-lg-7 col-sm-10 col-12";
+  }
+};
+
 const SliderSlide = ({ banner, height, width }) => {
   const src = resolveUrl(banner);
   const href = banner?.redirect_link?.link
@@ -20,12 +28,12 @@ const SliderSlide = ({ banner, height, width }) => {
 
   return (
     <div
-      className="home"
+      className="home d-flex align-items-center"
       style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center" }}
     >
       <div className="container">
         <div className="row">
-          <div className="col-lg-7 col-sm-10 col-12">
+          <div className={colClass(banner?.text_position)}>
             <div className="slider-contain">
               <div>
                 {banner?.subtitle && <h4>{banner.subtitle}</h4>}
