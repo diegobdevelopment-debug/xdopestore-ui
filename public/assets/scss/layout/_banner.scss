@@ -157,6 +157,11 @@
     .img-part {
         transition: all 0.5s ease;
         width: 100%;
+
+        img {
+            width: 100%;
+            display: block;
+        }
     }
 
     &.p-top {

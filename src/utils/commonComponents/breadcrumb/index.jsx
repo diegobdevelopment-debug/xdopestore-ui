@@ -1,26 +1,33 @@
-import { Href } from "@/utils/constants";
 import { useTranslation } from "react-i18next";
-import { Breadcrumb, Container } from "reactstrap";
+import { Breadcrumb } from "reactstrap";
+import Link from "next/link";
 
-const Breadcrumbs = ({ mainHeading, subNavigation, subTitle, title }) => {
+const Breadcrumbs = ({ subNavigation, subTitle, title }) => {
   const { t } = useTranslation("common");
   return (
     <div className="breadcrumb-section">
-      <Container>
+      <div className="container">
         <h2>{t(title?.replaceAll("-", " "))}</h2>
         <nav className="theme-breadcrumb">
           <Breadcrumb>
-            <div className="breadcrumb-item active">
-              <a href={Href}> {t("Home")} </a>
+            <div className="breadcrumb-item">
+              <Link href="/"> {t("Home")} </Link>
             </div>
-            {subNavigation?.map((result, i) => (
-              <div key={i} className="breadcrumb-item active ">
-                <a href={Href}> {t(result?.name?.replaceAll("-", " "))} </a>
-              </div>
-            ))}
+            {subNavigation?.map((result, i) => {
+              const isLast = i === subNavigation.length - 1;
+              return (
+                <div key={i} className={`breadcrumb-item${isLast ? " active" : ""}`}>
+                  {result?.link && !isLast ? (
+                    <Link href={result.link}>{t(result?.name?.replaceAll("-", " "))}</Link>
+                  ) : (
+                    <span>{t(result?.name?.replaceAll("-", " "))}</span>
+                  )}
+                </div>
+              );
+            })}
           </Breadcrumb>
         </nav>
-      </Container>
+      </div>
     </div>
   );
 };

@@ -118,6 +118,8 @@ const Headers = () => {
             const modifiedData = originalData.map((item) => ({
                 ...item,
                 class: `${['Product', 'Mega Menu'].includes(item.title) ? 1 : 0}`,
+                link_type: item.link_type ?? 'link',
+                is_target_blank: item.is_target_blank ?? 0,
             }))
 
             return modifiedData

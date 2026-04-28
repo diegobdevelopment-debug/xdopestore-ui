@@ -3,7 +3,7 @@
 ==========================**/
 .timer {
     padding: 15px;
-    background-color: rgba(236, 137, 81, 0.09);
+    background-color: color-mix(in srgb, var(--theme-color) 9%, transparent);
     display: inline-block;
     border: 1px dashed var(--theme-color);
     border-radius: 0;

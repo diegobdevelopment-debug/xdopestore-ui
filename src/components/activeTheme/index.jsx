@@ -28,7 +28,7 @@ const ActiveTheme = () => {
   const themeBySlug = search.get("theme");
   const activeTheme = data?.find((elem) => elem.status === 1);
   const { isLoading: themeLoading } = useContext(ThemeOptionContext);
-
+console.log(activeTheme, "ACTIVE THEME")
   const checkActive = {
     fashion_one: <Fashion1 />,
     game: <Game />,
@@ -47,8 +47,8 @@ const ActiveTheme = () => {
     digital_download: <DigitalDownload />,
   };
 
-  if (themeLoading) return <Loader />;
-  return themeBySlug ? checkActive[themeBySlug] : checkActive[activeTheme?.slug];
+  if (themeLoading || isLoading) return <Loader />;
+  return themeBySlug ? checkActive[themeBySlug] : checkActive[activeTheme?.slug] ?? <Loader />;
 };
 
 export default ActiveTheme;

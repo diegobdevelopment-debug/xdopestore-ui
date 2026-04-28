@@ -14,10 +14,11 @@ const MainHeaderMenu = () => {
     select: (res) => {
       // Extract the menu items from the API response
       const originalData = res.data.data;
-      // Optionally add or update properties on the remaining items. Not well understood
       const modifiedData = originalData.map((item) => ({
         ...item,
         class: "0",
+        link_type: item.link_type ?? "link",
+        is_target_blank: item.is_target_blank ?? 0,
       }));
 
       // Return filtered and modified list of menu items

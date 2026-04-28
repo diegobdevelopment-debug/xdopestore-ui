@@ -15,7 +15,7 @@ const HomeSlider = ({ bannerData, height, width, sliderClass }) => {
             {bannerData?.banners?.map((banner, index) => {
               if (videoType.includes(banner && banner?.image_url && banner?.image_url?.substring(banner?.image_url?.lastIndexOf(".") + 1))) {
                 return (
-                  <div className="slider-contain" id="block" style={{ width: "100%", position: "relative" }} data-vide-bg="../assets/video/video.mp4" data-vide-options="position: 0% 50%">
+                  <div key={index} className="home" id="block" style={{ width: "100%", position: "relative" }} data-vide-bg="../assets/video/video.mp4" data-vide-options="position: 0% 50%">
                     <div style={{ position: "absolute", zIndex: -1, inset: "0px", overflow: "hidden", backgroundSize: "cover", backgroundColor: "transparent", backgroundRepeat: "no-repeat", backgroundPosition: "0% 50%", backgroundImage: "none" }}>
                       <video autoPlay loop muted style={{ margin: "auto", position: "absolute", zIndex: "-1", top: "50%", left: " 0%", transform: "translate(0%, -50%)", visibility: "visible", opacity: "1", width: "1907px", height: "auto" }}>
                         <source src={storageURL + banner?.image_url} type="video/mp4" />
@@ -25,7 +25,7 @@ const HomeSlider = ({ bannerData, height, width, sliderClass }) => {
                 );
               } else {
                 return (
-                  <div key={index}>{}
+                  <div key={index} className="home">
                     <ImageLink imgUrl={banner} placeholder={`${ImagePath}/banner.png`} link={banner} height={height} width={width} homeBanner={true} />
                   </div>
                 );
@@ -33,7 +33,7 @@ const HomeSlider = ({ bannerData, height, width, sliderClass }) => {
             })}
           </Slider>
         ) : videoType.includes((bannerData?.banners?.[0] || bannerData) && (bannerData?.banners?.[0]?.image_url || bannerData?.image_url) && (bannerData?.banners?.[0]?.image_url?.substring(bannerData?.banners?.[0]?.image_url?.lastIndexOf(".") + 1) || bannerData?.image_url?.substring(bannerData?.image_url?.lastIndexOf(".") + 1))) ? (
-          <div className="slider-contain" id="block" data-vide-bg="../assets/video/video.mp4" data-vide-options="position: 0% 50%">
+          <div className="home" id="block" data-vide-bg="../assets/video/video.mp4" data-vide-options="position: 0% 50%">
             <div style={{ position: "absolute", zIndex: -1, inset: "0px", overflow: "hidden", backgroundSize: "cover", backgroundColor: "transparent", backgroundRepeat: "no-repeat", backgroundPosition: "0% 50%", backgroundImage: "none" }}>
               <video autoPlay loop muted style={{ margin: "auto", position: "absolute", zIndex: "-1", top: "50%", left: " 0%", transform: "translate(0%, -50%)", visibility: "visible", opacity: "1", width: "1907px", height: "auto" }}>
                 <source src={storageURL + bannerData?.banners?.[0]?.image_url || bannerData?.image_url} type="video/mp4" />
@@ -41,7 +41,9 @@ const HomeSlider = ({ bannerData, height, width, sliderClass }) => {
             </div>
           </div>
         ) : (
-          <ImageLink imgUrl={bannerData?.banners?.[0] || bannerData} placeholder={`${ImagePath}/banner.png`} height={height} width={width} />
+          <div className="home">
+            <ImageLink imgUrl={bannerData?.banners?.[0] || bannerData} placeholder={`${ImagePath}/banner.png`} height={height} width={width} />
+          </div>
         )}
         <div className="home-skeleton">
           <div className="skeleton-content">

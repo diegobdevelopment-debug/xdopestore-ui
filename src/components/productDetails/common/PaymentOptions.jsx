@@ -1,7 +1,7 @@
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import Image from "next/image";
 import { useContext } from "react";
-import { storageURL } from "@/utils/constants";
+import { getMediaSrc } from "@/utils/constants";
 import { useTranslation } from "react-i18next";
 
 const PaymentOptions = ({ productState }) => {
@@ -14,14 +14,14 @@ const PaymentOptions = ({ productState }) => {
         <div className="paymnet-option">
           <div className="dashed-border-box">
             <h4 className="sub-title">{t("GuaranteedSafeCheckout")}</h4>
-            {themeOption?.product?.safe_checkout_image && <Image src={storageURL + themeOption?.product?.safe_checkout_image} alt="Safe Checkout" className="img-fluid payment-img" height={33} width={301} />}
+            {themeOption?.product?.safe_checkout_image && <Image src={getMediaSrc(themeOption?.product?.safe_checkout_image)} alt="Safe Checkout" className="img-fluid payment-img" height={33} width={301} />}
           </div>
         </div>
       ) : null}
       {themeOption?.product?.secure_checkout && productState?.product?.secure_checkout ? (
         <div className="dashed-border-box">
           <h4 className="sub-title">{t("SecureCheckout")}</h4>
-          {themeOption?.product?.secure_checkout_image && <Image src={storageURL + themeOption?.product?.secure_checkout_image} alt="Secure Checkout" className="img-fluid security-img mt-1 " height={26} width={376} />}
+          {themeOption?.product?.secure_checkout_image && <Image src={getMediaSrc(themeOption?.product?.secure_checkout_image)} alt="Secure Checkout" className="img-fluid security-img mt-1 " height={26} width={376} />}
         </div>
       ) : null}
     </>

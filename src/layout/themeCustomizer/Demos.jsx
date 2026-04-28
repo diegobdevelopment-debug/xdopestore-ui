@@ -1,6 +1,6 @@
 import request from "@/utils/axiosUtils";
 import { ThemeAPI } from "@/utils/axiosUtils/API";
-import { storageURL } from "@/utils/constants";
+import { getMediaSrc, ImagePath } from "@/utils/constants";
 import useFetchQuery from "@/utils/hooks/useFetchQuery";;
 import Image from "next/image";
 import Link from "next/link";
@@ -27,7 +27,7 @@ const Demos = () => {
               <Col xs="6" className="text-center demo-effects" key={i}>
                 <div className="set-position">
                   <Link className="layout-container" href={`/?theme=${item?.slug}`}>
-                    <Image className="img-fluid bg-img bg-top" src={storageURL + item?.image} height={130} width={180} alt={`demo${i + 1}`} />
+                    <Image className="img-fluid bg-img bg-top" src={getMediaSrc(item?.image, `${ImagePath}/themes/fashion-1.png`)} height={130} width={180} alt={`demo${i + 1}`} />
                   </Link>
                   <Link className="demo-text" href={`/?theme=${item?.slug}`}>
                     <h4>{item?.name}</h4>

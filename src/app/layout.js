@@ -27,11 +27,18 @@ export async function generateMetadata() {
 }
 
 export default async function RootLayout({ children }) {
-  const settings = await fetch(`${process.env.API_PROD_URL}/settings`)
-    .then((res) => res.json())
-    .catch((err) => {
-      return err;
-    });
+  const [settings, themeOptions] = await Promise.all([
+    fetch(`${process.env.API_PROD_URL}/settings`).then((res) => res.json()).catch(() => ({})),
+    fetch(`${process.env.API_PROD_URL}/themeOptions`).then((res) => res.json()).catch(() => ({})),
+  ]);
+
+  const primaryColor = themeOptions?.options?.general?.primary_color || "#51ec8c";
+  const secondaryColor = themeOptions?.options?.general?.secondary_color;
+  const bodyStyle = {
+    "--theme-color": primaryColor,
+    ...(secondaryColor ? { "--theme-color2": secondaryColor } : {}),
+  };
+
   const lng = await detectLanguage();
   return (
     <I18nProvider language={lng}>
@@ -48,7 +55,7 @@ export default async function RootLayout({ children }) {
           <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
         </head>
-        <body suppressHydrationWarning={true}>{children}</body>
+        <body suppressHydrationWarning={true} style={bodyStyle}>{children}</body>
       </html>
     </I18nProvider>
   );

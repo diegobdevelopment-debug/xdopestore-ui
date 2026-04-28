@@ -1,7 +1,6 @@
 'use client'
 import ImageLink from '@/components/widgets/imageLink'
 import WrapperComponent from '@/components/widgets/WrapperComponent'
-import BlogIdsContext from '@/context/blogIdsContext'
 import BrandIdsContext from '@/context/brandIdsContext'
 import ProductIdsContext from '@/context/productIdsContext'
 import { horizontalProductSlider } from '@/data/sliderSetting/SliderSetting'
@@ -11,6 +10,7 @@ import useCustomDataQuery from '@/utils/hooks/useCustomDataQuery'
 import { useSkeletonLoader2 } from '@/utils/hooks/useSkeleton2'
 import React, { useContext, useEffect } from 'react'
 import { Container, Row } from 'reactstrap'
+import HomeBrand from '../../widgets/HomeBrand'
 import HomeParallaxBanner from '../../widgets/HomeParallaxBanner'
 import HomeProduct from '../../widgets/HomeProduct'
 import HomeProductTab from '../../widgets/HomeProductTab'
@@ -20,211 +20,198 @@ import HomeSocialMedia from '../../widgets/HomeSocialMedia'
 import HomeTitle from '../../widgets/HomeTitle'
 
 const Fashion1 = () => {
-    const hiddenFeatures = true
-    const { data, isLoading, refetch, fetchStatus } = useCustomDataQuery({
-        params: 'fashion_one',
-    })
-    const { setGetProductIds, isRefetching: productLoad } =
-        useContext(ProductIdsContext)
-    const { setGetBrandIds, isLoading: brandLoading } =
-        useContext(BrandIdsContext)
-    const { setGetBlogIds, isLoading: blogLoading } = useContext(BlogIdsContext)
+  const { data, isLoading, refetch, fetchStatus } = useCustomDataQuery({
+    params: 'fashion_one',
+  })
+  const { setGetProductIds, isRefetching: productLoad } =
+    useContext(ProductIdsContext)
+  const { setGetBrandIds, isLoading: brandLoading } =
+    useContext(BrandIdsContext)
 
-    useEffect(() => {
-        if (data?.products_ids?.length > 0) {
-            setGetProductIds({
-                ids: Array.from(new Set(data?.products_ids))?.join(','),
-            })
-        }
-        if (data?.brands?.brand_ids?.length > 0) {
-            setGetBrandIds({
-                ids: Array.from(new Set(data?.brands?.brand_ids))?.join(','),
-            })
-        }
-    }, [data])
+  useEffect(() => {
+    if (data?.products_ids?.length > 0) {
+      setGetProductIds({
+        ids: Array.from(new Set(data?.products_ids))?.join(','),
+      })
+    }
+    if (data?.brands?.brand_ids?.length > 0) {
+      setGetBrandIds({
+        ids: Array.from(new Set(data?.brands?.brand_ids))?.join(','),
+      })
+    }
+  }, [data])
 
-    useEffect(() => {
-        refetch()
-    }, [])
+  useEffect(() => {
+    refetch()
+  }, [])
 
-    useEffect(() => {
-        document.body.classList.add('home')
-        return () => {
-            document.body.classList.remove('home')
-        }
-    }, [])
+  useEffect(() => {
+    document.body.classList.add('home')
+    return () => {
+      document.body.classList.remove('home')
+    }
+  }, [])
 
-    useSkeletonLoader2([productLoad, blogLoading, brandLoading])
-    if (isLoading && document.body) return <Loader />
+  useSkeletonLoader2([productLoad, brandLoading])
+  if (isLoading && document.body) return <Loader />
 
-    return (
+  return (
+    <>
+      {/* Home Banner Slider */}
+      <WrapperComponent
+        classes={{
+          sectionClass: 'p-0',
+          fluidClass: 'home-slider',
+        }}
+        noRowCol={true}
+      >
+        <HomeSlider bannerData={data?.home_banner} height={627} width={1835} />
+      </WrapperComponent>
+
+      {/* Offer Banners */}
+      {(data?.offer_banner?.banner_1?.status || data?.offer_banner?.banner_2?.status) && (
+        <WrapperComponent
+          classes={{
+            sectionClass: 'pb-0 ratio2_1 banner-section',
+            fluidClass: 'container',
+          }}
+        >
+          <Row className="g-sm-4 g-3">
+            {data?.offer_banner?.banner_1?.status && (
+              <div className={data?.offer_banner?.banner_2?.status ? 'col-6' : 'col-12'}>
+                <div className="collection-banner position-relative overflow-hidden d-block" style={{ height: '260px' }}>
+                  <div className="img-part" style={{ height: '100%' }}>
+                    <ImageLink
+                      imgUrl={data?.offer_banner?.banner_1}
+                      placeholder={`${ImagePath}/two_column_banner.png`}
+                      height={338}
+                      width={676}
+                    />
+                  </div>
+                  {(data?.offer_banner?.banner_1?.title || data?.offer_banner?.banner_1?.subtitle) && (
+                    <div className="contain-banner banner-3" style={{ pointerEvents: 'none' }}>
+                      <div>
+                        {data?.offer_banner?.banner_1?.subtitle && <h4>{data.offer_banner.banner_1.subtitle}</h4>}
+                        {data?.offer_banner?.banner_1?.title && <h2 className="font-smaller">{data.offer_banner.banner_1.title}</h2>}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {data?.offer_banner?.banner_2?.status && (
+              <div className={data?.offer_banner?.banner_1?.status ? 'col-6' : 'col-12'}>
+                <div className="collection-banner position-relative overflow-hidden d-block" style={{ height: '260px' }}>
+                  <div className="img-part" style={{ height: '100%' }}>
+                    <ImageLink
+                      imgUrl={data?.offer_banner?.banner_2}
+                      placeholder={`${ImagePath}/two_column_banner.png`}
+                      height={338}
+                      width={676}
+                    />
+                  </div>
+                  {(data?.offer_banner?.banner_2?.title || data?.offer_banner?.banner_2?.subtitle) && (
+                    <div className="contain-banner banner-3" style={{ pointerEvents: 'none' }}>
+                      <div>
+                        {data?.offer_banner?.banner_2?.subtitle && <h4>{data.offer_banner.banner_2.subtitle}</h4>}
+                        {data?.offer_banner?.banner_2?.title && <h2 className="font-smaller">{data.offer_banner.banner_2.title}</h2>}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </Row>
+        </WrapperComponent>
+      )}
+
+      {/* Products Slider */}
+      {data?.products_list?.status && (
         <>
-            {/* Home Banner */}
-            <WrapperComponent
-                classes={{
-                    sectionClass: 'p-0 effect-cls',
-                    fluidClass: 'home-slider',
-                }}
-                noRowCol={true}
-            >
-                <HomeSlider
-                    bannerData={data?.home_banner}
-                    height={627}
-                    width={1835}
-                />
-            </WrapperComponent>
-
-            {/* Offer Banners */}
-            <WrapperComponent
-                classes={{
-                    sectionClass: 'pb-0 ratio2_1 banner-section',
-                    fluidClass: 'container',
-                }}
-            >
-                <Row className="g-sm-4 g-3">
-                    {data?.offer_banner?.banner_1?.status && (
-                        <div
-                            className={
-                                data?.offer_banner?.banner_1?.status
-                                    ? 'col-6'
-                                    : 'col-12'
-                            }
-                        >
-                            <div className="position-relative">
-                                <ImageLink
-                                    imgUrl={data?.offer_banner?.banner_1}
-                                    placeholder={`${ImagePath}/two_column_banner.png`}
-                                    height={338}
-                                    width={676}
-                                />
-                                <div className="banner-skeleton">
-                                    <div className="skeleton-content">
-                                        <p className="card-text placeholder-glow row g-lg-3 g-0">
-                                            <span className="col-lg-7 col-9">
-                                                <span className="placeholder"></span>
-                                            </span>
-                                            <span className="col-lg-9 col-12">
-                                                <span className="placeholder"></span>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    {data?.offer_banner?.banner_2?.status && (
-                        <div
-                            className={
-                                data?.offer_banner?.banner_2?.status
-                                    ? 'col-6'
-                                    : 'col-12'
-                            }
-                        >
-                            <div className="position-relative">
-                                <ImageLink
-                                    imgUrl={data?.offer_banner?.banner_2}
-                                    placeholder={`${ImagePath}/two_column_banner.png`}
-                                    height={338}
-                                    width={676}
-                                />
-                                <div className="banner-skeleton">
-                                    <div className="skeleton-content">
-                                        <p className="card-text placeholder-glow row g-lg-3 g-0">
-                                            <span className="col-lg-7 col-9">
-                                                <span className="placeholder"></span>
-                                            </span>
-                                            <span className="col-lg-9 col-12">
-                                                <span className="placeholder"></span>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </Row>
-            </WrapperComponent>
-
-            {/* Products Slider */}
-            {data?.products_list?.status && (
-                <>
-                    <HomeTitle title={data?.products_list} type="basic" />
-                    <WrapperComponent
-                        classes={{
-                            sectionClass: 'section-b-space pt-0',
-                            fluidClass: 'container',
-                        }}
-                    >
-                        <div className="product-4 no-arrow">
-                            <HomeProduct
-                                slider={true}
-                                style="vertical"
-                                productIds={
-                                    data?.products_list?.product_ids || []
-                                }
-                                sliderOptions={horizontalProductSlider}
-                            />
-                        </div>
-                    </WrapperComponent>
-                </>
-            )}
-
-            {/* Parallax Or Full Banner */}
-            {data?.parallax_banner?.status && !hiddenFeatures && (
-                <section className="p-0 game-parallax effect-cls section-t-space">
-                    <HomeParallaxBanner banners={data?.parallax_banner} />
-                </section>
-            )}
-
-            {/* Product Categories */}
-            {data?.category_product?.status && !hiddenFeatures && (
-                <>
-                    <HomeTitle title={data?.category_product} type="basic" />
-                    <WrapperComponent
-                        classes={{
-                            sectionClass:
-                                'section-b-space category-tab-section pt-0',
-                            fluidClass: 'container',
-                        }}
-                    >
-                        <HomeProductTab
-                            categoryIds={data?.category_product?.category_ids}
-                            style="vertical"
-                        />
-                    </WrapperComponent>
-                </>
-            )}
-
-            {/* Services */}
-            {data?.services && (
-                <Container>
-                    <WrapperComponent
-                        classes={{
-                            sectionClass:
-                                'service border-section small-section',
-                        }}
-                        noRowCol={true}
-                    >
-                        <HomeServices
-                            services={data?.services?.banners || []}
-                        />
-                    </WrapperComponent>
-                </Container>
-            )}
-
-            {/* Social Media */}
-            {data?.social_media?.banners?.length &&
-                data?.social_media?.status && (
-                    <section className="instagram ratio_square overflow-hidden section-t-space section-b-space">
-                        <HomeSocialMedia
-                            media={data?.social_media || []}
-                            classes="container-fluid"
-                            type="borderless"
-                        />
-                    </section>
-                )}
+          <HomeTitle title={data?.products_list} type="basic" />
+          <WrapperComponent
+            classes={{
+              sectionClass: 'section-b-space pt-0',
+              fluidClass: 'container',
+            }}
+          >
+            <div className="product-4 no-arrow">
+              <HomeProduct
+                slider={true}
+                style="vertical"
+                productIds={data?.products_list?.product_ids || []}
+                sliderOptions={horizontalProductSlider}
+              />
+            </div>
+          </WrapperComponent>
         </>
-    )
+      )}
+
+      {/* Product Categories */}
+      {data?.category_product?.status && (
+        <>
+          <HomeTitle title={data?.category_product} type="basic" />
+          <WrapperComponent
+            classes={{
+              sectionClass: 'section-b-space category-tab-section pt-0',
+              fluidClass: 'container',
+            }}
+          >
+            <HomeProductTab
+              categoryIds={data?.category_product?.category_ids}
+              style="vertical"
+            />
+          </WrapperComponent>
+        </>
+      )}
+
+      {/* Brands */}
+      {data?.brands?.brand_ids?.length > 0 && (
+        <WrapperComponent
+          classes={{
+            sectionClass: 'section-b-space',
+            fluidClass: 'container',
+          }}
+          noRowCol={true}
+        >
+          <HomeTitle title={{ title: 'Our Brands' }} type="basic" />
+          <HomeBrand brandIds={data?.brands?.brand_ids} />
+        </WrapperComponent>
+      )}
+
+      {/* Services */}
+      {data?.services?.banners?.length > 0 && (
+        <Container>
+          <WrapperComponent
+            classes={{
+              sectionClass: 'service border-section small-section',
+            }}
+            noRowCol={true}
+          >
+            <HomeServices services={data?.services?.banners || []} />
+          </WrapperComponent>
+        </Container>
+      )}
+
+      {/* Parallax Banner */}
+      {data?.parallax_banner?.status && (
+        <section className="p-0 game-parallax effect-cls section-t-space">
+          <HomeParallaxBanner banners={data?.parallax_banner} />
+        </section>
+      )}
+
+      {/* Social Media */}
+      {data?.social_media?.banners?.length > 0 && data?.social_media?.status && (
+        <section className="instagram ratio_square overflow-hidden section-t-space section-b-space">
+          <HomeSocialMedia
+            media={data?.social_media || []}
+            classes="container-fluid"
+            type="borderless"
+          />
+        </section>
+      )}
+    </>
+  )
 }
 
 export default Fashion1

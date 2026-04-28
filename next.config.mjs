@@ -3,8 +3,8 @@
 const nextConfig = {
   env: {
     // Change below URL with your current domain
-    API_PROD_URL: "http://localhost:3000/api",
-    storageURL: "http://localhost:3000",
+    API_PROD_URL: "http://localhost:5000",
+    storageURL: "",
   },
 
   images: {
@@ -16,6 +16,14 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
       },
     ],
   },

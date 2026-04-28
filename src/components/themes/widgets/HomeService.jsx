@@ -1,4 +1,4 @@
-import { storageURL } from "@/utils/constants";
+import { getMediaSrc } from "@/utils/constants";
 import Image from "next/image";
 import React, { Fragment, useEffect, useState } from "react";
 import { Row } from "reactstrap";
@@ -20,7 +20,7 @@ const HomeServices = ({ services, type }) => {
             {type === "simple" ? (
               <div className={` ${filteredServices.length === 4 ? "col-xl-3 col-md-6" : filteredServices.length === 3 ? "col-md-4" : filteredServices.length === 2 ? "col-md-6" : "col-12"}`}>
                 <div className="service-block1">
-                  <Image height={59} width={59} src={storageURL + service?.image_url} alt={service.title} />
+                  <Image height={59} width={59} src={getMediaSrc(service?.image_url)} alt={service.title} />
                   <div className="service-skeleton-img"></div>
                   <h4>{service.title}</h4>
                   <h4 className="skeleton-content-h4"></h4>
@@ -32,7 +32,7 @@ const HomeServices = ({ services, type }) => {
               <div className={`${filteredServices.length === 4 ? "col-xl-3 col-sm-6" : filteredServices.length === 3 ? "col-lg-4 col-sm-6" : filteredServices.length === 2 ? "col-sm-6" : "col-12"}`}>
                 <div className="service-block">
                   <div className="media">
-                    <Image height={59} width={59} src={storageURL + service?.image_url} alt={service.title} />
+                    <Image height={59} width={59} src={getMediaSrc(service?.image_url)} alt={service.title} />
                     <div className="skeleton-img-box"></div>
                     <div className="media-body">
                       <h4>{service.title}</h4>

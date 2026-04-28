@@ -1013,19 +1013,23 @@
             background-color: $white;
             border: 1px solid $white-dark;
             cursor: pointer;
+            color: #aaa;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+            i {
+              font-size: 18px;
+              line-height: 1;
+            }
+
+            &:hover {
+              color: var(--theme-color);
+              border-color: color-mix(in srgb, var(--theme-color) 30%, transparent);
+            }
 
             &.active {
               background-color: var(--theme-color);
               border-color: transparent;
-
-              img {
-                filter: invert(1) brightness(100);
-              }
-            }
-
-            img {
-              height: 16px;
-              cursor: pointer;
+              color: $white;
             }
           }
         }
@@ -3398,7 +3402,7 @@
     span {
       font-size: 20px;
       margin-right: 2px;
-      color: #ff9800;
+      color: #d0d0d0;
     }
   }
 
@@ -3651,7 +3655,7 @@
         .discounted-price {
           font-weight: 500;
           padding: 5px calc(12px + 0.0025 * (100vw - 320px));
-          background-color: #ec89511c;
+          background-color: color-mix(in srgb, var(--theme-color) 11%, transparent);
           color: var(--theme-color);
           display: inline-block;
           margin-bottom: 0;
@@ -4245,10 +4249,10 @@
     font-size: calc(14px + 0.0025 * (100vw - 320px));
     margin-right: calc(0px + 0.00125 * (100vw - 320px));
     line-height: 1;
-    color: #ff9800;
+    color: #d0d0d0;
 
     &.fill {
-      color: $star-yellow;
+      color: var(--theme-color2, #{$star-yellow});
     }
   }
 
@@ -4260,10 +4264,10 @@
     width: unset;
     height: unset;
     font-size: calc(12px + (18 - 12) * ((100vw - 320px) / (1920 - 320)));
-    color: #ff9800;
+    color: #d0d0d0;
 
     &.fill {
-      color: $star-yellow;
+      color: var(--theme-color2, #{$star-yellow});
     }
   }
 }
@@ -4396,8 +4400,8 @@
           &.active {
             color: var(--theme-color);
             font-weight: 600;
-            background-color: rgb(236, 137, 81, 0.07);
-            border-color: rgba(236, 137, 81, 0.5882352941);
+            background-color: color-mix(in srgb, var(--theme-color) 7%, transparent);
+            border-color: color-mix(in srgb, var(--theme-color) 59%, transparent);
           }
         }
 
@@ -4555,6 +4559,14 @@
   &.show {
     opacity: 0.3;
     visibility: visible;
+  }
+}
+
+.shop-section {
+  .collection-content {
+    @media (min-width: 992px) {
+      padding-right: calc(var(--bs-gutter-x) * 0.5 + 12px);
+    }
   }
 }
 
@@ -8766,7 +8778,7 @@
       .discounted-price {
         font-weight: 500;
         padding: 5px calc(12px + 0.0025 * (100vw - 320px));
-        background-color: #ec89511c;
+        background-color: color-mix(in srgb, var(--theme-color) 11%, transparent);
         color: var(--theme-color);
         display: inline-block;
         margin-bottom: 0;
@@ -9656,7 +9668,7 @@
 .six-items {
   .basic-product {
     .img-wrapper {
-      height: 190px;
+      aspect-ratio: 1 / 1;
     }
   }
 }
@@ -9755,6 +9767,8 @@
     z-index: 0;
     @include flex_common;
     background-color: $top-header;
+    width: 100%;
+    aspect-ratio: 1 / 1;
 
     >app-image-variant {
       height: 100%;

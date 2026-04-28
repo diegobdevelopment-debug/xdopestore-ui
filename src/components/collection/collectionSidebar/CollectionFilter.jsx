@@ -36,17 +36,17 @@ const CollectionFilter = ({ filter, setFilter, categorySlug }) => {
         }
         return val !== slugValue;
       });
-      mergeFilter();
-      setFilter(filterObj);
-      const params = {};
-      Object.keys(filterObj).forEach((key) => {
-        if (filterObj[key].length > 0) {
-          params[key] = filterObj[key].join(",");
-        }
-      });
-      const queryParams = new URLSearchParams({ ...params, ...layout }).toString();
-      router.push(`${pathname}?${queryParams}`);
     });
+    mergeFilter();
+    setFilter(filterObj);
+    const params = {};
+    Object.keys(filterObj).forEach((key) => {
+      if (filterObj[key].length > 0) {
+        params[key] = filterObj[key].join(",");
+      }
+    });
+    const queryParams = new URLSearchParams({ ...params, ...layout }).toString();
+    router.push(`${pathname}?${queryParams}`);
   };
 
   const clearParams = () => {
