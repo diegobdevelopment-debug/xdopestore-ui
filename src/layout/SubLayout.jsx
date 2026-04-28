@@ -118,47 +118,20 @@ const SubLayout = ({ children }) => {
     }
   }, [themeColor, themeColor2])
 
-<<<<<<< HEAD
-    useEffect(() => {
-        const messages = themeOption?.general?.taglines
-        let timer
-
-        const updateTitle = (index) => {
-            document.title = messages[index]
-            timer = setTimeout(() => {
-                const nextIndex = (index + 1) % messages.length
-                updateTitle(nextIndex)
-            }, 500)
-        }
-
-        if (!disableMetaTitle.includes(pathName.split('/')[1].toLowerCase())) {
-            if (!isTabActive && themeOption?.general?.exit_tagline_enable && messages?.length) {
-                updateTitle(0)
-            } else {
-                let value =
-                    themeOption?.general?.site_title &&
-                    themeOption?.general?.site_tagline
-                        ? `${themeOption?.general?.site_title} | ${themeOption?.general?.site_tagline}`
-                        : 'Multikart Marketplace: Where Vendors Shine Together'
-                document.title = value
-                clearTimeout(timer)
-            }
-        }
-=======
   useEffect(() => {
-    const message = themeOption?.general?.taglines
+    const messages = themeOption?.general?.taglines
     let timer
 
     const updateTitle = (index) => {
-      document.title = message[index]
+      document.title = messages[index]
       timer = setTimeout(() => {
-        const nextIndex = (index + 1) % message.length
+        const nextIndex = (index + 1) % messages.length
         updateTitle(nextIndex)
       }, 500)
     }
 
     if (!disableMetaTitle.includes(pathName.split('/')[1].toLowerCase())) {
-      if (!isTabActive && themeOption?.general?.exit_tagline_enable) {
+      if (!isTabActive && themeOption?.general?.exit_tagline_enable && messages?.length) {
         updateTitle(0)
       } else {
         let value =
@@ -169,7 +142,6 @@ const SubLayout = ({ children }) => {
         clearTimeout(timer)
       }
     }
->>>>>>> 073ecc6aa46337a1439684b407e3b9c79bd93edc
 
     return () => {
       clearTimeout(timer)

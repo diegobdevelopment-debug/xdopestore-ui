@@ -12,23 +12,14 @@ const MainHeaderMenu = () => {
     fetchStatus,
   } = useFetchQuery(["menu"], () => request({ url: "/menu" }), {
     select: (res) => {
-<<<<<<< HEAD
-      // Extract the menu items from the API response
-      const originalData = res.data.data;
-      const modifiedData = originalData.map((item) => ({
+      const originalData = res?.data?.data;
+      if (!Array.isArray(originalData)) return [];
+      return originalData.map((item) => ({
         ...item,
         class: "0",
         link_type: item.link_type ?? "link",
         is_target_blank: item.is_target_blank ?? 0,
       }));
-
-      // Return filtered and modified list of menu items
-      return modifiedData;
-=======
-      const originalData = res?.data?.data;
-      if (!Array.isArray(originalData)) return [];
-      return originalData.map((item) => ({ ...item, class: "0" }));
->>>>>>> 073ecc6aa46337a1439684b407e3b9c79bd93edc
     },
     refetchOnWindowFocus: true,
     enabled: false,
