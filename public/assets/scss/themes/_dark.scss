@@ -948,8 +948,8 @@ body {
                         &.active {
                             color: var(--theme-color);
                             font-weight: 600;
-                            background-color: rgba(236, 137, 81, 0.07);
-                            border-color: rgba(236, 137, 81, 0.5882352941);
+                            background-color: color-mix(in srgb, var(--theme-color) 7%, transparent);
+                            border-color: color-mix(in srgb, var(--theme-color) 59%, transparent);
                         }
                     }
                 }

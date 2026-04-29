@@ -1,6 +1,4 @@
 import ThemeOptionContext from "@/context/themeOptionsContext";
-import { ImagePath } from "@/utils/constants";
-import Image from "next/image";
 import { useContext } from "react";
 
 const GridBox = ({ grid, setGrid }) => {
@@ -10,16 +8,16 @@ const GridBox = ({ grid, setGrid }) => {
     <div className="collection-grid-view">
       <ul>
         <li className={`${grid == 2 ? "active" : ""}`} onClick={() => setGrid(2)}>
-          <Image src={`${ImagePath}/icon/2.png`} alt="grid image" height={16} width={11} className="product-2-layout-view" />
+          <i className="ri-layout-2-line" />
         </li>
         <li className={`${grid == 3 ? "active" : ""}`} onClick={() => setGrid(3)}>
-          <Image src={`${ImagePath}/icon/3.png`} alt="grid image" height={16} width={18} className="product-3-layout-view" />
+          <i className="ri-layout-3-line" />
         </li>
-        <li className={` ${grid == 4 ? "active" : ""}`} onClick={() => setGrid(4)}>
-          <Image src={`${ImagePath}/icon/4.png`} className="product-4-layout-view" alt="grid image" height={16} width={25} />
+        <li className={`${grid == 4 ? "active" : ""}`} onClick={() => setGrid(4)}>
+          <i className="ri-layout-4-line" />
         </li>
-        <li className={` ${grid == "list" ? "active" : ""}`} onClick={() =>  {setGrid("list"),setVariant('product_box_eleven')}}>
-          <Image src={`${ImagePath}/icon/list.png`} className="product-6-layout-view" alt="grid image" height={12} width={18} />
+        <li className={`${grid == "list" ? "active" : ""}`} onClick={() => { setGrid("list"); setVariant('product_box_eleven'); }}>
+          <i className="ri-list-unordered" />
         </li>
       </ul>
     </div>

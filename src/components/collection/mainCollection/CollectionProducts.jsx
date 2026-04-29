@@ -6,7 +6,7 @@ import ThemeOptionContext from "@/context/themeOptionsContext";
 import request from "@/utils/axiosUtils";
 import { ProductAPI } from "@/utils/axiosUtils/API";
 import { ImagePath } from "@/utils/constants";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -45,10 +45,11 @@ const CollectionProducts = ({ filter, grid, infiniteScroll, categorySlug }) => {
   };
 
   const { data, fetchNextPage, isRefetching, isLoading, fetchStatus, refetch } = useInfiniteQuery({
-    queryKey: ["infiniteScroll",filter],
+    queryKey: ["infiniteScroll", filter],
     queryFn: fetchData,
     retryOnMount: false,
     enabled: false,
+    placeholderData: keepPreviousData,
     getNextPageParam: ({ page, last_page }) => last_page > page && { page: page + 1 },
   });
 
@@ -95,7 +96,7 @@ const CollectionProducts = ({ filter, grid, infiniteScroll, categorySlug }) => {
 
   return (
     <>
-      {(!infiniteScroll && fetchStatus != "idle") || isLoading ? (
+      {isLoading ? (
         <Row className="g-xl-4 g-lg-3 g-sm-4 g-3">
           {new Array(40).fill(null).map((_, i) => (
             <Col className={adjustGrid} key={i}>
@@ -104,7 +105,7 @@ const CollectionProducts = ({ filter, grid, infiniteScroll, categorySlug }) => {
           ))}
         </Row>
       ) : data?.pages?.length > 0 && data.pages[data?.pages?.length - 1]?.data?.data?.length ? (
-        <div className={`product-wrapper-grid ${infiniteScroll ? "product-load-more" : ""} ${grid == "list" ? "list-view" : ""} ${themeOption?.product?.full_border ? "full_border" : ""} ${themeOption?.product?.image_bg ? "product_img_bg" : ""} ${themeOption?.product?.product_box_bg ? "full_bg" : ""} ${themeOption?.product?.product_box_border ? "product_border" : ""}`}>
+        <div className={`product-wrapper-grid ${infiniteScroll ? "product-load-more" : ""} ${grid == "list" ? "list-view" : ""} ${themeOption?.product?.full_border ? "full_border" : ""} ${themeOption?.product?.image_bg ? "product_img_bg" : ""} ${themeOption?.product?.product_box_bg ? "full_bg" : ""} ${themeOption?.product?.product_box_border ? "product_border" : ""}`} style={{ opacity: isRefetching ? 0.45 : 1, transition: "opacity 0.25s ease-in-out" }}>
           {!infiniteScroll ? (
             <Row className="g-xl-4 g-lg-3 g-sm-4 g-3">
               {data?.pages[data.pages.length - 1]?.data?.data?.map((product, i) => (

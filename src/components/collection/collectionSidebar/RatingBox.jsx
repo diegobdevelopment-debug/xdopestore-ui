@@ -15,12 +15,12 @@ const RatingBox = ({ classes = {}, totalRating, clickAble, setFieldValue, name }
           {RatingStar &&
             RatingStar.map((elem, index) => (
               <li key={elem} onClick={() => handleRate(index + 1)}>
-                {index + 1 <= rating ? <RiStarFill color="orange" size="17" /> : <RiStarLine size="17" />}
+                {index + 1 <= rating ? <RiStarFill style={{ color: "var(--theme-color2, #ffa200)" }} size="17" /> : <RiStarLine size="17" />}
               </li>
             ))}
         </div>
       ) : (
-        <div className={`rating ${classes?.customClass ? classes?.customClass : ""}`}>{RatingStar && RatingStar.map((elem) => <span key={elem}>{elem + 1 <= totalRating ? <RiStarFill color="orange" size="17" /> : <RiStarLine size="17" />}</span>)}</div>
+        <div className={`rating ${classes?.customClass ? classes?.customClass : ""}`}>{RatingStar && RatingStar.map((elem) => <span key={elem}>{elem + 1 <= totalRating ? <RiStarFill style={{ color: "var(--theme-color2, #ffa200)" }} size="17" /> : <RiStarLine size="17" />}</span>)}</div>
       )}
     </>
   );

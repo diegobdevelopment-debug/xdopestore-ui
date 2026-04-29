@@ -4,16 +4,27 @@ const nextConfig = {
   env: {
     // Change below URL with your current domain
     API_PROD_URL: "http://localhost:5000",
-    storageURL: "http://localhost:5000/uploads",
+    storageURL: "",
   },
 
   images: {
     remotePatterns: [
-      { protocol: "http", hostname: "127.0.0.1" },
-      { protocol: "http", hostname: "localhost" },
-      { protocol: "https", hostname: "picsum.photos" },
-      { protocol: "https", hostname: "fastly.picsum.photos" },
-      { protocol: "https", hostname: "res.cloudinary.com" },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
     ],
   },
   module: {

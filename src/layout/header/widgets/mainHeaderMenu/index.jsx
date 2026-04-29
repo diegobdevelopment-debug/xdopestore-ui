@@ -14,7 +14,12 @@ const MainHeaderMenu = () => {
     select: (res) => {
       const originalData = res?.data?.data;
       if (!Array.isArray(originalData)) return [];
-      return originalData.map((item) => ({ ...item, class: "0" }));
+      return originalData.map((item) => ({
+        ...item,
+        class: "0",
+        link_type: item.link_type ?? "link",
+        is_target_blank: item.is_target_blank ?? 0,
+      }));
     },
     refetchOnWindowFocus: true,
     enabled: false,

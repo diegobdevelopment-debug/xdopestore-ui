@@ -119,19 +119,19 @@ const SubLayout = ({ children }) => {
   }, [themeColor, themeColor2])
 
   useEffect(() => {
-    const message = themeOption?.general?.taglines
+    const messages = themeOption?.general?.taglines
     let timer
 
     const updateTitle = (index) => {
-      document.title = message[index]
+      document.title = messages[index]
       timer = setTimeout(() => {
-        const nextIndex = (index + 1) % message.length
+        const nextIndex = (index + 1) % messages.length
         updateTitle(nextIndex)
       }, 500)
     }
 
     if (!disableMetaTitle.includes(pathName.split('/')[1].toLowerCase())) {
-      if (!isTabActive && themeOption?.general?.exit_tagline_enable) {
+      if (!isTabActive && themeOption?.general?.exit_tagline_enable && messages?.length) {
         updateTitle(0)
       } else {
         let value =

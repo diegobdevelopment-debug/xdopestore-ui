@@ -990,7 +990,7 @@
     height: 70px;
     padding: 18px;
     border-radius: 100%;
-    background-color: rgba(236, 137, 81, 0.08);
+    background-color: color-mix(in srgb, var(--theme-color) 8%, transparent);
     color: var(--theme-color);
     margin-bottom: 10px;
     @include flex_common;

@@ -102,7 +102,7 @@ const RecursiveCategory = ({ redirectToCollection, categories, filter }) => (
             <span className="name">{elem?.name}</span>
           </Label>
         </div>
-        {elem.subcategories.length > 0 ? (
+        {elem.subcategories?.length > 0 ? (
           <ul className="sub-category-list">
             <RecursiveCategory redirectToCollection={redirectToCollection} categories={elem?.subcategories} filter={filter} />
           </ul>
