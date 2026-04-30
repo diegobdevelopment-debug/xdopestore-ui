@@ -97,11 +97,14 @@ const Fashion1 = () => {
                       width={676}
                     />
                   </div>
+                  {data?.offer_banner?.banner_1?.text_bg && (
+                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 1, pointerEvents: 'none' }} />
+                  )}
                   {(data?.offer_banner?.banner_1?.title || data?.offer_banner?.banner_1?.subtitle) && (
-                    <div className="contain-banner banner-3" style={{ pointerEvents: 'none' }}>
+                    <div className="contain-banner banner-3" style={{ pointerEvents: 'none', zIndex: 2 }}>
                       <div style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
-                        {data?.offer_banner?.banner_1?.subtitle && <h4>{data.offer_banner.banner_1.subtitle}</h4>}
-                        {data?.offer_banner?.banner_1?.title && <h2 className="font-smaller">{data.offer_banner.banner_1.title}</h2>}
+                        {data?.offer_banner?.banner_1?.subtitle && <h4 style={data.offer_banner.banner_1.text_color ? { color: data.offer_banner.banner_1.text_color } : undefined}>{data.offer_banner.banner_1.subtitle}</h4>}
+                        {data?.offer_banner?.banner_1?.title && <h2 className="font-smaller" style={data.offer_banner.banner_1.text_color ? { color: data.offer_banner.banner_1.text_color } : undefined}>{data.offer_banner.banner_1.title}</h2>}
                       </div>
                     </div>
                   )}
@@ -119,11 +122,14 @@ const Fashion1 = () => {
                       width={676}
                     />
                   </div>
+                  {data?.offer_banner?.banner_2?.text_bg && (
+                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 1, pointerEvents: 'none' }} />
+                  )}
                   {(data?.offer_banner?.banner_2?.title || data?.offer_banner?.banner_2?.subtitle) && (
-                    <div className="contain-banner banner-3" style={{ pointerEvents: 'none' }}>
+                    <div className="contain-banner banner-3" style={{ pointerEvents: 'none', zIndex: 2 }}>
                       <div style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
-                        {data?.offer_banner?.banner_2?.subtitle && <h4>{data.offer_banner.banner_2.subtitle}</h4>}
-                        {data?.offer_banner?.banner_2?.title && <h2 className="font-smaller">{data.offer_banner.banner_2.title}</h2>}
+                        {data?.offer_banner?.banner_2?.subtitle && <h4 style={data.offer_banner.banner_2.text_color ? { color: data.offer_banner.banner_2.text_color } : undefined}>{data.offer_banner.banner_2.subtitle}</h4>}
+                        {data?.offer_banner?.banner_2?.title && <h2 className="font-smaller" style={data.offer_banner.banner_2.text_color ? { color: data.offer_banner.banner_2.text_color } : undefined}>{data.offer_banner.banner_2.title}</h2>}
                       </div>
                     </div>
                   )}
