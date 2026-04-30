@@ -70,6 +70,15 @@ const HomeProductTab = ({ categoryIds, slider, style, tab_title_class, tabStyle,
 
   const filteredCategories = isFilterCategoryDataNested ? filterCategoryDataNested(categoryData, categoryIds) : filterCategoryData(categoryData, categoryIds);
 
+  // Auto-select the first category as soon as the tab list is available so the
+  // storefront shows its products by default (instead of "No Product Found").
+  useEffect(() => {
+    if (!currentCategory && filteredCategories?.length > 0) {
+      setCurrentCategory(filteredCategories[0].id);
+      setActiveTab(0);
+    }
+  }, [filteredCategories, currentCategory]);
+
   const { data: product, refetch, fetchStatus, isLoading } = useFetchQuery([currentCategory], () => request({ url: ProductAPI, params: { category_ids: currentCategory || customSelectedId, status: 1, paginate: paginate ? paginate : 4 } }, router), { enabled: !!(currentCategory || customSelectedId), refetchOnWindowFocus: false, select: (res) => res?.data?.data });
 
   const changeTab = (index, category) => {
