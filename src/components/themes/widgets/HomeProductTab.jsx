@@ -23,49 +23,29 @@ const HomeProductTab = ({ categoryIds, slider, style, tab_title_class, tabStyle,
   const [customSelectedId, setCustomSelectedId] = useState("");
 
   const filterCategoryDataNested = (categoryData, categoryIds) => {
-    if (!categoryData || !categoryIds) {
-      return [];
-    }
-
-    const filteredCategories = [];
-    const filteredSubCategoryIds = new Set(categoryIds);
-
-    const filterCategory = (category) => {
-      if (filteredSubCategoryIds.has(category.id)) {
-        filteredCategories.push(category);
-        if (category.subcategories) {
-          category.subcategories.forEach((subcategory) => {
-            filterCategory(subcategory);
-          });
-        }
+    if (!categoryData || !categoryIds) return [];
+    const idSet = new Set(categoryIds);
+    const seen = new Set();
+    const result = [];
+    const visit = (category) => {
+      if (seen.has(category.id)) return;
+      if (idSet.has(category.id)) {
+        seen.add(category.id);
+        result.push(category);
+        category.subcategories?.forEach(visit);
+      } else {
+        category.subcategories?.forEach(visit);
       }
-      return;
     };
-    categoryData.forEach(filterCategory);
-    return filteredCategories;
+    categoryData.forEach(visit);
+    return result;
   };
 
+  // The API returns a flat list that already includes subcategories — just filter by id directly.
   const filterCategoryData = (categoryData, categoryIds) => {
-    if (!categoryData || !categoryIds) {
-      return [];
-    }
-
-    const filteredCategories = [];
-    const filteredSubCategoryIds = new Set(categoryIds);
-
-    const filterCategory = (category) => {
-      if (filteredSubCategoryIds.has(category.id)) {
-        filteredCategories.push(category);
-        return;
-      }
-      if (category.subcategories) {
-        category.subcategories.forEach((subcategory) => {
-          filterCategory(subcategory);
-        });
-      }
-    };
-    categoryData.forEach(filterCategory);
-    return filteredCategories;
+    if (!categoryData || !categoryIds) return [];
+    const idSet = new Set(categoryIds);
+    return categoryData.filter((cat) => idSet.has(cat.id));
   };
 
   const filteredCategories = isFilterCategoryDataNested ? filterCategoryDataNested(categoryData, categoryIds) : filterCategoryData(categoryData, categoryIds);

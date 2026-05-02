@@ -31,12 +31,12 @@ const ApplyCoupon = ({ data, setFieldValue, storeCoupon, setStoreCoupon, values,
     setAppliedCoupon(null);
     setFieldValue("coupon", "");
     setStoreCoupon("");
-    // Put your logic here
+    mutate && mutate({ coupon_code: "" });
   };
   const onCouponApplyClick = () => {
-    storeCoupon !== "" && setAppliedCoupon("applied");
+    if (!storeCoupon) return;
     setFieldValue("coupon", storeCoupon);
-    // Put your logic here
+    mutate && mutate({ coupon_code: storeCoupon });
   };
   const onCopyCode = (couponData) => {
     navigator.clipboard.writeText(couponData);
@@ -73,7 +73,7 @@ const ApplyCoupon = ({ data, setFieldValue, storeCoupon, setStoreCoupon, values,
           <Image src={`${ImagePath}/offer.gif`} className="img-fluid" height={20} width={20} alt="offer" />
           <div>
             <h4>
-              {t("Yousaved")} <span>{convertCurrency("10")}</span> {t("withthiscode")} 🎉 <p>{t("CouponApplied")}</p>
+              {t("Yousaved")} <span>{convertCurrency(data?.data?.coupon_total_discount || 0)}</span> {t("withthiscode")} 🎉 <p>{t("CouponApplied")}</p>
             </h4>
           </div>
           <a style={{ cursor: "pointer" }} className="close-coupon" onClick={() => removeCoupon()}>

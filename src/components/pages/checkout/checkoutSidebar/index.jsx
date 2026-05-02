@@ -18,7 +18,7 @@ const CheckoutSidebar = ({ values, setFieldValue, errors, addToCartData }) => {
   const access_token = Cookies.get("uat");
   const [resData, setResData] = useState({});
 
-  const { isLoading } = useCreate(
+  const { isLoading, mutate } = useCreate(
     CheckoutAPI,
     false,
     false,
@@ -65,7 +65,7 @@ const CheckoutSidebar = ({ values, setFieldValue, errors, addToCartData }) => {
         {cartProducts?.length > 0 ? (
           <div className="checkout-right-box">
             <SidebarProduct values={values} setFieldValue={setFieldValue} />
-            <BillingSummary values={values} errors={errors} setFieldValue={setFieldValue} data={resData} errorCoupon={errorCoupon} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} storeCoupon={storeCoupon} setStoreCoupon={setStoreCoupon} isLoading={isLoading} addToCartData={addToCartData} />
+            <BillingSummary values={values} errors={errors} setFieldValue={setFieldValue} data={resData} errorCoupon={errorCoupon} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} storeCoupon={storeCoupon} setStoreCoupon={setStoreCoupon} isLoading={isLoading} addToCartData={addToCartData} mutate={mutate} />
           </div>
         ) : (
           <NoDataFound customClass="no-data-added" height={156} width={180} imageUrl={`/assets/svg/empty-items.svg`} title="EmptyCart" />

@@ -18,9 +18,9 @@ const HomeSocialMedia = ({ media, title, classes, sliderClass, type, sliderOptio
               (banner, index) =>
                 banner.status && (
                   <div className="h-100" key={index}>
-                    <a href={banner.redirect_link.link} tabIndex="0" target="_blank">
-                      <div className="instagram-box bg-size h-100" style={{ backgroundImage: `url(${storageURL + banner.image_url})` }} >
-                        <img src={storageURL + banner.image_url} className="bg-img d-none" alt="img" />
+                    <a href={banner.redirect_link?.link} tabIndex="0" target="_blank">
+                      <div className="instagram-box bg-size h-100" style={{ backgroundImage: `url(${banner.image_url ? storageURL + banner.image_url : banner.original_url})` }} >
+                        <img src={banner.image_url ? storageURL + banner.image_url : banner.original_url} className="bg-img d-none" alt="img" />
                         <div className="overlay">
                           <RiInstagramLine />
                         </div>
