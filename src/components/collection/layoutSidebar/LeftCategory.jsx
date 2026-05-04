@@ -33,10 +33,10 @@ const LeftCategory = ({ filter, setFilter }) => {
     });
     if (temp.length > 0) {
       const queryParams = new URLSearchParams({ ...layout, category: temp }).toString();
-      router.push(`${pathname}?${queryParams}`);
+      router.push(`${pathname}?${queryParams}`, { scroll: false });
     } else {
       const queryParams = new URLSearchParams({ ...layout }).toString();
-      router.push(`${pathname}?${queryParams}`);
+      router.push(`${pathname}?${queryParams}`, { scroll: false });
     }
   };
   return (

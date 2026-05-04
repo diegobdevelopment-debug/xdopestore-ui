@@ -8,7 +8,7 @@ import { ProductAPI } from "@/utils/axiosUtils/API";
 import { ImagePath } from "@/utils/constants";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Col, Row } from "reactstrap";
 import ListProductBox from "./ListProductBox";
@@ -22,6 +22,9 @@ const CollectionProducts = ({ filter, grid, infiniteScroll, categorySlug }) => {
   const [infiniteScrollData, setInfiniteScrollData] = useState([]);
   const param = useSearchParams();
   const tagParam = param.get("tag");
+  // When the page resets to 1 because the user toggled a filter, we don't want
+  // to yank the viewport back to the top. Skip the next scroll-to-top in that case.
+  const skipNextScroll = useRef(false);
 
   const fetchData = async () => {
     return request({
@@ -68,7 +71,11 @@ const CollectionProducts = ({ filter, grid, infiniteScroll, categorySlug }) => {
   useEffect(() => {
     fetchNextPage();
     if (!infiniteScroll) {
-      window.scroll(0, 0);
+      if (skipNextScroll.current) {
+        skipNextScroll.current = false;
+      } else {
+        window.scroll(0, 0);
+      }
     }
   }, [page]);
 
@@ -91,7 +98,8 @@ const CollectionProducts = ({ filter, grid, infiniteScroll, categorySlug }) => {
   useEffect(() => {
     refetch()
     setInfiniteScrollData([]); // Reset infinite scroll data when filter changes
-  setPage(1); 
+    skipNextScroll.current = true; // a filter change should NOT scroll to top
+    setPage(1);
   }, [refetch, filter]);
 
   return (
