@@ -1,11 +1,20 @@
 import Btn from "@/elements/buttons/Btn";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { RiCloseLine } from "react-icons/ri";
 import { Modal, ModalBody, ModalHeader } from "reactstrap";
 
 const CustomModal = ({ classes = {}, extraFunction, modal, setModal, ...props }) => {
   const { t } = useTranslation("common");
-  const toggle = () => (extraFunction ? extraFunction() : setModal((prev) => prev !== prev));
+  const toggle = () => (extraFunction ? extraFunction() : setModal(false));
+
+  // Ensure body overflow is restored when modal closes or component unmounts
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+      document.body.classList.remove("modal-open");
+    };
+  }, []);
 
   return (
     <Modal className={classes?.modalClass || ""} isOpen={modal} toggle={toggle} centered>

@@ -20,7 +20,12 @@ const LeftSideModal = ({ cloneVariation, productObj }) => {
     });
   }, []);
 
-  const currentVariation = cloneVariation?.selectedVariation?.variation_galleries?.length ? cloneVariation?.selectedVariation?.variation_galleries : cloneVariation?.product?.product_galleries;
+  const galleries = cloneVariation?.product?.product_galleries?.length
+    ? cloneVariation?.product?.product_galleries
+    : cloneVariation?.product?.product_thumbnail
+    ? [cloneVariation.product.product_thumbnail]
+    : [];
+  const currentVariation = cloneVariation?.selectedVariation?.variation_galleries?.length ? cloneVariation?.selectedVariation?.variation_galleries : galleries;
 
   return (
     <Col lg="6">

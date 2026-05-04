@@ -7,12 +7,15 @@ import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 
 const AddToWishlist = ({ productObj, customClass }) => {
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
-  const { addToWishlist, removeWishlist } = useContext(WishlistContext);
+  const { addToWishlist, removeWishlist, wishlistIds } = useContext(WishlistContext);
 
-  const handelWishlist = (productObj) => {
+  const productId = String(productObj?.id || productObj?._id || "");
+  const isWishlisted = !!wishlistIds?.[productId];
+
+  const handelWishlist = () => {
     if (Cookies.get("uat")) {
-      if (productObj.is_wishlist) {
-        removeWishlist(productObj.id, productObj.wish_list_id ?? productObj.id);
+      if (isWishlisted) {
+        removeWishlist(productId, wishlistIds[productId]);
       } else {
         addToWishlist(productObj);
       }
@@ -24,12 +27,12 @@ const AddToWishlist = ({ productObj, customClass }) => {
   return (
     <>
       {customClass ? (
-        <a onClick={() => handelWishlist(productObj)} href={Href} className={customClass ? customClass : ""}>
-          {productObj.is_wishlist ? <RiHeartFill className="theme-color" /> : <RiHeartLine />}
+        <a onClick={handelWishlist} href={Href} className={customClass ? customClass : ""}>
+          {isWishlisted ? <RiHeartFill className="theme-color" /> : <RiHeartLine />}
         </a>
       ) : (
-        <li title="Wishlist" onClick={() => handelWishlist(productObj)}>
-          <a className={"heart-icon"}>{productObj.is_wishlist ? <RiHeartFill className="theme-color" /> : <RiHeartLine />}</a>
+        <li title="Wishlist" onClick={handelWishlist}>
+          <a className={"heart-icon"}>{isWishlisted ? <RiHeartFill className="theme-color" /> : <RiHeartLine />}</a>
         </li>
       )}
     </>

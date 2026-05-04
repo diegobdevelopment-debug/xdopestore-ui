@@ -9,7 +9,7 @@ import Loader from "@/layout/loader";
 import Breadcrumbs from "@/utils/commonComponents/breadcrumb";
 import { Href } from "@/utils/constants";
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { RiCloseLine, RiShoppingCartLine } from "react-icons/ri";
 import { Table } from "reactstrap";
@@ -30,6 +30,12 @@ const WishlistContent = () => {
     handleIncDec(1, product);
   };
 
+  // Reactstrap Modal sets body.style.overflow='hidden' and may not clean up on Next.js navigation
+  useEffect(() => {
+    document.body.style.overflow = "";
+    document.body.classList.remove("modal-open");
+  }, []);
+
   if (WishlistAPILoading) return <Loader />;
 
   return (
@@ -37,7 +43,7 @@ const WishlistContent = () => {
       <Breadcrumbs title={"Wishlist"} subNavigation={[{ name: "Wishlist" }]} />
       <WrapperComponent classes={{ sectionClass: "wishlist-section section-b-space", row: "g-sm-3 g-2", col: "table-responsive-xs", fluidClass: "container" }} colProps={{ sm: "12" }}>
         {wishlistProducts?.length > 0 ? (
-          <div className="table-responsive">
+          <>
             <Table className="cart-table">
               <thead>
                 <tr className="table-head">
@@ -69,12 +75,12 @@ const WishlistContent = () => {
                         </div>
                         <div className="col">
                           <div className="icon-box d-flex gap-2 justify-content-center">
-                            <a href={Href} className="icon " onClick={() => removeFromWishlist(product)}>
+                            <button className="icon btn p-0 border-0 bg-transparent" onClick={() => removeFromWishlist(product)}>
                               <RiCloseLine />
-                            </a>
-                            <a href={Href} className="cart" onClick={() => addToCart(product)}>
+                            </button>
+                            <button className="cart btn p-0 border-0 bg-transparent" onClick={() => addToCart(product)}>
                               <RiShoppingCartLine />
-                            </a>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -90,19 +96,19 @@ const WishlistContent = () => {
 
                     <td>
                       <div className="icon-box d-flex gap-2 justify-content-center">
-                        <a href={Href} className="icon " onClick={() => removeFromWishlist(product)}>
+                        <button className="icon btn p-0 border-0 bg-transparent" onClick={() => removeFromWishlist(product)}>
                           <RiCloseLine />
-                        </a>
-                        <a href={Href} className="cart" onClick={() => addToCart(product)}>
+                        </button>
+                        <button className="cart btn p-0 border-0 bg-transparent" onClick={() => addToCart(product)}>
                           <RiShoppingCartLine />
-                        </a>
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-          </div>
+          </>
         ) : (
           <NoDataFound customClass="no-data-added" imageUrl={emptyImage} title="NoItemsAdded" description="NoWishListDescription" height="300" width="300" />
         )}
