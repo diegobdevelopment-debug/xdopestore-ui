@@ -1,7 +1,9 @@
 import ProductAttribute from "@/components/productDetails/common/productAttribute/ProductAttribute";
 import WishlistCompareShare from "@/components/productDetails/common/WishlistCompareShare";
 import CustomModal from "@/components/widgets/CustomModal";
-import { useState } from "react";
+import request from "@/utils/axiosUtils";
+import { ProductAPI } from "@/utils/axiosUtils/API";
+import { useEffect, useState } from "react";
 import { Col, Row } from "reactstrap";
 import LeftSideModal from "./LeftSideModal";
 import RightVariationModal from "./RightSideModal";
@@ -40,14 +42,29 @@ const getInitialVariationState = (productObj) => {
 const VariationModal = ({ productObj, variationModal, setVariationModal }) => {
   const [cloneVariation, setCloneVariation] = useState(() => getInitialVariationState(productObj));
 
+  const isOpen = productObj?.id == variationModal;
+
+  useEffect(() => {
+    if (!isOpen) return;
+    // Listing endpoint doesn't populate attributes_ids — fetch full product to get styles
+    request({ url: `${ProductAPI}/${productObj?.slug || productObj?.id}` })
+      .then((res) => {
+        const fullProduct = res?.data;
+        if (fullProduct) setCloneVariation(getInitialVariationState(fullProduct));
+      })
+      .catch(() => {
+        setCloneVariation(getInitialVariationState(productObj));
+      });
+  }, [isOpen]);
+
   return (
-    <CustomModal modal={productObj?.id == variationModal} setModal={setVariationModal} classes={{ modalClass: "quick-view-modal modal-lg theme-modal-2", modalHeaderClass: "p-0" }}>
+    <CustomModal modal={isOpen} setModal={setVariationModal} classes={{ modalClass: "quick-view-modal modal-lg theme-modal-2", modalHeaderClass: "p-0" }}>
       <Row className="g-sm-4 g-3">
-        <LeftSideModal cloneVariation={cloneVariation} productObj={productObj} />
+        <LeftSideModal cloneVariation={cloneVariation} productObj={cloneVariation.product} />
         <Col lg="6" className="rtl-text">
           <div className="right-sidebar-modal product-page-details">
             <RightVariationModal cloneVariation={cloneVariation} />
-            {cloneVariation?.product && productObj?.id == variationModal && (
+            {cloneVariation?.product?.attributes?.length > 0 && cloneVariation?.product?.variations?.length > 0 && (
               <div className="modal-attributes">
                 <ProductAttribute noHoverEffect={true} productState={cloneVariation} setProductState={setCloneVariation} />
               </div>
@@ -56,6 +73,7 @@ const VariationModal = ({ productObj, variationModal, setVariationModal }) => {
               <VariationModalQty cloneVariation={cloneVariation} setCloneVariation={setCloneVariation} />
               <VariationAddToCart  cloneVariation={cloneVariation} setVariationModal={setVariationModal} />
             </div>
+            <WishlistCompareShare productState={cloneVariation} />
           </div>
         </Col>
       </Row>
