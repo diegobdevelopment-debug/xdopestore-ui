@@ -18,7 +18,7 @@ import emptyImage from "/public/assets/svg/empty-items.svg";
 const WishlistContent = () => {
   const { wishlistProducts, WishlistAPILoading, removeWishlist } = useContext(WishlistContext);
   const { t } = useTranslation("common");
-  const { setCartCanvas } = useContext(ThemeOptionContext);
+  const { setCartCanvas, openAuthModal } = useContext(ThemeOptionContext);
   const { handleIncDec, openCartSidebar } = useContext(CartContext);
   const removeFromWishlist = (product) => {
     removeWishlist(product.id, product.id);
@@ -30,19 +30,22 @@ const WishlistContent = () => {
     handleIncDec(1, product);
   };
 
-  // Reactstrap Modal sets body.style.overflow='hidden' and may not clean up on Next.js navigation
+  // Clear any leftover scroll-lock from Reactstrap Modal on mount and whenever the modal closes.
+  // Checking openAuthModal prevents clearing the lock while the modal is legitimately open.
   useEffect(() => {
-    document.body.style.overflow = "";
-    document.body.classList.remove("modal-open");
-  }, []);
-
-  if (WishlistAPILoading) return <Loader />;
+    if (!openAuthModal) {
+      document.body.style.overflow = "";
+      document.body.classList.remove("modal-open");
+    }
+  }, [openAuthModal]);
 
   return (
     <>
       <Breadcrumbs title={"Wishlist"} subNavigation={[{ name: "Wishlist" }]} />
-      <WrapperComponent classes={{ sectionClass: "wishlist-section section-b-space", row: "g-sm-3 g-2", col: "table-responsive-xs", fluidClass: "container" }} colProps={{ sm: "12" }}>
-        {wishlistProducts?.length > 0 ? (
+      <WrapperComponent classes={{ sectionClass: "wishlist-section section-b-space", row: "g-sm-3 g-2", col: "table-responsive", fluidClass: "container" }} colProps={{ sm: "12" }}>
+        {WishlistAPILoading ? (
+          <Loader />
+        ) : wishlistProducts?.length > 0 ? (
           <>
             <Table className="cart-table">
               <thead>

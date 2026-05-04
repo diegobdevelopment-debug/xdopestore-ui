@@ -6,7 +6,7 @@ export function useHeaderScroll(value) {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  });
+  }, []);
   const handleScroll = () => {
     if (window.scrollY > 8) {
       setUpScroll(true);

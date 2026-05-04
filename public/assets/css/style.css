@@ -12160,8 +12160,7 @@ header.header-style .onhover-dropdown:before {
 }
 
 header.sticky {
-    position: fixed;
-    width: 100vw;
+    position: sticky;
     top: 0;
     z-index: 9;
     -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.12);
@@ -12383,8 +12382,7 @@ header.stickycls {
 }
 
 header.sticky {
-    position: fixed !important;
-    width: 100vw;
+    position: sticky !important;
     top: 0;
     z-index: 9;
     -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.12);
