@@ -10,8 +10,13 @@ import PointWallet from "./PointWallet";
 
 const BillingSummary = ({ data, values, setFieldValue, isLoading, mutate, storeCoupon, setStoreCoupon, errorCoupon, appliedCoupon, setAppliedCoupon, errors }) => {
   const { convertCurrency } = useContext(SettingContext);
-  const { cartProducts } = useContext(CartContext);
+  const { cartProducts, cartTotal } = useContext(CartContext);
   const { t } = useTranslation("common");
+
+  const subtotal = cartTotal || cartProducts?.reduce((s, i) => s + (i.sub_total || 0), 0) || 0;
+  const shipping = values?.shipping_total || 0;
+  const couponDiscount = data?.data?.coupon_total_discount || 0;
+  const total = (data?.data?.total) ?? (subtotal + shipping - couponDiscount);
 
   return (
     <div className="checkout-details ">
@@ -31,29 +36,25 @@ const BillingSummary = ({ data, values, setFieldValue, isLoading, mutate, storeC
               <ul className="sub-total">
                 <li>
                   {t("Subtotal")}
-                  <span className="count">{convertCurrency("39.81")}</span>
+                  <span className="count">{convertCurrency(subtotal)}</span>
                 </li>
                 <li>
                   {t("Shipping")}
-                  <span className="count">{convertCurrency("0")}</span>
+                  <span className="count">{convertCurrency(shipping)}</span>
                 </li>
-                <li>
-                  {t("Tax")}
-                  <span className="count">{convertCurrency("1.99")}</span>
-                </li>
+                {couponDiscount > 0 && (
+                  <li>
+                    {t("YouSave")}
+                    <span className="count">- {convertCurrency(couponDiscount)}</span>
+                  </li>
+                )}
 
                 <PointWallet values={values} setFieldValue={setFieldValue} data={data} />
               </ul>
               <ul className="total">
-                {appliedCoupon == "applied" && data?.data?.total?.coupon_total_discount ? (
-                  <li className="list-total">
-                    {t("YouSave")}
-                    <span className="count">{data?.data?.total?.coupon_total_discount ? convertCurrency(data?.data?.total?.coupon_total_discount - data?.data?.total?.tax_total) : ""}</span>
-                  </li>
-                ) : null}
                 <li className="list-total">
                   {t("Total")}
-                  <span className="count">{convertCurrency("41.80")}</span>
+                  <span className="count">{convertCurrency(total)}</span>
                 </li>
               </ul>
               <PlaceOrder values={values} errors={errors} />

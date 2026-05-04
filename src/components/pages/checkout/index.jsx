@@ -34,13 +34,23 @@ const CheckoutContent = () => {
     const token = Cookies.get("uat");
     setAccessToken(token);
   }, []);
-  
+
+  const { data: addressData, refetch: refetchAddresses } = useFetchQuery(
+    [AddressAPI],
+    () => request({ url: AddressAPI }, router),
+    { enabled: false, select: (res) => res?.data?.data ?? [] }
+  );
+
   useEffect(() => {
-    accountData?.address.length > 0 && setAddress((prev) => [...accountData?.address]);
-  }, [accountData]);
+    if (accessToken) refetchAddresses();
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (addressData?.length > 0) setAddress(addressData);
+  }, [addressData]);
 
   const { mutate, isLoading } = useCreate(AddressAPI, false, false, "Address Added successfully", (resDta) => {
-    setAddress((prev) => [...prev, resDta?.data]);
+    refetchAddresses();
     refetch();
     setModal("");
   });

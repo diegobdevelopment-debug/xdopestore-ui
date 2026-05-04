@@ -34,13 +34,18 @@ const SettingProvider = (props) => {
   }, [isLoading]);
   const convertCurrency = useCallback(
     (value) => {
-      let position = selectedCurrency?.symbol_position ? selectedCurrency?.symbol_position : settingObj?.general?.default_currency?.symbol_position || "before_price";
-      let symbol = selectedCurrency?.symbol ? selectedCurrency?.symbol : settingObj?.general?.default_currency?.symbol || "$";
-      let amount = Number(value);
-      amount = amount * (selectedCurrency?.exchange_rate ? selectedCurrency?.exchange_rate : settingObj?.general?.default_currency?.exchange_rate);
-      if (position == "before_price") {
-        return `${symbol}${amount.toFixed(2)}`;
-      } else return `${amount.toFixed(2)} ${symbol}`;
+      const currency = selectedCurrency?.code ? selectedCurrency : settingObj?.general?.default_currency;
+      const position = currency?.symbol_position || "before_price";
+      const symbol = currency?.symbol || "$";
+      const rate = Number(currency?.exchange_rate) || 1;
+      const amount = Number(value) * rate;
+      if (isNaN(amount)) return `${symbol}0`;
+      // Currencies without decimals (COP, CLP, JPY, KRW, etc.)
+      const noDecimals = ["COP", "CLP", "JPY", "KRW", "VND", "IDR"].includes(currency?.code);
+      const formatted = noDecimals
+        ? Math.round(amount).toLocaleString("es-CO")
+        : amount.toFixed(2);
+      return position === "before_price" ? `${symbol}${formatted}` : `${formatted} ${symbol}`;
     },
     [settingObj, selectedCurrency]
   );

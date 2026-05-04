@@ -122,8 +122,9 @@ const HeaderLogo = ({ extraClass }) => {
           <Image
             className="img-fluid"
             src={logo?.original_url}
-            height={34}
-            width={173}
+            height={52}
+            width={264}
+            unoptimized
             alt={
               settingData?.general?.site_name
                 ? settingData?.general?.site_name

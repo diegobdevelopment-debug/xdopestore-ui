@@ -11,7 +11,7 @@ const DeliveryOptions = ({ values, setFieldValue }) => {
   const [defaultDe, setDefaultDe] = useState(0);
   useEffect(() => {
     if (settingData?.delivery?.default?.title && settingData?.delivery?.default?.description) {
-      setFieldValue("delivery_description", `${settingData?.delivery?.same_day?.title} | ${settingData?.delivery?.same_day?.description}`);
+      setFieldValue("delivery_description", `${settingData?.delivery?.default?.title} | ${settingData?.delivery?.default?.description}`);
       setDefaultDe(1);
     }
   }, [settingData]);
