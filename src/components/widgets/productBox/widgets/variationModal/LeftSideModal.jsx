@@ -1,3 +1,4 @@
+import { placeHolderImage } from "@/components/widgets/Placeholder";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";

@@ -8548,12 +8548,14 @@
 .quantity-variant {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
   background-color: $top-header;
   padding: 6px 6px;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid $white-dark;
-  width: max-content;
+  width: auto;
+  max-width: 100%;
   margin-bottom: 0;
 
   li {
@@ -9534,6 +9536,24 @@
       .sub-title {
         justify-content: center;
       }
+    }
+  }
+}
+
+.modal-attributes {
+  .variation-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 14px;
+
+    .sub-title {
+      width: auto;
+      margin-bottom: 4px;
+    }
+
+    .quantity-variant {
+      max-width: 100%;
     }
   }
 }

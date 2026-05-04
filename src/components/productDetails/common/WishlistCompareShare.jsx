@@ -1,3 +1,4 @@
+import WishlistContext from "@/context/wishlistContext";
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import { audioFile } from "@/utils/constants";
 import Cookies from "js-cookie";
@@ -5,20 +6,24 @@ import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RiHeartFill, RiHeartLine, RiRefreshLine, RiShareLine } from "react-icons/ri";
 import ShareModal from "./ShareModal";
-import { useRouter } from "next/navigation";
 
 const WishlistCompareShare = ({ productState }) => {
   const [productWishlist, setProductWishlist] = useState("");
   const [addToWishlistAudio, setAddToWishlistAudio] = useState(null);
   const { t } = useTranslation("common");
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
+  const { addToWishlist, removeWishlist } = useContext(WishlistContext);
   const [modal, setModal] = useState(false);
-  const router = useRouter();
+
   const handelWishlist = () => {
     if (Cookies.get("uat")) {
-      addToWishlistAudio.play();
+      addToWishlistAudio?.play();
+      if (productWishlist) {
+        removeWishlist(productState?.product?.id, productState?.product?.wish_list_id ?? productState?.product?.id);
+      } else {
+        addToWishlist(productState?.product);
+      }
       setProductWishlist((prev) => !prev);
-      router.push("/wishlist");
     } else {
       setOpenAuthModal(true);
     }

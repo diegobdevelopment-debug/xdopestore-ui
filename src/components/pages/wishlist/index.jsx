@@ -16,12 +16,12 @@ import { Table } from "reactstrap";
 import emptyImage from "/public/assets/svg/empty-items.svg";
 
 const WishlistContent = () => {
-  const { wishlistProducts, WishlistAPILoading } = useContext(WishlistContext);
+  const { wishlistProducts, WishlistAPILoading, removeWishlist } = useContext(WishlistContext);
   const { t } = useTranslation("common");
   const { setCartCanvas } = useContext(ThemeOptionContext);
   const { handleIncDec, openCartSidebar } = useContext(CartContext);
   const removeFromWishlist = (product) => {
-    //  Put your logic here
+    removeWishlist(product.id, product.id);
   };
   const { convertCurrency } = useContext(SettingContext);
 

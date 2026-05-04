@@ -4,13 +4,11 @@ import useCreate from "@/utils/hooks/useCreate";
 import useDelete from "@/utils/hooks/useDelete";
 import useFetchQuery from "@/utils/hooks/useFetchQuery";;
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
-import CartContext from ".";
+import WishlistContext from ".";
 import ThemeOptionContext from "../themeOptionsContext";
 
 const WishlistProvider = (props) => {
-  const router = useRouter();
   const isCookie = Cookies.get("uat");
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
@@ -34,8 +32,8 @@ const WishlistProvider = (props) => {
   // Remove and Delete cart data from API and State
   const removeWishlist = (id, wishId) => {
     if (isCookie && wishId) {
-      let id = typeof wishId == "object" ? wishId.id : wishId;
-      deleteWishlist(id);
+      let wishlistId = typeof wishId == "object" ? wishId.id : wishId;
+      deleteWishlist(wishlistId);
     }
   };
 
@@ -50,14 +48,14 @@ const WishlistProvider = (props) => {
   // Common Handler for Add to wishlist
   const addToWishlist = (productObj) => {
     if (Cookies.get("uat")) {
-      router.push("/wishlist");
+      mutate({ product_id: productObj.id }, { onSuccess: refetch });
     } else {
       setOpenAuthModal(true);
     }
   };
 
   return (
-    <CartContext.Provider
+    <WishlistContext.Provider
       value={{
         ...props,
         wishlistProducts,
@@ -71,7 +69,7 @@ const WishlistProvider = (props) => {
       }}
     >
       {props.children}
-    </CartContext.Provider>
+    </WishlistContext.Provider>
   );
 };
 
