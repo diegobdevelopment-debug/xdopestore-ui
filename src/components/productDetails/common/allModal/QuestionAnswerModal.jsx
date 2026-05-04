@@ -4,6 +4,8 @@ import { placeHolderImage } from "@/components/widgets/Placeholder";
 import SettingContext from "@/context/settingContext";
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import Btn from "@/elements/buttons/Btn";
+import useCreate from "@/utils/hooks/useCreate";
+import { QuestionAnswerAPI } from "@/utils/axiosUtils/API";
 import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -18,14 +20,29 @@ const QuestionAnswerModal = ({ modal, setModal, productState, update, refetch })
   const { convertCurrency } = useContext(SettingContext);
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
   const isAuth = Cookies.get("uat");
+  const isAdding = update?.editData === "Add";
   const toggle = () => {
     setModal((prev) => prev !== prev);
   };
 
-  const handleClick = () => {
-    setModal(false)
-    // Put your logic here
-  }
+  const { mutate: createQnA, isPending: createLoader } = useCreate(
+    QuestionAnswerAPI,
+    false,
+    false,
+    "Question Posted Successfully",
+    (resData) => {
+      if (resData?.status === 200 || resData?.status === 201) {
+        refetch && refetch();
+        setModal(false);
+      } else if (resData?.data?.message) {
+        setShowBoxMessage(resData?.data?.message);
+      }
+    },
+    false,
+    undefined,
+    undefined,
+    setShowBoxMessage
+  );
 
   useEffect(() => {
     if (message == "Unauthenticated" && !isAuth) {
@@ -50,7 +67,19 @@ const QuestionAnswerModal = ({ modal, setModal, productState, update, refetch })
             product_id: productState?.product?.id,
           }}
           onSubmit={(values) => {
-            handleClick();
+            if (!isAuth) {
+              setOpenAuthModal(true);
+              setModal(false);
+              return;
+            }
+            const payload = { question: values.question, product_id: values.product_id };
+            if (isAdding) {
+              createQnA(payload);
+            } else if (update?.updateQnA) {
+              update.updateQnA(payload);
+            } else {
+              setModal(false);
+            }
           }}
         >
           {() => (
@@ -74,7 +103,7 @@ const QuestionAnswerModal = ({ modal, setModal, productState, update, refetch })
               </div>
               <ModalFooter className="p-0">
                 <Btn title="Cancel" type="button" className="btn btn-outline" onClick={() => setModal(false)} />
-                <Btn title="Submit" className="btn-solid" type="submit" />
+                <Btn title="Submit" className="btn-solid" type="submit" loading={createLoader || update?.updateLoader} />
               </ModalFooter>
             </Form>
           )}
