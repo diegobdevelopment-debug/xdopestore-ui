@@ -55,8 +55,11 @@ const ProductDetailContent = ({ params }) => {
         const buttonRect = button.getBoundingClientRect();
         if (buttonRect.bottom < window.innerHeight && buttonRect.bottom < 0) {
           document.body.classList.add("stickyCart");
+          const stickyBar = document.querySelector(".sticky-bottom-cart");
+          document.body.style.paddingBottom = stickyBar ? stickyBar.offsetHeight + "px" : "80px";
         } else {
           document.body.classList.remove("stickyCart");
+          document.body.style.paddingBottom = "";
         }
       }
     };
@@ -66,6 +69,7 @@ const ProductDetailContent = ({ params }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.body.classList?.remove("stickyCart");
+      document.body.style.paddingBottom = "";
     };
   }, []);
 
