@@ -31,10 +31,10 @@ const CollectionAttributes = ({ attributeAPIData, filter, setFilter, isOffCanvas
     });
     if (temp.length > 0) {
       const queryParams = new URLSearchParams({ ...category, ...price, ...rating, ...sortBy, ...field, ...layout, attribute: temp }).toString();
-      router.push(`${pathname}?${queryParams}`);
+      router.push(`${pathname}?${queryParams}`, { scroll: false });
     } else {
       const queryParams = new URLSearchParams({ ...category, ...price, ...rating, ...sortBy, ...field, ...layout }).toString();
-      router.push(`${pathname}?${queryParams}`);
+      router.push(`${pathname}?${queryParams}`, { scroll: false });
     }
   };
   return (

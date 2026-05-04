@@ -58,10 +58,10 @@ const CollectionBrand = ({ filter, setFilter }) => {
     });
     if (temp.length > 0) {
       const queryParams = new URLSearchParams({ ...category, ...attribute, ...price, ...sortBy, ...field, ...rating, ...layout, brand:brand ?brand:temp }).toString();
-      router.push(`${pathname}?${queryParams}`);
+      router.push(`${pathname}?${queryParams}`, { scroll: false });
     } else {
       const queryParams = new URLSearchParams({ ...category, ...attribute, ...price, ...sortBy, ...field, ...rating, ...layout }).toString();
-      router.push(`${pathname}?${queryParams}`);
+      router.push(`${pathname}?${queryParams}`, { scroll: false });
     }
   };  
   return (

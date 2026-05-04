@@ -1,9 +1,10 @@
 'use client'
 import ThemeOptionContext from '@/context/themeOptionsContext'
+import WishlistContext from '@/context/wishlistContext'
 import { useHeaderScroll } from '@/utils/hooks/HeaderScroll'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { RiHeartLine, RiLogoutBoxRLine, RiMenuLine, RiUserLine, RiDashboardLine } from 'react-icons/ri'
 import { Button, Col, Container, Row } from 'reactstrap'
 import HeaderCart from '../widgets/headerCart'
@@ -14,9 +15,14 @@ import { useTranslation } from 'react-i18next'
 
 const HeaderOne = () => {
   const { themeOption, setOpenAuthModal, openAuthModal, mobileSideBar, setMobileSideBar } = useContext(ThemeOptionContext)
+  const { wishlistIds, wishlistProducts } = useContext(WishlistContext)
   const UpScroll = useHeaderScroll(false)
   const { t } = useTranslation('common')
   const router = useRouter()
+  const wishlistCount = useMemo(() => {
+    const fromIds = wishlistIds ? Object.keys(wishlistIds).length : 0
+    return fromIds || (wishlistProducts?.length ?? 0)
+  }, [wishlistIds, wishlistProducts])
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -92,6 +98,7 @@ const HeaderOne = () => {
                         <li className="onhover-div">
                           <a href="#" onClick={handleWishlistClick}>
                             <RiHeartLine />
+                            {wishlistCount > 0 && <span className="cart_qty_cls">{wishlistCount}</span>}
                           </a>
                         </li>
                         <li className="onhover-div">

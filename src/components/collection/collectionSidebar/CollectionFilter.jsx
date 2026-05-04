@@ -46,7 +46,7 @@ const CollectionFilter = ({ filter, setFilter, categorySlug }) => {
       }
     });
     const queryParams = new URLSearchParams({ ...params, ...layout }).toString();
-    router.push(`${pathname}?${queryParams}`);
+    router.push(`${pathname}?${queryParams}`, { scroll: false });
   };
 
   const clearParams = () => {
