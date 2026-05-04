@@ -69,12 +69,12 @@ const WishlistContent = () => {
                         </div>
                         <div className="col">
                           <div className="icon-box d-flex gap-2 justify-content-center">
-                            <a href={Href} className="icon " onClick={() => removeFromWishlist(product)}>
+                            <button className="icon btn p-0 border-0 bg-transparent" onClick={() => removeFromWishlist(product)}>
                               <RiCloseLine />
-                            </a>
-                            <a href={Href} className="cart" onClick={() => addToCart(product)}>
+                            </button>
+                            <button className="cart btn p-0 border-0 bg-transparent" onClick={() => addToCart(product)}>
                               <RiShoppingCartLine />
-                            </a>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -90,12 +90,12 @@ const WishlistContent = () => {
 
                     <td>
                       <div className="icon-box d-flex gap-2 justify-content-center">
-                        <a href={Href} className="icon " onClick={() => removeFromWishlist(product)}>
+                        <button className="icon btn p-0 border-0 bg-transparent" onClick={() => removeFromWishlist(product)}>
                           <RiCloseLine />
-                        </a>
-                        <a href={Href} className="cart" onClick={() => addToCart(product)}>
+                        </button>
+                        <button className="cart btn p-0 border-0 bg-transparent" onClick={() => addToCart(product)}>
                           <RiShoppingCartLine />
-                        </a>
+                        </button>
                       </div>
                     </td>
                   </tr>
