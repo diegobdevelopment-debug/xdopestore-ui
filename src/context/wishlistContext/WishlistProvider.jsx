@@ -33,7 +33,8 @@ const WishlistProvider = (props) => {
   const removeWishlist = (id, wishId) => {
     if (isCookie && wishId) {
       let wishlistId = typeof wishId == "object" ? wishId.id : wishId;
-      deleteWishlist(wishlistId);
+      setWishlistProducts((prev) => prev.filter((p) => p.id !== wishlistId));
+      deleteWishlist(wishlistId, { onSuccess: refetch });
     }
   };
 
