@@ -183,8 +183,8 @@ const ProductAttribute = ({ productState, setProductState, stickyAddToCart, noHo
     <>
       {productState?.product?.attributes?.map((elem, i) => (
         <div className="variation-box" key={i}>
-          <h4 className="sub-title">{elem?.name}:</h4>
-          {stickyAddToCart ? <DropdownAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : <>{elem?.style == "radio" || elem?.style == "rectangle" ? <RadioAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : elem?.style == "dropdown" ? <DropdownAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : elem?.style == "color" || elem?.style == "circle" ? <ColorAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} productState={productState} noHoverEffect={noHoverEffect} /> : <ImageOtherAttributes elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} productState={productState} noHoverEffect={noHoverEffect} />}</>}
+          {elem?.name && <h4 className="sub-title">{elem?.name}:</h4>}
+          {stickyAddToCart ? <DropdownAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : <>{elem?.style == "radio" ? <RadioAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : elem?.style == "dropdown" ? <DropdownAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} i={i} productState={productState} /> : elem?.style == "color" ? <ColorAttribute elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} productState={productState} noHoverEffect={noHoverEffect} /> : <ImageOtherAttributes elem={elem} setVariant={setVariant} soldOutAttributesIds={soldOutAttributesIds} productState={productState} noHoverEffect={noHoverEffect} />}</>}
         </div>
       ))}
     </>

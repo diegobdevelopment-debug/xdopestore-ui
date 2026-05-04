@@ -1,23 +1,26 @@
+import WishlistContext from "@/context/wishlistContext";
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import { Href } from "@/utils/constants";
-import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 
 const AddToWishlist = ({ productObj, customClass }) => {
-  const router = useRouter();
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
+  const { addToWishlist, removeWishlist } = useContext(WishlistContext);
+
   const handelWishlist = (productObj) => {
     if (Cookies.get("uat")) {
-      // Put your logic here
-      router.push("/wishlist");
+      if (productObj.is_wishlist) {
+        removeWishlist(productObj.id, productObj.wish_list_id ?? productObj.id);
+      } else {
+        addToWishlist(productObj);
+      }
     } else {
       setOpenAuthModal(true);
-      ToastNotification("error", "Unauthenticated");
     }
   };
+
   return (
     <>
       {customClass ? (

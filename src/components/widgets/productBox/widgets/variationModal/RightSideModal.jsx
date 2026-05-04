@@ -22,12 +22,12 @@ const RightVariationModal = ({ cloneVariation }) => {
         <h3>
           <span className="text-dark fw-normal">MRP:</span>
           {cloneVariation?.selectedVariation ? convertCurrency(cloneVariation?.selectedVariation?.sale_price) : convertCurrency(cloneVariation?.product?.sale_price)}
-          {cloneVariation?.selectedVariation ? cloneVariation?.selectedVariation?.discount : cloneVariation?.product?.discount ? <del>{cloneVariation?.selectedVariation ? convertCurrency(cloneVariation?.selectedVariation?.price) : convertCurrency(cloneVariation?.product?.price)}</del> : null}
-          {cloneVariation?.selectedVariation ? (
-            cloneVariation?.selectedVariation?.discount
-          ) : cloneVariation?.product?.discount ? (
+          {(cloneVariation?.selectedVariation?.discount ?? cloneVariation?.product?.discount) ? (
+            <del>{cloneVariation?.selectedVariation ? convertCurrency(cloneVariation?.selectedVariation?.price) : convertCurrency(cloneVariation?.product?.price)}</del>
+          ) : null}
+          {(cloneVariation?.selectedVariation?.discount ?? cloneVariation?.product?.discount) ? (
             <span className="discounted-price">
-              {cloneVariation?.selectedVariation ? cloneVariation?.selectedVariation?.discount : cloneVariation?.product?.discount}% {t("Off")}
+              {cloneVariation?.selectedVariation?.discount ?? cloneVariation?.product?.discount}% {t("Off")}
             </span>
           ) : null}
         </h3>

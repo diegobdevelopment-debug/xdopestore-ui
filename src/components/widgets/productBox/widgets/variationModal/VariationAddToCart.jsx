@@ -25,7 +25,7 @@ const VariationAddToCart = ({ cloneVariation, setVariationModal }) => {
 
   return (
     <div className="product-buy-btn-group">
-      <Btn className="btn-animation btn-solid hover-solid scroll-button buy-button" disabled={(cloneVariation?.selectedVariation && cloneVariation?.selectedVariation?.stock_status !== "in_stock") || (cloneVariation?.product?.stock_status !== "in_stock" && true)} onClick={addToCart} loading={isLoading}>
+      <Btn className="btn-animation btn-solid hover-solid scroll-button buy-button" disabled={!productInStock} onClick={addToCart} loading={isLoading}>
         <RiShoppingCartLine className="me-2" />
         <span>{productInStock ? t("AddToCart") : t("SoldOut")}</span>
       </Btn>
