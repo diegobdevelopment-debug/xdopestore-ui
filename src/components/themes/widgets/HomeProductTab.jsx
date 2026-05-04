@@ -97,6 +97,13 @@ const HomeProductTab = ({ categoryIds, slider, style, tab_title_class, tabStyle,
     setCustomSelectedId(customSelectId);
   }, [isLoading, categoryIds]);
 
+  // Auto-select first category when categories load for the first time
+  useEffect(() => {
+    if (currentCategory || !filteredCategories?.length) return;
+    const first = filteredCategories.find((c) => c?.products_count) || filteredCategories[0];
+    if (first?.id) setCurrentCategory(first.id);
+  }, [filteredCategories?.length]); // eslint-disable-line
+
   const sliderSetting = sliderOptions && sliderOptions(skeletonArr?.length);
   const sliderOptionsMain = dynamic ? dynamicHorizontalSlider(skeletonArr.length) : sliderSetting;
 

@@ -29,15 +29,18 @@ const SliderSlide = ({ banner, height, width }) => {
   return (
     <div
       className="home d-flex align-items-center"
-      style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center" }}
+      style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}
     >
-      <div className="container">
+      {banner?.text_bg && (
+        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 0, pointerEvents: "none" }} />
+      )}
+      <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <div className="row">
           <div className={colClass(banner?.text_position)}>
             <div className="slider-contain">
-              <div>
-                {banner?.subtitle && <h4>{banner.subtitle}</h4>}
-                {banner?.title && <h1>{banner.title}</h1>}
+              <div style={banner?.text_color ? { color: banner.text_color } : undefined}>
+                {banner?.subtitle && <h4 style={banner?.text_color ? { color: banner.text_color } : undefined}>{banner.subtitle}</h4>}
+                {banner?.title && <h1 style={banner?.text_color ? { color: banner.text_color } : undefined}>{banner.title}</h1>}
                 <Link href={href} className="btn btn-solid hover-solid btn-md">
                   {banner?.button_text || "Shop Now"}
                 </Link>

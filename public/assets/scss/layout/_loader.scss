@@ -59,6 +59,73 @@
   }
 }
 
+// ===== Embroidery Loader =====
+@keyframes emb-march {
+  to { stroke-dashoffset: -226; }
+}
+
+@keyframes emb-draw {
+  from { stroke-dashoffset: 64; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes emb-appear {
+  to { opacity: 1; }
+}
+
+@keyframes emb-center-pop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.loader-embroidery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  .emb-border {
+    animation: emb-march 3s linear infinite;
+  }
+
+  @for $i from 1 through 6 {
+    .emb-petal-#{$i} {
+      animation: emb-draw 0.45s #{($i - 1) * 0.22}s ease-out forwards;
+    }
+    .emb-cross-#{$i} {
+      opacity: 0;
+      animation: emb-appear 0.3s #{1.4 + ($i - 1) * 0.1}s ease-out forwards;
+    }
+  }
+
+  .emb-center {
+    transform: scale(0);
+    opacity: 0;
+    animation: emb-center-pop 0.4s 2.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .emb-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #6b4423;
+    opacity: 0;
+    margin: 0;
+    animation: emb-appear 0.5s 2.4s ease-out forwards;
+  }
+}
+
+.loader-custom-gif {
+  img {
+    max-width: 220px;
+    max-height: 220px;
+    object-fit: contain;
+  }
+}
+
+// ===== End Embroidery Loader =====
+
 .home-skeleton,
 .banner-skeleton,
 .skeleton-text-p,
