@@ -6,7 +6,7 @@ import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
 import SelectForm from "./SelectForm";
 
-const AddAddressForm = ({ isLoading, type, editAddress, setModal, isFooterDisplay, method }) => {
+const AddAddressForm = ({ mutate, isLoading, type, editAddress, setModal, isFooterDisplay, method }) => {
 
   const { data } = useFetchQuery([CountryAPI], () => request({ url: CountryAPI }), {
     refetchOnWindowFocus: false,
@@ -42,7 +42,7 @@ const AddAddressForm = ({ isLoading, type, editAddress, setModal, isFooterDispla
         }
 
         values["pincode"] = values["pincode"].toString();
-        // Put your logic here
+        mutate(values);
         setModal(false);
       }}
     >

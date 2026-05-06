@@ -43,7 +43,7 @@ const PaynowModal = ({ modal, setModal, params }) => {
             values["return_url"] = `${process.env.PAYMENT_RETURN_URL}/account/order/details`;
             values["cancel_url"] = process.env.PAYMENT_CANCEL_URL;
             values["order_number"] = params;
-// Put your logic here
+            mutate(values);
           }}
         >
           {({ values, setFieldValue }) => (

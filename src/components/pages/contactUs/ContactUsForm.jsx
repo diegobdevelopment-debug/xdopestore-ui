@@ -1,5 +1,7 @@
 import SimpleInputField from "@/components/widgets/inputFields/SimpleInputField";
 import Btn from "@/elements/buttons/Btn";
+import { ContactUsAPI } from "@/utils/axiosUtils/API";
+import useCreate from "@/utils/hooks/useCreate";
 import { YupObject, emailSchema, nameSchema, phoneSchema } from "@/utils/validation/ValidationSchema";
 import { Form, Formik } from "formik";
 import { useTranslation } from "react-i18next";
@@ -7,6 +9,7 @@ import { Col, Row } from "reactstrap";
 
 const ContactUsForm = () => {
   const { t } = useTranslation("common");
+  const { mutate, isLoading } = useCreate(ContactUsAPI, false, false, "MessageSentSuccessfully");
   return (
     <Formik
       initialValues={{ name: "", email: "", phone: "", subject: "", message: "" }}
@@ -18,8 +21,8 @@ const ContactUsForm = () => {
         message: nameSchema,
       })}
       onSubmit={(values, { resetForm }) => {
+        mutate(values);
         resetForm();
-        // Put your logic here
       }}
     >
       {({ values, errors, touched, setFieldValue }) => (
@@ -35,7 +38,7 @@ const ContactUsForm = () => {
               ]}
             />
             <Col xs="12">
-              <Btn className=" btn-solid" type="submit">
+              <Btn className=" btn-solid" type="submit" loading={isLoading}>
                 {t("SendYourMessage")}
               </Btn>
             </Col>

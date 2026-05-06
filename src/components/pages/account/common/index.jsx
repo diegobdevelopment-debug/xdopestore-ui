@@ -19,15 +19,14 @@ const SidebarProfile = () => {
     formData.append("profile_image_id", "");
     formData.append("profile_image", event.target.files[0]);
     formData.append("_method", "PUT");
-    // Put your logic here
-
+    mutate(formData);
   };
 
   const handleRemove = () => {
     const formData = new FormData();
     formData.append("profile_image_id", "");
     formData.append("_method", "PUT");
-    // Put your logic here
+    mutate(formData);
   };
 
   return (

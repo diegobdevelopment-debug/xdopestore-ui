@@ -50,11 +50,11 @@ const CheckoutSidebar = ({ values, setFieldValue, errors, addToCartData }) => {
     if (settingData?.activation?.guest_checkout && !access_token) {
       if (values["delivery_description"] && values["payment_method"]) {
         values["products"] = cartProducts;
-        // Put your logic here
+        mutate(values);
       }
     } else {
       if (access_token && values["billing_address_id"] && values["shipping_address_id"] && values["delivery_description"] && values["payment_method"]) {
-        // Put Your logic here
+        mutate(values);
       }
     }
   }, [CartLoading, cartTotal, errors, values["points_amount"], values["wallet_balance"], values["billing_address_id"], values["delivery_description"], values["payment_method"], values["shipping_address_id"], values["delivery_interval"]]);

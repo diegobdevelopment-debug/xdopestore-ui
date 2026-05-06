@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import SelectForm from "./SelectForm";
 
-const AddAddressForm = ({ isLoading, type, editAddress, setEditAddress, modal, setModal, isFooterDisplay, method }) => {
+const AddAddressForm = ({ mutate, isLoading, type, editAddress, setEditAddress, modal, setModal, isFooterDisplay, method }) => {
   const router = useRouter();
   useEffect(() => {
     modal !== "edit" && setEditAddress && setEditAddress({});
@@ -46,7 +46,7 @@ const AddAddressForm = ({ isLoading, type, editAddress, setEditAddress, modal, s
           values["_method"] = method ? method : "PUT";
         }
         values["pincode"] = values["pincode"].toString();
-        // Put your logic here
+        mutate(values);
         setModal(false);
       }}
     >
