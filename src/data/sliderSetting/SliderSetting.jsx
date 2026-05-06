@@ -510,7 +510,7 @@ export const blog4Slider = (length) => {
 
 /* Social Media Slider */
 export const SocialMediaSlider = {
-  loop: true,
+  infinite: true,
   speed: 300,
   slidesToShow: 7,
   slidesToScroll: 1,

@@ -16,7 +16,7 @@ const CustomerReview = ({ productState }) => {
   const [modal, setModal] = useState("");
   const isLogin = Cookies.get("uat");
   const { data, isLoading, refetch } = useFetchQuery([ReviewAPI], () => request({ url: ReviewAPI, params: { product_id: productState?.product?.id } }), {
-    enabled: isLogin ? (productState?.product?.id ? true : false) : false,
+    enabled: !!productState?.product?.id,
     refetchOnWindowFocus: false,
     select: (res) => res?.data?.data,
   });
