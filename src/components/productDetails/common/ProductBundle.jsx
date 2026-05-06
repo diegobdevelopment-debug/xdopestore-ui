@@ -46,7 +46,6 @@ const ProductBundle = ({ productState, setProductState }) => {
   }, [productState, filteredProduct]);
   
   const getSelectedVariant = (data) => {
-    console.log("i am selectes", data);
   }
   const addToCart = (qty, products) => {
     let cloneCart = [...cartProducts];
