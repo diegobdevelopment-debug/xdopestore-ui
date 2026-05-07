@@ -4,7 +4,6 @@ import BrandProvider from '@/context/brandContext/BrandProvider'
 import BrandIdsProvider from '@/context/brandIdsContext/BrandIdsProvider'
 import CartProvider from '@/context/cartContext/CartProvider'
 import CategoryProvider from '@/context/categoryContext/CategoryProvider'
-import CompareProvider from '@/context/compareContext/CompareProvider'
 import ProductProvider from '@/context/productContext/ProductProvider'
 import ProductIdsProvider from '@/context/productIdsContext/ProductIdsProvider'
 import SettingProvider from '@/context/settingContext/SettingProvider'
@@ -26,8 +25,7 @@ const MainLayout = ({ children }) => {
       <QueryClientProvider client={queryClient}>
         <HydrationBoundary state={children.dehydratedState}>
           <SettingProvider>
-            <CompareProvider>
-              <CategoryProvider>
+            <CategoryProvider>
                 <ThemeOptionProvider>
                   <BrandProvider>
                     <ProductIdsProvider>
@@ -46,7 +44,6 @@ const MainLayout = ({ children }) => {
                   </BrandProvider>
                 </ThemeOptionProvider>
               </CategoryProvider>
-            </CompareProvider>
           </SettingProvider>
         </HydrationBoundary>
       </QueryClientProvider>

@@ -4,7 +4,7 @@ import { audioFile } from "@/utils/constants";
 import Cookies from "js-cookie";
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { RiHeartFill, RiHeartLine, RiRefreshLine, RiShareLine } from "react-icons/ri";
+import { RiHeartFill, RiHeartLine, RiShareLine } from "react-icons/ri";
 import ShareModal from "./ShareModal";
 
 const WishlistCompareShare = ({ productState }) => {
@@ -39,24 +39,12 @@ const WishlistCompareShare = ({ productState }) => {
     setProductWishlist(productState?.product?.is_wishlist);
   }, [productState]);
 
-  const addToCompare = () => {
-    if (!Cookies.get("uat")) {
-      setOpenAuthModal(true);
-    } else {
-      // Put your logic here
-    }
-  };
-
   return (
     <>
       <div className="buy-box compare-box">
         <a onClick={handelWishlist}>
           {productWishlist ? <RiHeartFill /> : <RiHeartLine />}
           <span>{t("AddToWishlist")}</span>
-        </a>
-        <a onClick={addToCompare}>
-          <RiRefreshLine />
-          <span>{t("AddToCompare")}</span>
         </a>
         {productState?.product?.social_share ? (
           <a onClick={() => setModal(true)}>

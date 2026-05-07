@@ -55,11 +55,11 @@ const EmailPasswordModal = ({ modal, setModal }) => {
             let passwordObj = { current_password: values["current_password"], password: values["password"], password_confirmation: values["password_confirmation"], _method: "PUT" };
             let emailObj = { name: values["name"], email: values["email"], country_code: values["country_code"], phone: values["phone"], _method: "PUT" };
             if (modal == "password") {
-              // Put your logic here
+              mutate(passwordObj);
               setModal(false);
               resetForm()
             } else {
-              // Put your logic here
+              mutate(emailObj);
               setModal(false);
               resetForm()
             }

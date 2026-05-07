@@ -16,7 +16,7 @@ const AddressData = ({ addressState, setAddressState, modal, setModal, setEditAd
 
   const removeAddress = () => {
     setModal(false);
-    // Put your logic here
+    mutate(deleteId);
   };
   useEffect(() => {
     if (data?.status) {

@@ -1,6 +1,8 @@
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import Btn from "@/elements/buttons/Btn";
 import { ImagePath, storageURL } from "@/utils/constants";
+import { SubscribeAPI } from "@/utils/axiosUtils/API";
+import useCreate from "@/utils/hooks/useCreate";
 import { emailSchema, YupObject } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
@@ -13,6 +15,7 @@ const NewsLetterModal = ({ setMakeExitActive }) => {
   const { t } = useTranslation("common");
   const [isOpen, setIsOpen] = useState(false);
   const { themeOption } = useContext(ThemeOptionContext);
+  const { mutate } = useCreate(SubscribeAPI, false, false, "Subscribed Successfully");
 
   useEffect(() => {
     const newsletterCookie = Cookies.get("newsletter");
@@ -50,7 +53,7 @@ const NewsLetterModal = ({ setMakeExitActive }) => {
                   }}
                   validationSchema={YupObject({ email: emailSchema })}
                   onSubmit={(values) => {
-                    // Put your logic here
+                    mutate(values);
                     setIsOpen(false);
                   }}
                 >

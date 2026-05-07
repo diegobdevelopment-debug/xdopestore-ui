@@ -35,8 +35,8 @@ const FooterNewsLetter = ({ style }) => {
                     initialValues={{ email: "" }}
                     validationSchema={emailValidationSchema}
                     onSubmit={(values, { resetForm }) => {
+                      mutate(values);
                       resetForm();
-                      // Put your logic here
                     }}
                   >
                     {({ errors, touched }) => (
@@ -68,8 +68,8 @@ const FooterNewsLetter = ({ style }) => {
             initialValues={{ email: "" }}
             validationSchema={emailValidationSchema}
             onSubmit={(values, { resetForm }) => {
+              mutate(values);
               resetForm();
-              // Put your logic here
             }}
           >
             {({ touched, errors }) => (
@@ -97,8 +97,8 @@ const FooterNewsLetter = ({ style }) => {
           }}
           validationSchema={emailValidationSchema}
           onSubmit={(values, { resetForm }) => {
+            mutate(values);
             resetForm();
-            // Put your logic here
           }}
         >
           {({ touched, errors }) => (

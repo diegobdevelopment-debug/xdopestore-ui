@@ -4,6 +4,8 @@ import SimpleInputField from "@/components/widgets/inputFields/SimpleInputField"
 import { placeHolderImage } from "@/components/widgets/Placeholder";
 import SettingContext from "@/context/settingContext";
 import Btn from "@/elements/buttons/Btn";
+import { RefundAPI } from "@/utils/axiosUtils/API";
+import useCreate from "@/utils/hooks/useCreate";
 import { YupObject, nameSchema } from "@/utils/validation/ValidationSchema";
 import { Form, Formik } from "formik";
 import { useContext } from "react";
@@ -12,6 +14,7 @@ import { useTranslation } from "react-i18next";
 const RefundModal = ({ modal, setModal, storeData }) => {
   const { t } = useTranslation("common");
   const { convertCurrency } = useContext(SettingContext);
+  const { mutate, isLoading } = useCreate(RefundAPI, false, false, "RefundRequestSubmitted");
 
   return (
     <CustomModal modal={modal ? true : false} setModal={setModal} classes={{ modalClass: "theme-modal-2 refund-modal", modalHeaderClass: "p-0", title: "Refund" }}>
@@ -22,7 +25,7 @@ const RefundModal = ({ modal, setModal, storeData }) => {
           payment_type: nameSchema,
         })}
         onSubmit={(values) => {
-          // Put your logic here
+          mutate(values);
           setModal(false);
         }}
       >

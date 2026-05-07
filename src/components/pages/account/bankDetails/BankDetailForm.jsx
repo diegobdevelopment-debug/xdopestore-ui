@@ -3,6 +3,7 @@ import Btn from "@/elements/buttons/Btn";
 import Loader from "@/layout/loader";
 import request from "@/utils/axiosUtils";
 import { PaymentAccountAPI } from "@/utils/axiosUtils/API";
+import useCreate from "@/utils/hooks/useCreate";
 import useFetchQuery from "@/utils/hooks/useFetchQuery";;
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
@@ -27,6 +28,8 @@ const BankDetailForm = () => {
     refetch();
   }, []);
 
+  const { mutate, isLoading: saveLoader } = useCreate(PaymentAccountAPI, false, false, "BankDetailsSaved");
+
   if (paymentLoader) return <Loader />;
   return (
     <Card className="mt-0">
@@ -42,7 +45,7 @@ const BankDetailForm = () => {
             paypal_email: data ? data?.paypal_email : "",
           }}
           onSubmit={(values) => {
-            // Put your logic here
+            mutate(values);
           }}
         >
           <Form className="themeform-auth">
@@ -59,7 +62,7 @@ const BankDetailForm = () => {
             <AccountHeading title="PaymentDetails" classes={"mb-3 top-sec top-sec-2"} />
             <SimpleInputField nameList={[{ name: "paypal_email", type: "email", placeholder: t("EnterPaypalEmail"), title: "PaypalEmail" }]} />
             <div className="text-end">
-              <Btn className="btn-solid">{t("Save")}</Btn>
+              <Btn className="btn-solid" loading={saveLoader}>{t("Save")}</Btn>
             </div>
           </Form>
         </Formik>
