@@ -1,7 +1,8 @@
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import Btn from "@/elements/buttons/Btn";
-import { Href } from "@/utils/constants";
+import { Href, ImagePath, storageURL } from "@/utils/constants";
 import Cookies from "js-cookie";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -70,7 +71,9 @@ const AuthModal = () => {
                     )}
                   </div>
                 </div>
-                <div className="left-img w-lg-50 d-lg-block d-none">{/* <Ima  ge height={1920} width={1920} src={themeOption?.popup?.auth?.image_url ? storageURL + themeOption?.popup?.auth?.image_url : ` ${ImagePath}/placeholder/auth.png`} alt="login" /> */}</div>
+                <div className="left-img w-lg-50 d-lg-block d-none">
+                  <Image height={600} width={600} src={themeOption?.popup?.auth?.image_url ? storageURL + themeOption.popup.auth.image_url : `${ImagePath}/placeholder/auth.png`} alt="login" className="img-fluid" />
+                </div>
               </div>
             </div>
           </ModalBody>

@@ -11,7 +11,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, ModalBody } from "reactstrap";
 
-const NewsLetterModal = ({ setMakeExitActive }) => {
+const NewsLetterModal = () => {
   const { t } = useTranslation("common");
   const [isOpen, setIsOpen] = useState(false);
   const { themeOption } = useContext(ThemeOptionContext);
@@ -33,7 +33,6 @@ const NewsLetterModal = ({ setMakeExitActive }) => {
       isOpen={isOpen}
       toggle={() => {
         setIsOpen(false);
-        setMakeExitActive(true);
       }}
       size="xl"
       className="d-block  theme-modal-2 auth-modal fade show"
@@ -44,7 +43,8 @@ const NewsLetterModal = ({ setMakeExitActive }) => {
             <div className="right-content w-lg-50 w-100">
               <div>
                 <div className="auth-title">
-                  <h2>{themeOption?.popup?.news_letter.title}</h2>
+                  {themeOption?.popup?.news_letter?.offer && <h6 className="offer-text">{themeOption.popup.news_letter.offer}</h6>}
+                  <h2>{themeOption?.popup?.news_letter?.title}</h2>
                   <p>{themeOption?.popup?.news_letter?.description}</p>
                 </div>
                 <Formik

@@ -19,7 +19,6 @@ import ThemeCustomizer from './themeCustomizer'
 const SubLayout = ({ children }) => {
   const isTabActive = TabFocusChecker()
   const { themeOption, setOpenAuthModal } = useContext(ThemeOptionContext)
-  const [makeExitActive, setMakeExitActive] = useState(false)
   const path = useSearchParams()
   const theme = path.get('theme')
   const pathName = usePathname()
@@ -132,14 +131,11 @@ const SubLayout = ({ children }) => {
       <NextTopLoader showSpinner={false} />
       <RecentPurchase />
       {themeOption?.popup?.news_letter?.is_enable && (
-        <NewsLetterModal setMakeExitActive={setMakeExitActive} />
+        <NewsLetterModal />
       )}
       <TapTop />
-      {themeOption?.popup?.exit?.is_enable && makeExitActive && (
-        <ExitModal
-          dataApi={themeOption?.popup?.exit}
-          headerLogo={themeOption?.logo?.header_logo?.original_url}
-        />
+      {themeOption?.popup?.exit?.is_enable && (
+        <ExitModal />
       )}
     </>
   )
