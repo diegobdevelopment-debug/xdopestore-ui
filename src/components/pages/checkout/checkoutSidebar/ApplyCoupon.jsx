@@ -40,7 +40,7 @@ const ApplyCoupon = ({ data, setFieldValue, storeCoupon, setStoreCoupon, values,
   };
   const onCopyCode = (couponData) => {
     navigator.clipboard.writeText(couponData);
-    ToastNotification("success", "Code copied to clipboard");
+    ToastNotification("success", "CodeCopiedToClipboard");
   };
 
   return (

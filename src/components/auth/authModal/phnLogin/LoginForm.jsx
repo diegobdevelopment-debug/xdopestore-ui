@@ -29,7 +29,7 @@ const NumberLoginForm = ({ setState }) => {
         <div className="auth-form-box ">
           {showBoxMessage && (
             <div role="alert" className="alert alert-danger login-alert">
-              <i className="ri-error-warning-line"></i> {showBoxMessage}
+              <i className="ri-error-warning-line"></i> {t(showBoxMessage, { defaultValue: showBoxMessage })}
             </div>
           )}
           <Form>

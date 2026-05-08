@@ -19,7 +19,7 @@ const ProductBox2 = ({ productState, setProductState }) => {
         <div className="img-wrapper">
           {productState?.product?.is_trending || productState?.product?.is_sale_enable || productState?.product?.is_featured ? (
             <div className={`ribbon ${productState?.product?.is_sale_enable ? "sale-tag" : productState?.product?.is_featured ? "featured-tag" : productState?.product?.is_trending ? "trending-tag" : ""}`}>
-              <span>{productState?.product?.is_sale_enable ? "sale" : productState?.product?.is_featured ? "featured" : productState?.product?.is_trending ? "trending" : ""}</span>
+              <span>{productState?.product?.is_sale_enable ? t("Sale") : productState?.product?.is_featured ? t("Featured") : productState?.product?.is_trending ? t("Trending") : ""}</span>
             </div>
           ) : null}
 
@@ -54,7 +54,7 @@ const ProductBox2 = ({ productState, setProductState }) => {
               {(productState?.selectedVariation ? productState?.selectedVariation.discount : productState?.product?.discount) ? (
                 <>
                   {productState?.selectedVariation?.price != productState?.selectedVariation?.sale_price || (productState?.product?.price != productState?.product?.sale_price && <del>{convertCurrency(productState?.product?.price)}</del>)}
-                  <span className="discounted-price">{productState?.selectedVariation ? productState?.selectedVariation.discount : productState?.product?.discount}% Off</span>
+                  <span className="discounted-price">{productState?.selectedVariation ? productState?.selectedVariation.discount : productState?.product?.discount}% {t("Off")}</span>
                 </>
               ) : null}
             </h4>
@@ -65,7 +65,7 @@ const ProductBox2 = ({ productState, setProductState }) => {
                 <span className="offer-icon">
                   <RiDiscountPercentFill />
                 </span>{" "}
-                {t("LimitedTimeOffer")}: {productState?.product?.discount}% off
+                {t("LimitedTimeOffer")}: {productState?.product?.discount}% {t("Off")}
               </li>
             ))}
           </ul>

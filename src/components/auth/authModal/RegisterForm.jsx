@@ -11,7 +11,7 @@ import { Input } from "reactstrap";
 
 const RegisterForm = () => {
   const [showBoxMessage, setShowBoxMessage] = useState();
-  const { mutate, isLoading } = useCreate(RegisterAPI, false, false, "Register Successfully", false, false, false, false, setShowBoxMessage);
+  const { mutate, isLoading } = useCreate(RegisterAPI, false, false, "RegisterSuccessfully", false, false, false, false, setShowBoxMessage);
   const { t } = useTranslation("common");
   const [checkboxChecked, setCheckboxChecked] = useState(false);
 
@@ -38,7 +38,7 @@ const RegisterForm = () => {
         <Form className="auth-form-box">
           {showBoxMessage && (
             <div role="alert" className="alert alert-danger login-alert">
-              <i className="ri-error-warning-line"></i> {showBoxMessage}
+              <i className="ri-error-warning-line"></i> {t(showBoxMessage, { defaultValue: showBoxMessage })}
             </div>
           )}
           <div className="auth-box mb-3 form-box">

@@ -25,7 +25,7 @@ const Offer = () => {
   const onCopyCode = (couponData) => {
     try {
       navigator.clipboard.writeText(couponData);
-      ToastNotification("success", "Code Copied To Clipboard");
+      ToastNotification("success", "CodeCopiedToClipboard");
     } catch (err) {
       ToastNotification("error", err);
     }
@@ -62,7 +62,7 @@ const Offer = () => {
               </Col>
             ))
           ) : (
-            <NoDataFound customClass='no-data-added' title='No Offers Found' imageUrl={"/assets/svg/empty-items.svg"} description='I regret to inform you that the offer is currently unavailable.' height='300' width='300' />
+            <NoDataFound customClass='no-data-added' title='NoOffersFound' imageUrl={"/assets/svg/empty-items.svg"} description='NoOffersDescription' height='300' width='300' />
           )}
         </WrapperComponent>
       )}

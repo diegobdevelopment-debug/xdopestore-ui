@@ -9,7 +9,7 @@ import { Col, Container, FormGroup, Row } from "reactstrap";
 
 const FooterNewsLetter = ({ style }) => {
   const { t } = useTranslation("common");
-  const { mutate, isLoading } = useCreate(SubscribeAPI, false, false, "Subscribed Successfully", (resDta) => {
+  const { mutate, isLoading } = useCreate(SubscribeAPI, false, false, "SubscribedSuccessfully", (resDta) => {
     if (resDta?.status == 200 || resDta?.status == 201) {
       refetch && refetch();
     }
@@ -42,7 +42,7 @@ const FooterNewsLetter = ({ style }) => {
                     {({ errors, touched }) => (
                       <Form className="form-inline subscribe-form auth-form needs-validation">
                         <div className="form-group">
-                          <Field type="email" className="form-control" placeholder="Enter Email Address" name="email" />
+                          <Field type="email" className="form-control" placeholder={t("EnterEmailAddress")} name="email" />
                           {(errors.email || touched.email) && (
                             <span className="error-text">
                               <ErrorMessage name="email" />
@@ -104,7 +104,7 @@ const FooterNewsLetter = ({ style }) => {
           {({ touched, errors }) => (
             <Form className="form-inline align-items-start">
               <FormGroup className="me-3 mb-sm-2 newsletter-custom-mb">
-                <Field type="email" className="form-control" placeholder="Enter Email Address" name="email" />
+                <Field type="email" className="form-control" placeholder={t("EnterEmailAddress")} name="email" />
                 {(errors.email || touched.email) && (
                   <span className="error-text">
                     <ErrorMessage name="email" />

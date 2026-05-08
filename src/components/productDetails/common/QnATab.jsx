@@ -24,7 +24,7 @@ const QnATab = ({ productState }) => {
     setEditData(data);
     setModal("qna");
   };
-  const { mutate: updateQnA, isLoading: updateLoader } = useUpdate(QuestionAnswerAPI, editData?.id, false, "Question Update Successfully", (resData) => {
+  const { mutate: updateQnA, isLoading: updateLoader } = useUpdate(QuestionAnswerAPI, editData?.id, false, "QuestionUpdatedSuccessfully", (resData) => {
     if (resData?.status == 200 || resData?.status == 201) {
       refetch();
       setModal("");

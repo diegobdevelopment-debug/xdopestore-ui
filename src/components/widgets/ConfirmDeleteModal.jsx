@@ -11,8 +11,8 @@ const ConfirmDeleteModal = ({ modal, setModal, loading, confirmFunction, setDele
         <div className="icon-box">
           <RiDeleteBinLine />
         </div>
-        <h5 className="modal-title">{"Delete Item?"}</h5>
-        <p>{"This Item Will Be Deleted Permanently. You Can't Undo This Action."} </p>
+        <h5 className="modal-title">{t("DeleteItem")}</h5>
+        <p>{t("DeleteItemDescription")}</p>
         <div className="button-box">
           <Btn
             className="btn-md btn-outline fw-bold"

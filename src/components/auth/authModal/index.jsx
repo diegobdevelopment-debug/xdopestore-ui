@@ -14,7 +14,7 @@ import RegisterForm from "./RegisterForm";
 
 const AuthModal = () => {
   const [state, setState] = useState("login");
-  const [title, setTitle] = useState("Sign in");
+  const [title, setTitle] = useState("SignIn");
   const { t } = useTranslation("common");
   const [logOrNew, setLogOrNew] = useState(false);
   const { openAuthModal, setOpenAuthModal, themeOption } = useContext(ThemeOptionContext);

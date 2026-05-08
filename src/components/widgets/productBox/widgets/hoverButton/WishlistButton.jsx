@@ -4,9 +4,11 @@ import Btn from "@/elements/buttons/Btn";
 import { audioFile, Href } from "@/utils/constants";
 import Cookies from "js-cookie";
 import { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 
 const WishlistButton = ({ productstate, customClass, hideAction, customAnchor }) => {
+  const { t } = useTranslation("common");
   const [addToWishlistAudio] = useState(() => (typeof window !== "undefined" ? new Audio(audioFile) : null));
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
   const { addToWishlist, removeWishlist, wishlistIds } = useContext(WishlistContext);
@@ -34,12 +36,12 @@ const WishlistButton = ({ productstate, customClass, hideAction, customAnchor })
           {isWishlisted ? <RiHeartFill className="theme-color" /> : <RiHeartLine />}
         </Btn>
       ) : customAnchor ? (
-        <a href={Href} title="Add to Wishlist" className={`wishlist-icon ${isWishlisted ? "theme-color" : ""}`} onClick={handelWishlist}>
+        <a href={Href} title={t("AddToWishlist")} className={`wishlist-icon ${isWishlisted ? "theme-color" : ""}`} onClick={handelWishlist}>
           <i className={`ri-heart-${isWishlisted ? "fill" : "line"}`}></i>
         </a>
       ) : (
         !hideAction?.includes("wishlist") && (
-          <div title="Wishlist" onClick={handelWishlist} className="wishlist-icon">
+          <div title={t("WishlistTitle")} onClick={handelWishlist} className="wishlist-icon">
             <a className={"heart-icon"}>{isWishlisted ? <RiHeartFill className="theme-color" /> : <RiHeartLine />}</a>
           </div>
         )

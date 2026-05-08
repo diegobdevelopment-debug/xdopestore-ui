@@ -44,7 +44,7 @@ const LoginHandle = (responseData, router, refetch, CallBackUrl, mutate, cartRef
     Cookies.remove("wishListID");
     localStorage.removeItem("cart");
   } else {
-    const msg = responseData?.response?.data?.message || "Invalid credentials";
+    const msg = responseData?.response?.data?.message || "InvalidCredentials";
     setShowBoxMessage && setShowBoxMessage(msg);
   }
 };

@@ -2,6 +2,7 @@ import SettingContext from "@/context/settingContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import CartButton from "./widgets/CartButton";
 import WishlistButton from "./widgets/hoverButton/WishlistButton";
 import ProductHoverButton from "./widgets/ProductHoverButton";
@@ -10,6 +11,7 @@ import ProductRatingBox from "./widgets/ProductRatingBox";
 const ProductBox4 = ({ productState }) => {
   const router = useRouter();
   const { convertCurrency } = useContext(SettingContext);
+  const { t } = useTranslation("common");
   return (
     <>
       <div className={`basic-product theme-product-3 ${productState?.product?.stock_status === "out_of_stock" ? "sold-out" : ""}`}>
@@ -37,7 +39,7 @@ const ProductBox4 = ({ productState }) => {
             {convertCurrency(productState?.product?.sale_price)} {productState?.product?.discount && <>{productState?.selectedVariation?.price != productState?.selectedVariation?.sale_price || (productState?.product?.price != productState?.product?.sale_price && <del>{convertCurrency(productState?.product?.price)}</del>)}</>}
           </h4>
           <div className="add-cart-button">
-            <CartButton productState={productState} selectedVariation={productState.selectedVariation} classes="add-cart-btn" text="Add to cart" />
+            <CartButton productState={productState} selectedVariation={productState.selectedVariation} classes="add-cart-btn" text={t("AddToCart")} />
           </div>
         </div>
       </div>

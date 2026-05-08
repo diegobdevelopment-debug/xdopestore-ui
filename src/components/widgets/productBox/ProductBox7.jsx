@@ -44,12 +44,12 @@ const ProductBox7 = ({ productState }) => {
             {productState?.product?.discount && (
               <>
                 {productState?.selectedVariation?.price != productState?.selectedVariation?.sale_price || (productState?.product?.price != productState?.product?.sale_price && <del>{convertCurrency(productState?.product?.price)}</del>)}
-                <span className="discounted-price">{productState?.product?.discount}% Off</span>
+                <span className="discounted-price">{productState?.product?.discount}% {t("Off")}</span>
               </>
             )}
           </h4>
           <div className="addtocart_btn">
-            <CartButton productState={productState} selectedVariation={productState.selectedVariation} quantity={true} classes="add-button add_cart" text="Add to cart" />
+            <CartButton productState={productState} selectedVariation={productState.selectedVariation} quantity={true} classes="add-button add_cart" text={t("AddToCart")} />
           </div>
         </div>
       </div>

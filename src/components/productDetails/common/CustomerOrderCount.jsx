@@ -31,7 +31,7 @@ const CustomerOrderCount = ({ productState }) => {
       {(themeOption?.product?.encourage_order && productState?.product?.encourage_order) || (themeOption?.product?.encourage_view && productState?.product?.encourage_view) ? (
         <div className="trending-text">
           <Image src={`${ImagePath}/trending.gif`} alt="Trending" height={30} width={30} className="img-fluid" />
-          <h5>Selling fast! 4 people have this in their carts.</h5>
+          <h5>{t("SellingFast")}</h5>
         </div>
       ) : null}
     </>

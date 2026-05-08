@@ -65,7 +65,7 @@ const ProductBox3 = ({ productState, setProductState }) => {
         </div>
         <ul className="cart-detail">
           <li>
-            <CartButton productState={productState} selectedVariation={productState.selectedVariation} text="Add to cart" />
+            <CartButton productState={productState} selectedVariation={productState.selectedVariation} text={t("AddToCart")} />
           </li>
         </ul>
       </div>

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Col, Container, Row } from "reactstrap";
 
 const RegisterContainer = () => {
-  const { mutate, isLoading } = useCreate(RegisterAPI, false, `/auth/register`, "Register Successfully");
+  const { mutate, isLoading } = useCreate(RegisterAPI, false, `/auth/register`, "RegisterSuccessfully");
   const { t } = useTranslation("common");
   return (
     <>
@@ -40,24 +40,24 @@ const RegisterContainer = () => {
                       <Row className="form-row">
                         <Col md="4">
                           <label htmlFor="email">{t("FullName")}</label>
-                          <Field className="form-control" name="name" type="text" id="fname" placeholder="First name" required />
+                          <Field className="form-control" name="name" type="text" id="fname" placeholder={t("FirstName")} required />
                           {errors.name && touched.name && <ErrorMessage name="name" render={(msg) => <div className="invalid-feedback  d-block">{errors.name}</div>} />}
                         </Col>
                         <Col md="4">
                           <label htmlFor="email">{t("Email")}</label>
-                          <Field className="form-control" name="email" type="text" id="email" placeholder="Email" required />
+                          <Field className="form-control" name="email" type="text" id="email" placeholder={t("EnterEmail")} required />
                           {errors.email && touched.email && <ErrorMessage name="email" render={(msg) => <div className="invalid-feedback d-block">{errors.email}</div>} />}
                         </Col>
                       </Row>
                       <Row className="form-row">
                         <Col md="6">
                           <label htmlFor="review">{t("Password")}</label>
-                          <Field className="form-control" type="password" name="password" id="review" placeholder="Enter your password" required />
+                          <Field className="form-control" type="password" name="password" id="review" placeholder={t("EnterYourPassword")} required />
                           {errors.password && touched.password && <ErrorMessage name="password" render={(msg) => <div className="invalid-feedback d-block">{errors.password}</div>} />}
                         </Col>
                         <Col md="6">
                           <label htmlFor="review">{t("ConfirmPassword")}</label>
-                          <Field className="form-control" name="password_confirmation" type="password" id="lname" placeholder="Confirm your password" required />
+                          <Field className="form-control" name="password_confirmation" type="password" id="lname" placeholder={t("ConfirmYourPassword")} required />
                           {errors.password_confirmation && touched.password_confirmation && <ErrorMessage name="password_confirmation" render={(msg) => <div className="invalid-feedback d-block">{errors.password_confirmation}</div>} />}
                         </Col>
 

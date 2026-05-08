@@ -19,12 +19,12 @@ const AddressHeader = () => {
   useEffect(() => {
     accountData?.address.length > 0 && setAddressState((prev) => [...accountData?.address]);
   }, [accountData]);
-  const { mutate, isLoading } = useCreate(AddressAPI, false, false, "Address Added successfully", (resDta) => {
+  const { mutate, isLoading } = useCreate(AddressAPI, false, false, "AddressAddedSuccessfully", (resDta) => {
     setAddressState((prev) => [...prev, resDta?.data]);
     refetch();
     setModal("");
   });
-  const { mutate: editMutate, isLoading: editLoader } = useCreate(`${AddressAPI}/${editAddress?.id}`, false, false, "Address Updated successfully", (resDta) => {
+  const { mutate: editMutate, isLoading: editLoader } = useCreate(`${AddressAPI}/${editAddress?.id}`, false, false, "AddressUpdatedSuccessfully", (resDta) => {
     setAddressState((prev) =>
       prev.map((elem) => {
         if (elem?.id == resDta?.data?.id) {

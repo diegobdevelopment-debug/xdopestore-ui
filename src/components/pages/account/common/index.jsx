@@ -13,7 +13,7 @@ const SidebarProfile = () => {
       fileInputRef.current.click();
     }
   };
-  const { mutate } = useCreate(`/updateProfile`, false, false, "profile updated successfully", () => refetch());
+  const { mutate } = useCreate(`/updateProfile`, false, false, "ProfileUpdatedSuccessfully", () => refetch());
   const handleOnChange = (event) => {
     const formData = new FormData();
     formData.append("profile_image_id", "");

@@ -129,7 +129,7 @@ const CollectionProducts = ({ filter, grid, infiniteScroll, categorySlug }) => {
           )}
         </div>
       ) : (
-        <NoDataFound customClass="no-data-added " title="NoProductFound" description="Please check if you have misspelt something or try searching with other way." height="345" width="345" imageUrl={`/assets/svg/empty-items.svg`} />
+        <NoDataFound customClass="no-data-added " title="NoProductFound" description="productsNoFoundDescription" height="345" width="345" imageUrl={`/assets/svg/empty-items.svg`} />
       )}
       {!infiniteScroll ? (
         data?.pages[data.pages.length - 1]?.data?.data?.length > 0 && (

@@ -6,6 +6,7 @@ import SettingContext from "@/context/settingContext";
 import Btn from "@/elements/buttons/Btn";
 import { AddToCartAPI } from "@/utils/axiosUtils/API";
 import useCreate from "@/utils/hooks/useCreate";
+import i18next from "i18next";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -54,7 +55,7 @@ const ProductBundle = ({ productState, setProductState }) => {
         const index = cloneCart?.findIndex((item) => item?.product_id === elem.id);
         const productStockQty = cloneCart[index]?.product?.quantity;
         if (productStockQty < cloneCart[index]?.quantity + qty) {
-          ToastNotification("error", `You can not add more items than available. In stock ${productStockQty} items.`);
+          ToastNotification("error", i18next.t("StockLimitMessage", { qty: productStockQty }));
           return false;
         }
         if (index !== -1) {
