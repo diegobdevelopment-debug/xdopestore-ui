@@ -1,52 +1,68 @@
 const { test, expect } = require("@playwright/test");
-const { TEST_EMAIL, TEST_PASSWORD } = require("./helpers/auth");
+const { dismissNewsletterModal, openAuthModal, TEST_EMAIL, TEST_PASSWORD } = require("./helpers/auth");
 
-test.describe("Login", () => {
-  test("shows login form fields", async ({ page }) => {
-    await page.goto("/auth/login");
-    await expect(page.locator("#email")).toBeVisible();
-    await expect(page.locator("#review")).toBeVisible(); // password field id
-    await expect(page.locator('button[type="submit"], .btn-solid')).toBeVisible();
+test.describe("Login (auth modal)", () => {
+  test.beforeEach(async ({ page }) => {
+    await dismissNewsletterModal(page);
+    await page.goto("/");
   });
 
-  test("logs in with valid credentials and redirects to dashboard", async ({ page }) => {
-    await page.goto("/auth/login");
-
-    await page.locator("#email").fill(TEST_EMAIL);
-    await page.locator("#review").fill(TEST_PASSWORD);
-    await page.locator('button[type="submit"], .btn-solid').first().click();
-
-    // Should redirect to /account/dashboard (or wherever CallBackUrl points)
-    await expect(page).toHaveURL(/account\/dashboard/, { timeout: 15000 });
+  test("clicking user icon opens the auth modal with login form", async ({ page }) => {
+    await openAuthModal(page);
+    await expect(page.locator(".auth-modal #email")).toBeVisible();
+    await expect(page.locator(".auth-modal #password")).toBeVisible();
+    await expect(page.locator(".auth-modal button[type='submit']")).toBeVisible();
   });
 
-  test("shows error on wrong password", async ({ page }) => {
-    await page.goto("/auth/login");
+  test("logs in with valid credentials and closes the modal", async ({ page }) => {
+    await openAuthModal(page);
 
-    await page.locator("#email").fill(TEST_EMAIL);
-    await page.locator("#review").fill("wrongpassword123!");
-    await page.locator('button[type="submit"], .btn-solid').first().click();
+    await page.locator(".auth-modal #email").fill(TEST_EMAIL);
+    await page.locator(".auth-modal #password").fill(TEST_PASSWORD);
+    await page.locator(".auth-modal button[type='submit']").click();
 
-    // Error message should appear (toast or inline)
-    const errorVisible = await page
-      .locator('.Toastify__toast--error, .invalid-feedback, [class*="error"], [class*="alert"]')
-      .first()
-      .waitFor({ timeout: 8000 })
-      .then(() => true)
-      .catch(() => false);
-
-    expect(errorVisible).toBe(true);
+    // Modal should close after successful login
+    await expect(page.locator(".auth-modal")).not.toBeVisible({ timeout: 15000 });
   });
 
-  test("blocks submit with empty fields", async ({ page }) => {
-    await page.goto("/auth/login");
+  test("shows error alert on wrong password", async ({ page }) => {
+    await openAuthModal(page);
 
-    // Clear pre-filled defaults and try to submit
-    await page.locator("#email").clear();
-    await page.locator("#review").clear();
-    await page.locator('button[type="submit"], .btn-solid').first().click();
+    await page.locator(".auth-modal #email").fill(TEST_EMAIL);
+    await page.locator(".auth-modal #password").fill("wrongpassword123!");
+    await page.locator(".auth-modal button[type='submit']").click();
 
-    // Should NOT navigate away
-    await expect(page).toHaveURL(/auth\/login/);
+    await expect(page.locator(".auth-modal .alert-danger.login-alert")).toBeVisible({ timeout: 8000 });
+  });
+
+  test("shows validation errors with empty fields", async ({ page }) => {
+    await openAuthModal(page);
+
+    await page.locator(".auth-modal #email").clear();
+    await page.locator(".auth-modal #password").clear();
+    await page.locator(".auth-modal button[type='submit']").click();
+
+    // Modal stays open and shows inline validation
+    await expect(page.locator(".auth-modal")).toBeVisible();
+    await expect(page.locator(".auth-modal .invalid-feedback").first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test("can switch to register form and back", async ({ page }) => {
+    await openAuthModal(page);
+
+    // Click "Register Here" link
+    await page.locator(".auth-modal a:has-text('Register')").click();
+    await expect(page.locator(".auth-modal .auth-title h3")).toContainText(/Create|Register/i, { timeout: 5000 });
+
+    // Click "Login Here" link to go back
+    await page.locator(".auth-modal a:has-text('Login')").click();
+    await expect(page.locator(".auth-modal .auth-title h3")).toContainText(/Sign|Login/i, { timeout: 5000 });
+  });
+
+  test("forgot password link switches to forgot password form", async ({ page }) => {
+    await openAuthModal(page);
+
+    await page.locator(".auth-modal .forgot").click();
+    await expect(page.locator(".auth-modal .auth-title h3")).toContainText(/Forgot/i, { timeout: 5000 });
   });
 });

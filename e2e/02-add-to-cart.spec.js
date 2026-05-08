@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { loginViaAPI, BASE_API } = require("./helpers/auth");
+const { loginViaAPI, BASE_API, dismissNewsletterModal } = require("./helpers/auth");
 
 test.describe("Add to Cart", () => {
   test.beforeEach(async ({ page }) => {
