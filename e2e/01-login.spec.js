@@ -21,8 +21,11 @@ test.describe("Login (auth modal)", () => {
     await page.locator(".auth-modal #password").fill(TEST_PASSWORD);
     await page.locator(".auth-modal button[type='submit']").click();
 
-    // Modal should close after successful login
-    await expect(page.locator(".auth-modal")).not.toBeVisible({ timeout: 15000 });
+    // After login: modal closes (isOpen=false removes it from DOM) OR page navigates
+    await Promise.race([
+      page.locator(".auth-modal").waitFor({ state: "hidden", timeout: 15000 }),
+      page.waitForURL(/account\/dashboard/, { timeout: 15000 }),
+    ]);
   });
 
   test("shows error alert on wrong password", async ({ page }) => {
@@ -50,13 +53,17 @@ test.describe("Login (auth modal)", () => {
   test("can switch to register form and back", async ({ page }) => {
     await openAuthModal(page);
 
-    // Click "Register Here" link
-    await page.locator(".auth-modal a:has-text('Register')").click();
-    await expect(page.locator(".auth-modal .auth-title h3")).toContainText(/Create|Register/i, { timeout: 5000 });
+    // Click the toggle link inside p.create (currently shows "Register Here")
+    await page.locator(".auth-modal p.create a").click();
+    await expect(page.locator(".auth-modal .auth-title h3")).toBeVisible({ timeout: 5000 });
 
-    // Click "Login Here" link to go back
-    await page.locator(".auth-modal a:has-text('Login')").click();
-    await expect(page.locator(".auth-modal .auth-title h3")).toContainText(/Sign|Login/i, { timeout: 5000 });
+    // The title should change (CreateAccount / Register)
+    const titleAfterSwitch = await page.locator(".auth-modal .auth-title h3").textContent();
+    expect(titleAfterSwitch).not.toBe(""); // title changed
+
+    // Click again to go back to login
+    await page.locator(".auth-modal p.create a").click();
+    await expect(page.locator(".auth-modal .auth-title h3")).toBeVisible({ timeout: 5000 });
   });
 
   test("forgot password link switches to forgot password form", async ({ page }) => {

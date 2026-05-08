@@ -5,10 +5,10 @@
 const BASE_API = process.env.API_URL || "http://localhost:5000";
 const TEST_EMAIL = process.env.TEST_EMAIL || "consumer@xdope.com";
 const TEST_PASSWORD = process.env.TEST_PASSWORD || "Consumer@123";
+const TEST_NAME = "Test Consumer";
 
 /**
  * Sets the `newsletter` cookie so the modal never appears during tests.
- * Call this before any page.goto() that loads the site.
  */
 async function dismissNewsletterModal(page) {
   await page.context().addCookies([
@@ -26,23 +26,51 @@ async function dismissNewsletterModal(page) {
 }
 
 /**
- * Calls the login API directly and injects the `uat` cookie into the browser context.
- * Also sets the newsletter cookie to avoid the popup.
+ * Ensures the test user exists. Tries to login; if 401 registers first then logs in.
+ * Returns the token string.
  */
-async function loginViaAPI(page) {
-  await dismissNewsletterModal(page);
-
-  const res = await page.request.post(`${BASE_API}/login`, {
+async function ensureTestUser(page) {
+  const loginRes = await page.request.post(`${BASE_API}/login`, {
     data: { email: TEST_EMAIL, password: TEST_PASSWORD },
     headers: { "Content-Type": "application/json", Accept: "application/json" },
   });
 
-  if (!res.ok()) {
-    throw new Error(`Login API failed: ${res.status()} ${await res.text()}`);
+  if (loginRes.ok()) {
+    const body = await loginRes.json();
+    return { token: body?.access_token || body?.token, body };
   }
 
-  const body = await res.json();
-  const token = body?.access_token || body?.token || body?.data?.access_token || body?.data?.token;
+  // User doesn't exist — register then login
+  await page.request.post(`${BASE_API}/register`, {
+    data: {
+      name: TEST_NAME,
+      email: TEST_EMAIL,
+      password: TEST_PASSWORD,
+      password_confirmation: TEST_PASSWORD,
+    },
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+  });
+
+  const loginRes2 = await page.request.post(`${BASE_API}/login`, {
+    data: { email: TEST_EMAIL, password: TEST_PASSWORD },
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+  });
+
+  if (!loginRes2.ok()) {
+    throw new Error(`Login failed after registration: ${loginRes2.status()} ${await loginRes2.text()}`);
+  }
+
+  const body = await loginRes2.json();
+  return { token: body?.access_token || body?.token, body };
+}
+
+/**
+ * Logs in via API and injects `uat` cookie. Also suppresses newsletter modal.
+ */
+async function loginViaAPI(page) {
+  await dismissNewsletterModal(page);
+
+  const { token, body } = await ensureTestUser(page);
   if (!token) throw new Error("No token in login response: " + JSON.stringify(body));
 
   await page.context().addCookies([
@@ -58,7 +86,13 @@ async function loginViaAPI(page) {
     },
   ]);
 
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  // goto can abort if previous test triggered navigation; retry once
+  try {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+  } catch {
+    await page.waitForTimeout(500);
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+  }
   await page.evaluate((data) => {
     localStorage.setItem("account", JSON.stringify(data));
   }, body?.data || body);
@@ -67,16 +101,9 @@ async function loginViaAPI(page) {
 }
 
 /**
- * Opens the auth modal via the user icon in the header.
- * Waits until the modal is visible.
- */
-/**
  * Opens the auth modal via the user icon (3rd li.onhover-div in .icon-nav).
- * Waits until the modal is visible.
  */
 async function openAuthModal(page) {
-  // The user icon is the 3rd li.onhover-div inside .icon-nav
-  // (heart = 1st, cart = 2nd, user = 3rd)
   await page.locator(".icon-nav li.onhover-div").nth(2).click();
   await page.locator(".auth-modal").waitFor({ state: "visible", timeout: 8000 });
 }
