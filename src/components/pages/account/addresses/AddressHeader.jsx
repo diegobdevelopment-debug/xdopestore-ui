@@ -17,7 +17,7 @@ const AddressHeader = () => {
   const [modal, setModal] = useState("");
   const { accountData, refetch } = useContext(AccountContext);
   useEffect(() => {
-    accountData?.address.length > 0 && setAddressState((prev) => [...accountData?.address]);
+    accountData?.address?.length > 0 && setAddressState((prev) => [...accountData?.address]);
   }, [accountData]);
   const { mutate, isLoading } = useCreate(AddressAPI, false, false, "AddressAddedSuccessfully", (resDta) => {
     setAddressState((prev) => [...prev, resDta?.data]);

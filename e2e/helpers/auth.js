@@ -108,4 +108,4 @@ async function openAuthModal(page) {
   await page.locator(".auth-modal").waitFor({ state: "visible", timeout: 8000 });
 }
 
-module.exports = { loginViaAPI, dismissNewsletterModal, openAuthModal, TEST_EMAIL, TEST_PASSWORD, BASE_API };
+module.exports = { loginViaAPI, dismissNewsletterModal, openAuthModal, ensureTestUser, TEST_EMAIL, TEST_PASSWORD, BASE_API };

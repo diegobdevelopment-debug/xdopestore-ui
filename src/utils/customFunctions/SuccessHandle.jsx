@@ -7,9 +7,11 @@ const SuccessHandle = (resData, router, path, message, setCouponError, pathName,
     {
       message !== 'No' && ToastNotification("success", message ? message : (router && MessageCreate(pathName)));
     }
-  } else if (resData.response?.data?.message || resData?.data?.errors[0]?.message) {
-    setCouponError && setCouponError(resData.response?.data?.message || resData?.data?.errors[0]?.message)
-    { message !== 'No' && ToastNotification("error", resData.response?.data?.message || resData?.data?.errors[0]?.message) ;setShowBoxMessage(resData.response?.data?.message); }
+  } else if (resData.response?.data?.message || resData?.data?.errors?.[0]?.message || resData?.data?.message) {
+    const errMsg = resData.response?.data?.message || resData?.data?.errors?.[0]?.message || resData?.data?.message;
+    setCouponError && setCouponError(errMsg);
+    message !== 'No' && ToastNotification("error", errMsg);
+    setShowBoxMessage && setShowBoxMessage(errMsg);
   
   } else { message !== 'No' && ToastNotification("error"); }
 };
