@@ -1,18 +1,58 @@
+"use client";
 import Btn from "@/elements/buttons/Btn";
-import { RegisterAPI } from "@/utils/axiosUtils/API";
 import Breadcrumbs from "@/utils/commonComponents/breadcrumb";
-import useCreate from "@/utils/hooks/useCreate";
 import { YupObject, emailSchema, nameSchema, passwordConfirmationSchema, passwordSchema } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Col, Container, Row } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
+
+const API_URL = process.env.API_PROD_URL || "http://localhost:5000";
 
 const RegisterContainer = () => {
-  const { mutate, isLoading } = useCreate(RegisterAPI, false, `/auth/register`, "Register Successfully");
   const { t } = useTranslation("common");
+  const [showBoxMessage, setShowBoxMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (values) => {
+    setIsSubmitting(true);
+    setShowBoxMessage("");
+    try {
+      const payload = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      };
+      const res = await fetch(`${API_URL}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const token = data?.access_token || data?.token;
+        if (token) {
+          Cookies.set("uat", token, { path: "/", expires: 7 });
+          Cookies.set("account", JSON.stringify(data?.data || {}));
+          localStorage.setItem("account", JSON.stringify(data?.data || {}));
+        }
+        router.push("/account/dashboard");
+      } else {
+        setShowBoxMessage(data?.message || "Registration failed");
+      }
+    } catch (err) {
+      console.error("Register error:", err);
+      setShowBoxMessage(`Registration failed: ${err.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
-    
       <Breadcrumbs title={"Home"} subTitle={"CreateAccount"} />
       <section className="register-page section-t-space section-b-space">
         <Container>
@@ -20,6 +60,11 @@ const RegisterContainer = () => {
             <Col lg="12">
               <h3>{t("CreateAccount")}</h3>
               <div className="theme-card">
+                {showBoxMessage && (
+                  <div role="alert" className="alert alert-danger login-alert mb-3">
+                    <i className="ri-error-warning-line"></i> {showBoxMessage}
+                  </div>
+                )}
                 <Formik
                   initialValues={{
                     name: "",
@@ -33,36 +78,36 @@ const RegisterContainer = () => {
                     password: passwordSchema,
                     password_confirmation: passwordConfirmationSchema,
                   })}
-                  onSubmit={mutate}
+                  onSubmit={handleSubmit}
                 >
-                  {({ errors, touched, setFieldValue }) => (
+                  {({ errors, touched }) => (
                     <Form className="theme-form">
                       <Row className="form-row">
                         <Col md="4">
-                          <label htmlFor="email">{t("FullName")}</label>
+                          <label htmlFor="fname">{t("FullName")}</label>
                           <Field className="form-control" name="name" type="text" id="fname" placeholder="First name" required />
-                          {errors.name && touched.name && <ErrorMessage name="name" render={(msg) => <div className="invalid-feedback  d-block">{errors.name}</div>} />}
+                          {errors.name && touched.name && <ErrorMessage name="name" render={() => <div className="invalid-feedback d-block">{errors.name}</div>} />}
                         </Col>
                         <Col md="4">
                           <label htmlFor="email">{t("Email")}</label>
                           <Field className="form-control" name="email" type="text" id="email" placeholder="Email" required />
-                          {errors.email && touched.email && <ErrorMessage name="email" render={(msg) => <div className="invalid-feedback d-block">{errors.email}</div>} />}
+                          {errors.email && touched.email && <ErrorMessage name="email" render={() => <div className="invalid-feedback d-block">{errors.email}</div>} />}
                         </Col>
                       </Row>
                       <Row className="form-row">
                         <Col md="6">
-                          <label htmlFor="review">{t("Password")}</label>
-                          <Field className="form-control" type="password" name="password" id="review" placeholder="Enter your password" required />
-                          {errors.password && touched.password && <ErrorMessage name="password" render={(msg) => <div className="invalid-feedback d-block">{errors.password}</div>} />}
+                          <label htmlFor="password">{t("Password")}</label>
+                          <Field className="form-control" type="password" name="password" id="password" placeholder="Enter your password" required />
+                          {errors.password && touched.password && <ErrorMessage name="password" render={() => <div className="invalid-feedback d-block">{errors.password}</div>} />}
                         </Col>
                         <Col md="6">
-                          <label htmlFor="review">{t("ConfirmPassword")}</label>
-                          <Field className="form-control" name="password_confirmation" type="password" id="lname" placeholder="Confirm your password" required />
-                          {errors.password_confirmation && touched.password_confirmation && <ErrorMessage name="password_confirmation" render={(msg) => <div className="invalid-feedback d-block">{errors.password_confirmation}</div>} />}
+                          <label htmlFor="password_confirmation">{t("ConfirmPassword")}</label>
+                          <Field className="form-control" name="password_confirmation" type="password" id="password_confirmation" placeholder="Confirm your password" required />
+                          {errors.password_confirmation && touched.password_confirmation && <ErrorMessage name="password_confirmation" render={() => <div className="invalid-feedback d-block">{errors.password_confirmation}</div>} />}
                         </Col>
 
-                        <Btn loading={isLoading} type="submit" className=" btn-solid w-auto">
-                          {t("CreateAccount")}
+                        <Btn loading={isSubmitting} type="submit" disabled={isSubmitting} className="btn-solid w-auto">
+                          {isSubmitting ? "Creating..." : t("CreateAccount")}
                         </Btn>
                       </Row>
                     </Form>
