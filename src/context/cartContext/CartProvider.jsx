@@ -3,6 +3,7 @@ import { AddToCartAPI, ClearCart, ReplaceCartAPI } from "@/utils/axiosUtils/API"
 import getCookie from "@/utils/customFunctions/GetCookie";
 import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 import useCreate from "@/utils/hooks/useCreate";
+import i18next from "i18next";
 import useDelete from "@/utils/hooks/useDelete";
 import useFetchQuery from "@/utils/hooks/useFetchQuery";
 import { useMutation } from "@tanstack/react-query";
@@ -164,7 +165,7 @@ const CartProvider = (props) => {
       // Checking the Stock QTY of particular product
       const productStockQty = cart[index]?.variation?.quantity ? cart[index]?.variation?.quantity : cart[index]?.product?.quantity;
       if (productStockQty < cart[index]?.quantity + qty) {
-        ToastNotification("error", `You can not add more items than available. In stock ${productStockQty} items.`);
+        ToastNotification("error", i18next.t("StockLimitMessage", { qty: productStockQty }));
         return false;
       }
 
@@ -207,7 +208,7 @@ const CartProvider = (props) => {
     const isAvailableInCart = cart.find((cartProduct) => cartProduct?.variation_id == cloneVariation.variation_id);
 
     if (isAvailableInCart) {
-      ToastNotification("error", "You already have this item in your cart.");
+      ToastNotification("error", i18next.t("AlreadyInCart"));
       return false;
     }
     const index = cart.findIndex((item) => item.product_id === productObj?.id && item.variation_id == selectedVariation.variation_id);
@@ -221,7 +222,7 @@ const CartProvider = (props) => {
 
     // Checking the Stock QTY of particular product
     if (productQty < cart[index]?.quantity + updatedQty) {
-      ToastNotification("error", `You can not add more items than available. In stock ${productQty} items.`);
+      ToastNotification("error", i18next.t("StockLimitMessage", { qty: productQty }));
       return false;
     }
     let newProduct;

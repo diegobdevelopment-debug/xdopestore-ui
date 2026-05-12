@@ -181,7 +181,7 @@ const Fashion1 = () => {
       )}
 
       {/* Brands */}
-      {data?.brands?.brand_ids?.length > 0 && (
+      {!!data?.brands?.status && data?.brands?.brand_ids?.length > 0 && (
         <WrapperComponent
           classes={{
             sectionClass: 'section-b-space',
@@ -189,7 +189,7 @@ const Fashion1 = () => {
           }}
           noRowCol={true}
         >
-          <HomeTitle title={{ title: 'Our Brands' }} type="basic" />
+          <HomeTitle title={{ title: data?.brands?.title || 'Our Brands' }} type="basic" />
           <HomeBrand brandIds={data?.brands?.brand_ids} />
         </WrapperComponent>
       )}

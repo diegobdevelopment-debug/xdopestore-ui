@@ -55,7 +55,7 @@ const AccountSection = ({ values, setFieldValue }) => {
               checked={values.create_account}
             />
             <Label className="form-check-label" htmlFor="flexCheckDefault">
-              {t("Create an account ?")}
+              {t("CreateAnAccount")}
             </Label>
           </div>
         </Col>

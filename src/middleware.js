@@ -45,7 +45,8 @@ export async function middleware(request) {
   }
 
   if (protectedRoutes.includes(path) && !request.cookies.has("uat")) {
-    const response = NextResponse.redirect(new URL(request?.cookies?.get("currentPath").value, request.url));
+    const redirectTo = request?.cookies?.get("currentPath")?.value || "/";
+    const response = NextResponse.redirect(new URL(redirectTo, request.url));
     response.cookies.set("showAuthToast", "true", { httpOnly: false });
     return response;
   }

@@ -1,11 +1,13 @@
 import Btn from "@/elements/buttons/Btn";
 import Image from "next/image";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { RiHeadphoneLine, RiImage2Line, RiPlayLine, RiPlayListLine, RiShareBoxLine } from "react-icons/ri";
 import VideoPlayModal from "../common/allModal/VideoPlayModal";
 import ProductDetailsTab from "../common/ProductDetailsTab";
 
 const DigitalProductImage = ({ productState }) => {
+  const { t } = useTranslation("common");
   const [modal, setModal] = useState("");
   const [videoType, setVideoType] = useState(["video/mp4", "video/webm", "video/ogg"]);
   const [audioType, setAudioType] = useState(["audio/mpeg", "audio/wav", "audio/ogg"]);
@@ -35,24 +37,24 @@ const DigitalProductImage = ({ productState }) => {
                     {productState?.product?.product_galleries && productState?.product?.product_galleries?.length > 0 && (
                       <Btn className="theme-image-icon btn-md" onClick={() => setModal("image")}>
                         <RiImage2Line />
-                        <span className="ms-2">{"Preview Image"}</span>
+                        <span className="ms-2">{t("PreviewImage")}</span>
                       </Btn>
                     )}
                     {productState?.product?.preview_type == "url" ? (
                       <a className="theme-image-icon btn-md" href={productState?.product?.preview_url} target="_blank">
                         <RiShareBoxLine />
-                        <span className="ms-2">{"Live Preview"}</span>
+                        <span className="ms-2">{t("LivePreview")}</span>
                       </a>
                     ) : productState?.product?.preview_type == "video" ? (
                       <Btn className="theme-image-icon  btn-md" onClick={() => setModal("image")}>
                         <RiPlayListLine />
-                        <span className="ms-2">{"Preview Video"}</span>
+                        <span className="ms-2">{t("PreviewVideo")}</span>
                       </Btn>
                     ) : (
                       productState?.product?.preview_type == "audio" && (
                         <Btn className="theme-image-icon" onClick={() => setModal("image")}>
                           <RiPlayListLine />
-                          <span className="ms-2">{"Preview Audio"}</span>
+                          <span className="ms-2">{t("PreviewAudio")}</span>
                         </Btn>
                       )
                     )}

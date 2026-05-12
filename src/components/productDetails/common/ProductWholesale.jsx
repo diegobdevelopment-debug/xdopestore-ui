@@ -10,9 +10,9 @@ const ProductWholesale = ({ productState }) => {
       <table className="table mt-2 mb-4 modal-table">
         <thead>
           <tr>
-            <th className="border-top-0">{"Min QTY"}</th>
-            <th className="border-top-0">{"Max QTY"}</th>
-            <th className="border-top-0">{productState.product?.wholesale_price_type == "fixed" ? "Unit Price" : "Percentage"}</th>
+            <th className="border-top-0">{t("MinQty")}</th>
+            <th className="border-top-0">{t("MaxQty")}</th>
+            <th className="border-top-0">{productState.product?.wholesale_price_type == "fixed" ? t("UnitPrice") : t("Percentage")}</th>
           </tr>
         </thead>
         <tbody>

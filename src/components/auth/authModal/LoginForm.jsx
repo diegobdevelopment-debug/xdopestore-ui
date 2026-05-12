@@ -43,11 +43,11 @@ const LoginForm = ({ setState }) => {
           router.refresh();
         }
       } else {
-        setShowBoxMessage(data?.message || "Invalid credentials");
+        setShowBoxMessage(data?.message || "InvalidCredentials");
       }
     } catch (err) {
       console.error("Login error:", err);
-      setShowBoxMessage(`Login failed: ${err.message}`);
+      setShowBoxMessage("LoginFailed");
     } finally {
       setIsSubmitting(false);
     }
@@ -69,7 +69,7 @@ const LoginForm = ({ setState }) => {
         <Form className="auth-form-box">
           {showBoxMessage && (
             <div role="alert" className="alert alert-danger login-alert">
-              <i className="ri-error-warning-line"></i> {showBoxMessage}
+              <i className="ri-error-warning-line"></i> {t(showBoxMessage, { defaultValue: showBoxMessage })}
             </div>
           )}
           <div className="auth-box mb-3">
@@ -90,7 +90,7 @@ const LoginForm = ({ setState }) => {
             </a>
           </div>
           <Btn loading={isSubmitting} type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Logging in..." : t("Login")}
+            {isSubmitting ? t("LoggingIn") : t("Login")}
           </Btn>
         </Form>
       )}

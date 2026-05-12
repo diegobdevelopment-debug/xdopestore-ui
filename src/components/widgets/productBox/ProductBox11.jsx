@@ -15,7 +15,7 @@ const ProductBox11 = ({ productState, setProductState }) => {
       <div className={`basic-product theme-product-10 ${productState?.selectedVariation ? (productState?.selectedVariation.stock_status === "out_of_stock" || !productState?.selectedVariation.status ? "sold-out" : "") : productState?.product?.stock_status === "out_of_stock" ? "sold-out" : ""}`}>
         <div className="img-wrapper">
           <ImageVariant thumbnail={productState.selectedVariation?.variation_image ? productState.selectedVariation.variation_image : productState.product?.product_thumbnail} gallery_images={productState.product?.product_galleries} product={productState.product} width={750} height={750} />
-          <CartButton productState={productState} selectedVariation={productState.selectedVariation} text="Add to cart" classes="addto-cart-bottom" />
+          <CartButton productState={productState} selectedVariation={productState.selectedVariation} text={t("AddToCart")} classes="addto-cart-bottom" />
           <div className="cart-info">
             <ProductHoverButton productstate={productState?.product} />
           </div>

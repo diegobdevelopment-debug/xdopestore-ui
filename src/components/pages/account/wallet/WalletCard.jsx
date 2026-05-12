@@ -100,7 +100,7 @@ const WalletCard = () => {
           </Col>
         </Row>
       ) : (
-        <NoDataFound customClass="no-data-added" imageUrl={`/assets/svg/empty-items.svg`} title="NoTransactionsFound" description={'No wallet balance activity detected'} height="300" width="300" />
+        <NoDataFound customClass="no-data-added" imageUrl={`/assets/svg/empty-items.svg`} title="NoTransactionsFound" description="NoWalletActivity" height="300" width="300" />
       )}
     </>
   );

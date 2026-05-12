@@ -49,7 +49,7 @@ const SelectForm = ({ values, isLoading, data, setModal, isFooterDisplay = true 
                 name: "country_id",
                 id: "country_id",
                 options: data,
-                defaultOption: "Select state",
+                defaultOption: t("SelectState"),
               },
             },
             {
@@ -62,7 +62,7 @@ const SelectForm = ({ values, isLoading, data, setModal, isFooterDisplay = true 
                 name: "state_id",
                 id: "state_id",
                 options: values?.["country_id"] ? data?.filter((country) => Number(country.id) === Number(values?.["country_id"]))?.[0]?.["state"] : [],
-                defaultOption: "Select state",
+                defaultOption: t("SelectState"),
               },
               disabled: values?.["country_id"] ? false : true,
             },

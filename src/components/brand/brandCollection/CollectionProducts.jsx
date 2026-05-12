@@ -77,7 +77,7 @@ const CollectionProducts = ({ filter, grid }) => {
           </Row>
         </div>
       ) : (
-        <NoDataFound imageUrl={`/assets/svg/empty-items.svg`} customClass="no-data-added collection-no-data" title="Sorry! Couldn't find the products you were looking For!" description="Please check if you have misspelt something or try searching with other way." height={345} width={345} />
+        <NoDataFound imageUrl={`/assets/svg/empty-items.svg`} customClass="no-data-added collection-no-data" title="NoFoundProducts" description="productsNoFoundDescription" height={345} width={345} />
       )}
 
       {data?.data?.length > 0 && (

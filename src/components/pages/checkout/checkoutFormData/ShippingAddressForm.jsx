@@ -30,7 +30,7 @@ const ShippingAddressForm = ({ values, data }) => {
                 name: "shipping_address.country_id",
                 id: "shipping_address.country_id",
                 options: data,
-                defaultOption: "Select state",
+                defaultOption: t("SelectState"),
               },
             },
 
@@ -44,7 +44,7 @@ const ShippingAddressForm = ({ values, data }) => {
                 name: "shipping_address.state_id",
                 id: "shipping_address.state_id",
                 options: values?.shipping_address?.country_id ? data?.filter((country) => Number(country.id) === Number(values?.shipping_address?.country_id))?.[0]?.["state"] : [],
-                defaultOption: "Select state",
+                defaultOption: t("SelectState"),
               },
               disabled: values?.["shipping_address.country_id"] ? false : true,
             },

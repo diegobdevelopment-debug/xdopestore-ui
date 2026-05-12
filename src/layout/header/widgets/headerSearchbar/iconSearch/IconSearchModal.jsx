@@ -103,7 +103,7 @@ const IconSearchModal = ({ setIsOpen, isOpen }) => {
               ))}
             </Row>
           ) : (
-            <NoDataFound height={345} width={345} imageUrl={`/assets/svg/empty-items.svg`} customClass={"collection-no-data no-data-added"} description={"Please check if you have misspelt something or try searching with other way."} title={"NoProductFound"} />
+            <NoDataFound height={345} width={345} imageUrl={`/assets/svg/empty-items.svg`} customClass={"collection-no-data no-data-added"} description={"productsNoFoundDescription"} title={"NoProductFound"} />
           )}
         </div>
       </ModalBody>

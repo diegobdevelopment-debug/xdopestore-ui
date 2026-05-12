@@ -104,17 +104,17 @@ const CartButton = ({ productState, text, classes, iconClass = true, quantity = 
               }}
             >
               <i className="ri-shopping-cart-line"></i>
-              <span> {!(productQty > 0) ? text : "Added"}</span>
+              <span> {!(productQty > 0) ? text : t("Added")}</span>
             </Btn>
           ) : (
             <Btn id={`out-of-stock'+${productState?.product?.id}`} className={classes ? classes : ""} disabled={true} iconClass={iconClass ? iconClass : <RiAddLine />}>
-              {text ? "Out of stock" : ""}
+              {text ? t("OutOfStock") : ""}
             </Btn>
           )}
         </>
       ) : (
         <Btn id={`add-to-cart${productState?.product?.id}`} className={`btn btn-add-cart addcart-button ${classes ? classes : ""}`} onClick={() => externalProductLink(productState?.product?.external_url)}>
-          {productState?.product?.external_button_text ? productState?.product?.external_button_text : "BuyNow"}
+          {productState?.product?.external_button_text ? productState?.product?.external_button_text : t("BuyNow")}
         </Btn>
       )}
     </>

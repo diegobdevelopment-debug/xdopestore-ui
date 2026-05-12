@@ -23,7 +23,7 @@ const ProductBox1 = ({ productState, setProductState }) => {
         </div>
 
         <div className="cart-info">
-          <CartButton classes={"addto-cart-bottom"} productState={productState} selectedVariation={productState?.selectedVariation} text="Add to Cart" />
+          <CartButton classes={"addto-cart-bottom"} productState={productState} selectedVariation={productState?.selectedVariation} text={t("AddToCart")} />
           <ProductHoverButton productstate={productState?.product} />
         </div>
 

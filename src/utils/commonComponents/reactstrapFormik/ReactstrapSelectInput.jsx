@@ -123,7 +123,7 @@ const ReactstrapSelectInput = ({ field, form: { touched, errors, setFieldValue }
           ) : (
             <Input type="text" className="form-select cursor position-absolute" value={t(setvalue !== undefined ? props.inputprops.value || selectedItems?.name : props.inputprops?.options?.find((item) => item.id === field.value)?.name) || t("Select")} onClick={() => setIsComponentVisible(true)} readOnly invalid={Boolean(touched[field.name] && errors[field.name])} />
           )}
-          {!Array.isArray(selectedItems) && <Input id={props.inputprops.id} {...field} {...props} placeholder="Search" className="form-control form-select" type="text" invalid={Boolean(touched[field.name] && errors[field.name])} disabled />}
+          {!Array.isArray(selectedItems) && <Input id={props.inputprops.id} {...field} {...props} placeholder={t("Search")} className="form-control form-select" type="text" invalid={Boolean(touched[field.name] && errors[field.name])} disabled />}
           <p className="help-text">{props?.inputprops?.helpertext}</p>
           {props.inputprops?.setsearch
             ? listOpt?.length > 0

@@ -42,7 +42,7 @@ const ReviewModal = ({ modal, setModal, productState, refetch }) => {
               <div className="product-content">
                 <h5 className="name">{productState?.product?.name}</h5>
                 <div className="product-review-rating">
-                  <label>{"Rating"}</label>
+                  <label>{t("Rating")}</label>
                   <div className="product-rating">
                     {/* <ProductBox1Rating totalRating={productState?.product?.rating_count} /> */}
                     <h6 className="rating-number">{productState?.product?.rating_count?.toFixed(2) || 0}</h6>

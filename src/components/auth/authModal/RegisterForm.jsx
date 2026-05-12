@@ -1,19 +1,70 @@
+"use client";
 import SearchableSelectInput from "@/components/widgets/inputFields/SearchableSelectInput";
+import ThemeOptionContext from "@/context/themeOptionsContext";
 import { AllCountryCode } from "@/data/CountryCode";
 import Btn from "@/elements/buttons/Btn";
-import { RegisterAPI } from "@/utils/axiosUtils/API";
-import useCreate from "@/utils/hooks/useCreate";
 import { YupObject, emailSchema, nameSchema, passwordConfirmationSchema, passwordSchema, phoneSchema } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Input } from "reactstrap";
 
+const API_URL = process.env.API_PROD_URL || "http://localhost:5000";
+
 const RegisterForm = () => {
-  const [showBoxMessage, setShowBoxMessage] = useState();
-  const { mutate, isLoading } = useCreate(RegisterAPI, false, false, "Register Successfully", false, false, false, false, setShowBoxMessage);
-  const { t } = useTranslation("common");
+  const [showBoxMessage, setShowBoxMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [checkboxChecked, setCheckboxChecked] = useState(false);
+  const { t } = useTranslation("common");
+  const { setOpenAuthModal } = useContext(ThemeOptionContext);
+  const router = useRouter();
+
+  const handleSubmit = async (values) => {
+    setIsSubmitting(true);
+    setShowBoxMessage("");
+    try {
+      // Backend expects { name, email, password, phone, country_code }.
+      // password_confirmation is client-side only.
+      const payload = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        phone: values.phone,
+        country_code: values.country_code,
+      };
+      const res = await fetch(`${API_URL}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const token = data?.access_token || data?.token;
+        if (token) {
+          Cookies.set("uat", token, { path: "/", expires: 7 });
+          Cookies.set("account", JSON.stringify(data?.data || {}));
+          localStorage.setItem("account", JSON.stringify(data?.data || {}));
+        }
+        setOpenAuthModal && setOpenAuthModal(false);
+        const callbackUrl = Cookies.get("CallBackUrl");
+        if (callbackUrl) {
+          Cookies.remove("CallBackUrl");
+          router.push(callbackUrl);
+        } else {
+          router.refresh();
+        }
+      } else {
+        setShowBoxMessage(data?.message || "Registration failed");
+      }
+    } catch (err) {
+      console.error("Register error:", err);
+      setShowBoxMessage(`Registration failed: ${err.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Formik
@@ -22,7 +73,7 @@ const RegisterForm = () => {
         email: "",
         password: "",
         password_confirmation: "",
-        country_code: "91",
+        country_code: "57",
         phone: "",
       }}
       validationSchema={YupObject({
@@ -32,45 +83,45 @@ const RegisterForm = () => {
         password_confirmation: passwordConfirmationSchema,
         phone: phoneSchema,
       })}
-      onSubmit={mutate}
+      onSubmit={handleSubmit}
     >
-      {({ errors, touched, setFieldValue }) => (
+      {({ errors, touched }) => (
         <Form className="auth-form-box">
           {showBoxMessage && (
             <div role="alert" className="alert alert-danger login-alert">
-              <i className="ri-error-warning-line"></i> {showBoxMessage}
+              <i className="ri-error-warning-line"></i> {t(showBoxMessage, { defaultValue: showBoxMessage })}
             </div>
           )}
           <div className="auth-box mb-3 form-box">
-            <label htmlFor="email">{t("FullName")}</label>
+            <label htmlFor="fname">{t("FullName")}</label>
             <Field className="form-control" name="name" type="text" id="fname" placeholder={t("FirstName")} required />
-            {errors.name && touched.name && <ErrorMessage name="name" render={(msg) => <div className="invalid-feedback  d-block">{errors.name}</div>} />}
+            {errors.name && touched.name && <ErrorMessage name="name" render={() => <div className="invalid-feedback d-block">{errors.name}</div>} />}
           </div>
           <div className="auth-box form-box mb-3">
             <label htmlFor="email">{t("Email")}</label>
             <Field className="form-control" name="email" type="text" id="email" placeholder={t("Email")} required />
-            {errors.email && touched.email && <ErrorMessage name="email" render={(msg) => <div className="invalid-feedback d-block">{errors.email}</div>} />}
+            {errors.email && touched.email && <ErrorMessage name="email" render={() => <div className="invalid-feedback d-block">{errors.email}</div>} />}
           </div>
 
           <div className="auth-box form-box mb-3 phone-field">
             <div className="form-box">
               <label htmlFor="phone">{t("Phone")}</label>
-              <SearchableSelectInput nameList={[{ name: "country_code", notitle: "true", inputprops: { name: "country_code", id: "country_code", options: AllCountryCode, }, },]} />
+              <SearchableSelectInput nameList={[{ name: "country_code", notitle: "true", inputprops: { name: "country_code", id: "country_code", options: AllCountryCode } }]} />
               <Field className="form-control" name="phone" placeholder={t("EnterPhoneNumber")} type="number" />
-              {errors.phone && touched?.phone && <ErrorMessage render={() => <div className="invalid-feedback">{errors.phone}</div>} />}
+              {errors.phone && touched?.phone && <ErrorMessage render={() => <div className="invalid-feedback d-block">{errors.phone}</div>} />}
             </div>
           </div>
 
           <div className="auth-box form-box mb-3">
-            <label htmlFor="review">{t("Password")}</label>
-            <Field className="form-control" type="password" name="password" id="review" placeholder={t("EnterYourPassword")} required />
-            {errors.password && touched.password && <ErrorMessage name="password" render={(msg) => <div className="invalid-feedback d-block">{errors.password}</div>} />}
+            <label htmlFor="password">{t("Password")}</label>
+            <Field className="form-control" type="password" name="password" id="password" placeholder={t("EnterYourPassword")} required />
+            {errors.password && touched.password && <ErrorMessage name="password" render={() => <div className="invalid-feedback d-block">{errors.password}</div>} />}
           </div>
           <div className="mb-3">
             <div className="form-box">
-              <label htmlFor="review">{t("ConfirmPassword")}</label>
-              <Field className="form-control" name="password_confirmation" type="password" id="lname" placeholder={t("ConfirmYourPassword")} required />
-              {errors.password_confirmation && touched.password_confirmation && <ErrorMessage name="password_confirmation" render={(msg) => <div className="invalid-feedback d-block">{errors.password_confirmation}</div>} />}
+              <label htmlFor="password_confirmation">{t("ConfirmPassword")}</label>
+              <Field className="form-control" name="password_confirmation" type="password" id="password_confirmation" placeholder={t("ConfirmYourPassword")} required />
+              {errors.password_confirmation && touched.password_confirmation && <ErrorMessage name="password_confirmation" render={() => <div className="invalid-feedback d-block">{errors.password_confirmation}</div>} />}
             </div>
           </div>
           <div className="auth-box form-box mb-3">
@@ -84,8 +135,8 @@ const RegisterForm = () => {
             </div>
           </div>
 
-          <Btn loading={isLoading} type="submit" className={`btn ${Object.keys(errors).length === 0 && checkboxChecked ? "" : "disabled"}`}>
-            {t("CreateAccount")}
+          <Btn loading={isSubmitting} type="submit" disabled={isSubmitting || !checkboxChecked} className={`btn ${checkboxChecked ? "" : "disabled"}`}>
+            {isSubmitting ? "Creating..." : t("CreateAccount")}
           </Btn>
         </Form>
       )}

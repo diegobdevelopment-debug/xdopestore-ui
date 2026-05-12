@@ -55,7 +55,7 @@ const BillingAddressForm = ({ values, setFieldValue, errors, data }) => {
                 checked={values.billing_address.same_shipping}
               />
               <Label className="form-check-label" htmlFor="flexCheckDefault">
-                {t("Is the shipping address the same as your billing address?")}
+                {t("SameAsShippingAddress")}
               </Label>
             </div>
           </Col>
@@ -69,14 +69,14 @@ const BillingAddressForm = ({ values, setFieldValue, errors, data }) => {
         />
         <SearchableSelectInput
           nameList={[
-            { name: "billing_address.country_id", require: "true", title: "Country", toplabel: "Country", colprops: { md: 6 }, inputprops: { name: "billing_address.country_id", id: "billing_address.country_id", options: data, defaultOption: "Select state", }, },
+            { name: "billing_address.country_id", require: "true", title: "Country", toplabel: "Country", colprops: { md: 6 }, inputprops: { name: "billing_address.country_id", id: "billing_address.country_id", options: data, defaultOption: t("SelectState"), }, },
             {
               name: "billing_address.state_id", require: "true", title: "State", toplabel: "State", colprops: { md: 6 },
               inputprops: {
                 name: "billing_address.state_id",
                 id: "billing_address.state_id",
                 options: values?.shipping_address?.country_id ? data?.filter((country) => Number(country.id) === Number(values?.shipping_address?.country_id))?.[0]?.["state"] : [],
-                defaultOption: "Select state",
+                defaultOption: t("SelectState"),
               },
               disabled: values?.["country_id"] ? false : true,
             },

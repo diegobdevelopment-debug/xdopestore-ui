@@ -14,7 +14,7 @@ const ShareModal = ({ productState, modal, setModal }) => {
 
   const copyLink = () => {
     navigator.clipboard.writeText(shareLink);
-    ToastNotification("success", "Link copied To Clipboard");
+    ToastNotification("success", "LinkCopiedToClipboard");
   };
 
   const handleShare = (shareOn) => {

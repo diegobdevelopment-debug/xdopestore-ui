@@ -29,7 +29,7 @@ const OurBlog = () => {
           />
         </Row>
       ) : (
-        <NoDataFound customClass="bg-light no-data-added" title="No Blog Found" />
+        <NoDataFound customClass="bg-light no-data-added" title="NoBlogFound" />
       )}
     </WrapperComponent>
   );

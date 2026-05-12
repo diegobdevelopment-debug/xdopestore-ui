@@ -3,12 +3,14 @@ import { placeHolderImage } from "@/components/widgets/Placeholder";
 import SettingContext from "@/context/settingContext";
 import Btn from "@/elements/buttons/Btn";
 import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Container, Input, InputGroup } from "reactstrap";
 import ProductAttribute from "../productAttribute/ProductAttribute";
 import StickyCheckoutButtons from "../StickyCheckoutButtons";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
 const ShowProduct = ({ productState, setProductState }) => {
+  const { t } = useTranslation("common");
   const [totalPrice, settotalPrice] = useState(0);
   const updateQty = (qty) => {
     if (1 > productState?.productQty + qty) return;
@@ -79,7 +81,7 @@ const ShowProduct = ({ productState, setProductState }) => {
                 {productState?.selectedVariation?.discount ?? productState?.product?.discount ? (
                   <>
                     <del>{productState?.selectedVariation ? convertCurrency(productState?.selectedVariation?.price) : convertCurrency(productState?.product?.price)}</del>
-                    <span>{productState?.selectedVariation ? productState?.selectedVariation?.discount : productState?.product?.discount}% Off</span>
+                    <span>{productState?.selectedVariation ? productState?.selectedVariation?.discount : productState?.product?.discount}% {t("Off")}</span>
                   </>
                 ) : null}
               </h6>

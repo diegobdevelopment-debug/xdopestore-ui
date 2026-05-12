@@ -49,7 +49,7 @@ const CheckoutContent = () => {
     if (addressData?.length > 0) setAddress(addressData);
   }, [addressData]);
 
-  const { mutate, isLoading } = useCreate(AddressAPI, false, false, "Address Added successfully", (resDta) => {
+  const { mutate, isLoading } = useCreate(AddressAPI, false, false, "AddressAddedSuccessfully", (resDta) => {
     refetchAddresses();
     refetch();
     setModal("");
@@ -96,14 +96,14 @@ const CheckoutContent = () => {
               create_account: false,
               name: "",
               email: "",
-              country_code: "91",
+              country_code: "57",
               phone: "",
               password: "",
               shipping_address: {
                 title: "",
                 street: "",
                 city: "",
-                country_code: "91",
+                country_code: "57",
                 phone: "",
                 pincode: "",
                 country_id: "",
@@ -114,7 +114,7 @@ const CheckoutContent = () => {
                 title: "",
                 street: "",
                 city: "",
-                country_code: "91",
+                country_code: "57",
                 phone: "",
                 pincode: "",
                 country_id: "",
