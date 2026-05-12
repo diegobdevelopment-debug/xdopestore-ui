@@ -16,21 +16,22 @@ const EmbroideryLoader = () => (
       <circle cx="50" cy="50" r="41.5" fill="none" stroke="#9b7040" strokeWidth="0.75" opacity="0.5" />
 
       {/* Running stitch border — marches continuously */}
+      {/* stroke set via CSS: var(--theme-color) */}
       <circle
         cx="50" cy="50" r="36"
-        fill="none" stroke="#8b1a4a" strokeWidth="1.5"
+        fill="none" strokeWidth="1.5"
         strokeDasharray="4.5 3.5"
         className="emb-border"
       />
 
       {/* 6 petals, each drawn in sequence */}
+      {/* stroke set via CSS: var(--theme-color) */}
       {[0, 60, 120, 180, 240, 300].map((rot, i) => (
         <path
           key={i}
           transform={`rotate(${rot}, 50, 50)`}
           d="M50,50 C43,37 43,27 50,24 C57,27 57,37 50,50"
           fill="none"
-          stroke="#c4205a"
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeDasharray="64"
@@ -40,19 +41,20 @@ const EmbroideryLoader = () => (
       ))}
 
       {/* Cross-stitch marks between petals */}
+      {/* stroke set via CSS: var(--theme-color2) */}
       {CROSSES.map(({ cx, cy }, i) => (
         <g key={i} className={`emb-cross emb-cross-${i + 1}`}>
           <line x1={cx - 2.8} y1={cy - 2.8} x2={cx + 2.8} y2={cy + 2.8}
-            stroke="#c4911a" strokeWidth="1.5" strokeLinecap="round" />
+            strokeWidth="1.5" strokeLinecap="round" />
           <line x1={cx + 2.8} y1={cy - 2.8} x2={cx - 2.8} y2={cy + 2.8}
-            stroke="#c4911a" strokeWidth="1.5" strokeLinecap="round" />
+            strokeWidth="1.5" strokeLinecap="round" />
         </g>
       ))}
 
       {/* Center dot */}
+      {/* fill set via CSS: var(--theme-color2) */}
       <circle
         cx="50" cy="50" r="5"
-        fill="#c4911a"
         className="emb-center"
         style={{ transformBox: "fill-box", transformOrigin: "center" }}
       />
