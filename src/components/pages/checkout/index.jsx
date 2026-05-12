@@ -49,7 +49,7 @@ const CheckoutContent = () => {
     if (addressData?.length > 0) setAddress(addressData);
   }, [addressData]);
 
-  const { mutate, isLoading } = useCreate(AddressAPI, false, false, "Address Added successfully", (resDta) => {
+  const { mutate, isLoading } = useCreate(AddressAPI, false, false, "AddressAddedSuccessfully", (resDta) => {
     refetchAddresses();
     refetch();
     setModal("");

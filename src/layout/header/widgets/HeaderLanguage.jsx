@@ -11,7 +11,7 @@ const HeaderLanguage = () => {
   // Only keep Spanish and English in the dropdown
   const languages = useMemo(
     () => [
-    {id: 1, title: "Spanish", icon: "es", image: "es"},
+    {id: 1, title: "Español", icon: "es", image: "es"},
     {id: 2, title: "English", icon: "en", image: "us"},
     ],
     []

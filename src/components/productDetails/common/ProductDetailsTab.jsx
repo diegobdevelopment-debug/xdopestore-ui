@@ -2,6 +2,7 @@ import NavTabTitles from "@/components/widgets/NavTabs";
 import NoDataFound from "@/components/widgets/NoDataFound";
 import TextLimit from "@/utils/customFunctions/TextLimit";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Col, Row, TabContent, TabPane } from "reactstrap";
 import CustomerReview from "./CustomerReview";
 import QnATab from "./QnATab";
@@ -9,6 +10,7 @@ import { RiArrowDownSLine } from "react-icons/ri";
 import Btn from "@/elements/buttons/Btn";
 
 const ProductDetailsTab = ({ productState }) => {
+  const { t } = useTranslation("common");
   let [showMore, setShowMore] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const ProductDetailsTabTitle = [
@@ -28,7 +30,7 @@ const ProductDetailsTab = ({ productState }) => {
           <div className={`product-description more-less-box ${showMore ? "more" : ""}`}>
             {productState?.product?.description?.length > 1500 ? showMore ? <TextLimit classes={'more-text'} value={productState?.product?.description} /> : <TextLimit classes={'more-text'} value={productState?.product?.description?.substring(0, productState?.product?.description?.length / 2)} /> : <TextLimit classes={'more-text'} value={productState?.product?.description} />}
             {productState?.product?.description?.length > 1500 && <Btn className="btn-solid hover-solid bg-theme btn-md scroll-button btn-sm mt-3 more-lest-btn" onClick={seeMore}>
-              {showMore ? "Show Less" : "Show more"}
+              {showMore ? t("ShowLess") : t("ShowMore")}
               <RiArrowDownSLine />
             </Btn>}
           </div>

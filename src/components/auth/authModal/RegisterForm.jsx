@@ -89,7 +89,7 @@ const RegisterForm = () => {
         <Form className="auth-form-box">
           {showBoxMessage && (
             <div role="alert" className="alert alert-danger login-alert">
-              <i className="ri-error-warning-line"></i> {showBoxMessage}
+              <i className="ri-error-warning-line"></i> {t(showBoxMessage, { defaultValue: showBoxMessage })}
             </div>
           )}
           <div className="auth-box mb-3 form-box">

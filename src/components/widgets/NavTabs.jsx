@@ -41,7 +41,7 @@ const NavTabTitles = ({ classes = {}, activeTab, setActiveTab, titleList, isLogo
       <Nav className={classes?.navClass}>
         {titleList.map((elem, i) => (
           <NavItem key={i}>
-            <NavLink className={checkType(elem, i) ? "active" : ""} onClick={() => onNavClick(elem, i)}>
+            <NavLink className={checkType(elem, i) ? "active" : ""} href={elem.path || "#"} onClick={(e) => { e.preventDefault(); onNavClick(elem, i); }}>
               {elem.icon && elem.icon}
               {t(elem?.title) || t(elem?.name)}
             </NavLink>

@@ -15,7 +15,7 @@ const NewsLetterModal = () => {
   const { t } = useTranslation("common");
   const [isOpen, setIsOpen] = useState(false);
   const { themeOption } = useContext(ThemeOptionContext);
-  const { mutate } = useCreate(SubscribeAPI, false, false, "Subscribed Successfully");
+  const { mutate } = useCreate(SubscribeAPI, false, false, "SubscribedSuccessfully");
 
   useEffect(() => {
     const newsletterCookie = Cookies.get("newsletter");

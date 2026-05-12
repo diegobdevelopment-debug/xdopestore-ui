@@ -37,7 +37,7 @@ const Brands = () => {
 
       <AccordionItem>
         <div className="border-0 accordion-item">
-          <AccordionHeader targetId="1">Brand</AccordionHeader>
+          <AccordionHeader targetId="1">{t("Brand")}</AccordionHeader>
           <AccordionBody accordionId="1" className="accordion-collapse show" id="brand-collapse">
             <div className="collection-brand-filter custom-sidebar-height">
               <ul className="category-list">

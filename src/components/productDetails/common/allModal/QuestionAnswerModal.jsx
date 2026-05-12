@@ -29,7 +29,7 @@ const QuestionAnswerModal = ({ modal, setModal, productState, update, refetch })
     QuestionAnswerAPI,
     false,
     false,
-    "Question Posted Successfully",
+    "QuestionPostedSuccessfully",
     (resData) => {
       if (resData?.status === 200 || resData?.status === 201) {
         refetch && refetch();

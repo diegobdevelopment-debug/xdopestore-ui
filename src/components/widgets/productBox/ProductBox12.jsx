@@ -20,7 +20,7 @@ const ProductBox12 = ({ productState, setProductState }) => {
           <div className="cart-info">
             <ProductHoverButton productstate={productState?.product} />
           </div>
-          {productState?.product?.is_trending || productState?.product?.is_sale_enable || productState?.product?.is_featured ? <label className="trending-label-product11 ">{productState?.product?.is_sale_enable ? "Sale" : productState?.product?.is_featured ? "Featured" : productState?.product?.is_trending ? "Trending" : ""}</label> : null}
+          {productState?.product?.is_trending || productState?.product?.is_sale_enable || productState?.product?.is_featured ? <label className="trending-label-product11 ">{productState?.product?.is_sale_enable ? t("Sale") : productState?.product?.is_featured ? t("Featured") : productState?.product?.is_trending ? t("Trending") : ""}</label> : null}
         </div>
         <div className="product-detail">
           {productState?.product?.brand && (
@@ -69,7 +69,7 @@ const ProductBox12 = ({ productState, setProductState }) => {
             </h4>
           </div>
           <ProductBoxVariantAttribute productState={productState} setProductState={setProductState} showVariableType={["color", "rectangle", "circle", "radio", "dropdown", "image"]} />
-          <CartButton productState={productState} selectedVariation={productState?.selectedVariation} text="Add To Cart" iconClass="" classes="add-cart-btn" />
+          <CartButton productState={productState} selectedVariation={productState?.selectedVariation} text={t("AddToCart")} iconClass="" classes="add-cart-btn" />
         </div>
       </div>
     </>

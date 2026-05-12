@@ -1,3 +1,4 @@
+'use client'
 import CategoryContext from '@/context/categoryContext'
 import ThemeOptionContext from '@/context/themeOptionsContext'
 import Loader from '@/layout/loader'

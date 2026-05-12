@@ -19,7 +19,7 @@ const FooterUsefulLinks = () => {
           ))}
         </ul>
       ) : (
-        <NoDataFound customClass={"no-data-footer"} title={"No Link Found"} />
+        <NoDataFound customClass={"no-data-footer"} title={"NoLinkFound"} />
       )}
     </div>  
   );

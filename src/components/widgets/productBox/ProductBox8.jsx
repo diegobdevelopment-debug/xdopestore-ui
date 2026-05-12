@@ -1,6 +1,7 @@
 import SettingContext from "@/context/settingContext";
 import Link from "next/link";
 import React, { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import CartButton from "./widgets/CartButton";
 import QuickViewButton from "./widgets/hoverButton/QuickViewButton";
 import WishlistButton from "./widgets/hoverButton/WishlistButton";
@@ -8,6 +9,7 @@ import ProductRatingBox from "./widgets/ProductRatingBox";
 
 const ProductBox8 = ({ productState }) => {
   const { convertCurrency } = useContext(SettingContext);
+  const { t } = useTranslation("common");
   return (
     <>
       <div className={`basic-product theme-product-7 ${productState?.product?.stock_status === "out_of_stock" ? "sold-out" : ""}`}>
@@ -30,7 +32,7 @@ const ProductBox8 = ({ productState }) => {
           </div>
           <div className="product-action">
             <WishlistButton productstate={productState?.product} />
-            <CartButton productState={productState} selectedVariation={productState.selectedVariation} text="Add to cart" />
+            <CartButton productState={productState} selectedVariation={productState.selectedVariation} text={t("AddToCart")} />
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import SettingContext from "@/context/settingContext";
 import { ImagePath } from "@/utils/constants";
 import Link from "next/link";
 import React, { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import ProductRating from "../productRating";
 import CartButton from "./widgets/CartButton";
 import ImageVariant from "./widgets/ImageVariant";
@@ -9,6 +10,7 @@ import ProductBoxVariantAttribute from "./widgets/ProductBoxVariantAttributes";
 
 const ProductBoxHorizontal = ({ productState, style }) => {
   const { convertCurrency } = useContext(SettingContext);
+  const { t } = useTranslation("common");
   return (
     <>
       {style == "single_product" ? (
@@ -27,7 +29,7 @@ const ProductBoxHorizontal = ({ productState, style }) => {
             </Link>
             {productState?.product?.short_description && <p>{productState?.product?.short_description}</p>}
             <ProductBoxVariantAttribute productState={productState} showVariableType={["color", "rectangle", "circle", "radio", "dropdown", "image"]} />
-            <CartButton classes="btn gradient-btn" text="Add To Cart" productState={productState} />
+            <CartButton classes="btn gradient-btn" text={t("AddToCart")} productState={productState} />
           </div>
         </div>
       ) : (

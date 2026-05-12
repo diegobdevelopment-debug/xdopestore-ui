@@ -17,8 +17,8 @@ const WishlistProvider = (props) => {
 
   const { data: WishlistApiData, isLoading: WishlistAPILoading, refetch } = useFetchQuery([WishlistAPI], () => request({ url: WishlistAPI }), { enabled: false, refetchOnWindowFocus: false, select: (res) => res?.data });
 
-  const { mutate, isLoading } = useCreate(WishlistAPI, false, false, "Added to Wishlist List");
-  const { mutate: deleteWishlist } = useDelete(WishlistAPI, false, false, "Product Deleted from Wishlist");
+  const { mutate, isLoading } = useCreate(WishlistAPI, false, false, "AddedToWishlist");
+  const { mutate: deleteWishlist } = useDelete(WishlistAPI, false, false, "ProductDeletedFromWishlist");
 
   useEffect(() => {
     if (isCookie) refetch();

@@ -17,7 +17,7 @@ const LoginContainer = () => {
         <Container>
           <Row>
             <Col lg="6">
-              <h3>Login</h3>
+              <h3>{t("Login")}</h3>
               <div className="theme-card">
                 <Formik
                   initialValues={{
@@ -34,12 +34,12 @@ const LoginContainer = () => {
                     <Form className="theme-form">
                       <FormGroup>
                         <label htmlFor="email">{t("Email")}</label>
-                        <Field name="email" className="form-control" id="email" placeholder="Email" required />
+                        <Field name="email" className="form-control" id="email" placeholder={t("EnterEmail")} required />
                         {errors.email && touched.email && <ErrorMessage name="email" render={(msg) => <div className="invalid-feedback d-block">{errors.email}</div>} />}
                       </FormGroup>
                       <FormGroup>
                         <label htmlFor="review">{t("Password")}</label>
-                        <Field name="password" type="password" className="form-control" id="review" placeholder="Enter your password" required />
+                        <Field name="password" type="password" className="form-control" id="review" placeholder={t("EnterYourPassword")} required />
                         {errors.password && touched.password && <ErrorMessage name="password" render={(msg) => <div className="invalid-feedback d-block">{errors.password}</div>} />}
                       </FormGroup>
                       <Btn  type="submit" className="btn-solid">

@@ -111,7 +111,7 @@ const HeaderOne = () => {
                         </li>
                         {isAuthenticated && isAdmin && (
                           <li className="onhover-div">
-                            <a href="http://localhost:3001" target="_blank" title="Admin Panel">
+                            <a href="http://localhost:3001" target="_blank" title={t("AdminPanel")}>
                               <RiDashboardLine />
                             </a>
                           </li>

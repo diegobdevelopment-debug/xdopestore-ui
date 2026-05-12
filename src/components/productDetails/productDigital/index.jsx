@@ -7,6 +7,7 @@ import useCreate from "@/utils/hooks/useCreate";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { RiHeartLine } from "react-icons/ri";
 import { Col } from "reactstrap";
 import ProductContent from "../common/ProductContent";
@@ -15,8 +16,9 @@ import VendorContains from "../common/VendorContains";
 import DigitalImage from "./DigitalImage";
 
 const ProductDigital = ({ productState, setProductState }) => {
-  const { mutate, isLoading } = useCreate(WishlistAPI, false, false, "Added to Wishlist List");
+  const { mutate, isLoading } = useCreate(WishlistAPI, false, false, "AddedToWishlist");
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
+  const { t } = useTranslation("common");
 
   const handelWishlist = (productState) => {
     if (Cookies.get("uat")) {
@@ -44,29 +46,29 @@ const ProductDigital = ({ productState, setProductState }) => {
             <div className="buy-box">
               <a onClick={() => handelWishlist()}>
                 <RiHeartLine />
-                <span>{"Add to Wishlist"}</span>
+                <span>{t("AddToWishlist")}</span>
               </a>
             </div>
 
             <div className="pickup-box">
               <div className="product-title">
-                <h4>{"Assets Information"}</h4>
+                <h4>{t("AssetsInformation")}</h4>
               </div>
 
               <div className="product-info">
                 <ul className="product-info-list product-info-list-2">
                   <li>
-                    {"Created"} :<Link href={Href}>{dateFormat(productState?.product?.created_at)}</Link>
+                    {t("Created")} :<Link href={Href}>{dateFormat(productState?.product?.created_at)}</Link>
                   </li>
                   {productState.product.updated_at && (
                     <li>
-                      {"Last Update "}:<Link href={Href}>{dateFormat(productState?.product?.updated_at)}</Link>
+                      {t("LastUpdate")} :<Link href={Href}>{dateFormat(productState?.product?.updated_at)}</Link>
                     </li>
                   )}
 
                   {productState?.product?.tags?.length ? (
                     <li className="d-flex align-items-center">
-                      <span>{"Tags"} :</span>
+                      <span>{t("Tags")} :</span>
                       <ul className="tag-list">
                         {productState?.product?.tags?.map((tag, i) => (
                           <li key={i}>
