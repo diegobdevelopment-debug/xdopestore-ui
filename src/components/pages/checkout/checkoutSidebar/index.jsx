@@ -47,6 +47,12 @@ const CheckoutSidebar = ({ values, setFieldValue, errors, addToCartData }) => {
 
   // Submitting data on Checkout
   useEffect(() => {
+    // Don't auto-fire /checkout while the cart is still loading or is empty —
+    // the API responds with 422 "Cart is empty" which would surface as an
+    // error banner the moment the page loads. Wait until we know we have items.
+    if (CartLoading) return;
+    if (!cartProducts?.length) return;
+
     if (settingData?.activation?.guest_checkout && !access_token) {
       if (values["delivery_description"] && values["payment_method"]) {
         values["products"] = cartProducts;
@@ -57,7 +63,7 @@ const CheckoutSidebar = ({ values, setFieldValue, errors, addToCartData }) => {
         mutate(values);
       }
     }
-  }, [CartLoading, cartTotal, errors, values["points_amount"], values["wallet_balance"], values["billing_address_id"], values["delivery_description"], values["payment_method"], values["shipping_address_id"], values["delivery_interval"]]);
+  }, [CartLoading, cartTotal, cartProducts?.length, errors, values["points_amount"], values["wallet_balance"], values["billing_address_id"], values["delivery_description"], values["payment_method"], values["shipping_address_id"], values["delivery_interval"]]);
 
   return (
     <>

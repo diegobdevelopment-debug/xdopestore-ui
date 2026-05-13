@@ -6,6 +6,7 @@ import ThemeOptionContext from "@/context/themeOptionsContext";
 import Btn from "@/elements/buttons/Btn";
 import useCreate from "@/utils/hooks/useCreate";
 import { QuestionAnswerAPI } from "@/utils/axiosUtils/API";
+import { useQueryClient } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -19,10 +20,16 @@ const QuestionAnswerModal = ({ modal, setModal, productState, update, refetch })
   const [message, setShowBoxMessage] = useState();
   const { convertCurrency } = useContext(SettingContext);
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
+  const queryClient = useQueryClient();
   const isAuth = Cookies.get("uat");
-  const isAdding = update?.editData === "Add";
-  const toggle = () => {
-    setModal((prev) => prev !== prev);
+  const isAdding = !update?.editData || update?.editData === "Add";
+  const toggle = () => setModal(false);
+
+  // Make sure any mounted Q&A list (e.g. <QnATab/>) re-pulls after success,
+  // regardless of which entry point opened this modal.
+  const invalidateQnA = () => {
+    queryClient.invalidateQueries({ queryKey: [QuestionAnswerAPI] });
+    refetch && refetch();
   };
 
   const { mutate: createQnA, isPending: createLoader } = useCreate(
@@ -32,7 +39,7 @@ const QuestionAnswerModal = ({ modal, setModal, productState, update, refetch })
     "QuestionPostedSuccessfully",
     (resData) => {
       if (resData?.status === 200 || resData?.status === 201) {
-        refetch && refetch();
+        invalidateQnA();
         setModal(false);
       } else if (resData?.data?.message) {
         setShowBoxMessage(resData?.data?.message);
@@ -85,6 +92,11 @@ const QuestionAnswerModal = ({ modal, setModal, productState, update, refetch })
           {() => (
             <Form>
               <div className="product-review-form">
+                {message && typeof message === "string" && message !== "Unauthenticated" && (
+                  <div role="alert" className="alert alert-danger login-alert mb-3">
+                    <i className="ri-error-warning-line"></i> {t(message, { defaultValue: message })}
+                  </div>
+                )}
                 <div className="product-wrapper">
                   <div className="product-image">{productState?.product.product_thumbnail && <Image src={productState?.product.product_thumbnail ? productState?.product.product_thumbnail.original_url : placeHolderImage} className="img-fluid" height={80} width={80} alt={productState?.product?.name} />}</div>
                   <div className="product-content">

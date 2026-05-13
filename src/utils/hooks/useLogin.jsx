@@ -7,9 +7,9 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import request from "../axiosUtils";
-import { LoginAPI, SyncCart } from "../axiosUtils/API";
+import { LoginAPI } from "../axiosUtils/API";
+import syncLocalCart from "../customFunctions/SyncLocalCart";
 import { YupObject, emailSchema, passwordSchema, recaptchaSchema } from "../validation/ValidationSchema";
-import useCreate from "./useCreate";
 
 export const LogInSchema = YupObject({
   email: emailSchema,
@@ -17,17 +17,7 @@ export const LogInSchema = YupObject({
   recaptcha: recaptchaSchema,
 });
 
-const transformLocalStorageData = (localStorageData) => {
-  const transformedData = localStorageData?.map((item) => ({
-    product_id: item?.product_id,
-    variation_id: item?.variation_id || "",
-    quantity: item?.quantity,
-  }));
-
-  return transformedData;
-};
-
-const LoginHandle = (responseData, router, refetch, CallBackUrl, mutate, cartRefetch, setShowBoxMessage, addToWishlist, setOpenAuthModal) => {
+const LoginHandle = async (responseData, router, refetch, CallBackUrl, cartRefetch, setShowBoxMessage, addToWishlist, setOpenAuthModal) => {
   if (responseData.status === 200 || responseData.status === 201) {
     const token = responseData.data?.access_token || responseData.data?.token;
     Cookies.set("uat", token, { path: "/", expires: new Date(Date.now() + 24 * 60 * 6000) });
@@ -35,14 +25,18 @@ const LoginHandle = (responseData, router, refetch, CallBackUrl, mutate, cartRef
       Cookies.set("account", JSON.stringify(responseData.data));
       localStorage.setItem("account", JSON.stringify(responseData.data));
     }
-    router.push(`${CallBackUrl}`);
+
+    // Push any guest cart items to the user's server-side cart BEFORE we
+    // refetch / navigate, so the merged cart shows up correctly.
+    await syncLocalCart();
+
     refetch();
     setOpenAuthModal && setOpenAuthModal(false);
-    cartRefetch();
+    cartRefetch && cartRefetch();
     const wishListID = Cookies.get("wishListID");
     wishListID ? addToWishlist({ id: wishListID }) : null;
     Cookies.remove("wishListID");
-    localStorage.removeItem("cart");
+    router.push(`${CallBackUrl}`);
   } else {
     const msg = responseData?.response?.data?.message || "InvalidCredentials";
     setShowBoxMessage && setShowBoxMessage(msg);
@@ -51,13 +45,15 @@ const LoginHandle = (responseData, router, refetch, CallBackUrl, mutate, cartRef
 
 const useHandleLogin = (setShowBoxMessage) => {
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
-  const { mutate } = useCreate(SyncCart, false, false, "No");
   const { addToWishlist } = useContext(WishlistContext);
   const CallBackUrl = Cookies.get("CallBackUrl") ? Cookies.get("CallBackUrl") : "/account/dashboard";
   const { refetch } = useContext(AccountContext);
   const { refetch: cartRefetch } = useContext(CartContext);
   const router = useRouter();
-  return useMutation({ mutationFn: (data) => request({ url: LoginAPI, method: "post", data }), onSuccess: (responseData) => LoginHandle(responseData, router, refetch, CallBackUrl, mutate, cartRefetch, setShowBoxMessage, addToWishlist, setOpenAuthModal) });
+  return useMutation({
+    mutationFn: (data) => request({ url: LoginAPI, method: "post", data }),
+    onSuccess: (responseData) => LoginHandle(responseData, router, refetch, CallBackUrl, cartRefetch, setShowBoxMessage, addToWishlist, setOpenAuthModal),
+  });
 };
 
 export default useHandleLogin;

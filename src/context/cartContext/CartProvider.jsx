@@ -1,6 +1,7 @@
 import request from "@/utils/axiosUtils";
 import { AddToCartAPI, ClearCart, ReplaceCartAPI } from "@/utils/axiosUtils/API";
 import getCookie from "@/utils/customFunctions/GetCookie";
+import syncLocalCart from "@/utils/customFunctions/SyncLocalCart";
 import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 import useCreate from "@/utils/hooks/useCreate";
 import i18next from "i18next";
@@ -29,14 +30,14 @@ const CartProvider = (props) => {
     isLoading,
   } = useCreate(AddToCartAPI, false, false, "No", (resDta) => {
     if (resDta?.status == 200 || resDta?.status == 201) {
-      setGetCardData(resDta?.data?.items[0]);
-      setCartProducts((prevCart) =>
-        prevCart?.map((elem) => {
-          if (!elem?.variation_id && !resDta?.data?.items[0]?.variation_id && elem?.product_id == resDta?.data?.items[0]?.product_id) {
-            return resDta?.data?.items[0];
-          } else return elem;
-        })
-      );
+      // The server returns the full, authoritative cart on every write — adopt it
+      // wholesale so optimistic local items pick up their real cart-item IDs and
+      // drift between client / server is impossible.
+      if (Array.isArray(resDta?.data?.items)) {
+        setCartProducts(resDta.data.items);
+        setCartTotal(resDta.data.total ?? 0);
+        setGetCardData(resDta.data.items[0]);
+      }
     }
   });
   // Delete Cart API Data
@@ -55,11 +56,17 @@ const CartProvider = (props) => {
     },
   });
 
-  // Refetching Cart API
+  // Refetching Cart API. For authenticated users we first push any pending
+  // guest / orphaned localStorage cart items into the server, then refetch —
+  // that way carts that pre-date the persistent /cart wiring also recover.
   useEffect(() => {
-    if (isCookie) {
-      refetch();
-    }
+    if (!isCookie) return;
+    let cancelled = false;
+    (async () => {
+      try { await syncLocalCart(); } catch {}
+      if (!cancelled) refetch();
+    })();
+    return () => { cancelled = true; };
   }, [isCookie]);
 
   // Setting CartAPI data to state and LocalStorage
@@ -78,9 +85,12 @@ const CartProvider = (props) => {
     }
   }, [getCartLoading]);
 
-  // Adding data in localstorage when not Login
+  // Adding data in localstorage when not Login. For authenticated users the
+  // server cart (/cart) is the source of truth, so don't mirror state into
+  // localStorage — otherwise the initial mount (cartProducts=[]) would wipe a
+  // pending guest cart before the recovery sync has a chance to push it up.
   useEffect(() => {
-    storeInLocalStorage();
+    if (!isCookie) storeInLocalStorage();
   }, [cartProducts]);
 
   // Getting total
@@ -108,6 +118,10 @@ const CartProvider = (props) => {
   const removeCart = (id, cartId) => {
     const updatedCart = cartProducts?.filter((item) => (item?.variation_id ? item?.variation_id !== id : item.product_id !== id));
     setCartProducts(updatedCart);
+    // Mirror the deletion on the server so the user's cart in the DB matches.
+    if (isCookie && cartId) {
+      deleteCart(cartId);
+    }
   };
 
   const fetchReplaceCartData = async (obj) => {
@@ -185,6 +199,18 @@ const CartProvider = (props) => {
         };
         isCookie ? !isLoading && setCartProducts([...cart]) : setCartProducts([...cart]);
       }
+    }
+
+    // Persist the change to the server cart. Without this the user only ever
+    // mutates local React state + localStorage — POST /checkout and
+    // POST /payment/initialize would then 422 with "Cart is empty" because
+    // the database has no items for this consumer.
+    if (isCookie) {
+      mutate({
+        product_id: obj.product_id,
+        variation_id: obj.variation_id,
+        quantity: obj.quantity,
+      });
     }
 
     // Update the productQty state immediately after updating the cartProducts state
