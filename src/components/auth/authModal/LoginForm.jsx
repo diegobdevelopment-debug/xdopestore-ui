@@ -1,7 +1,9 @@
 "use client";
 import Btn from "@/elements/buttons/Btn";
 import { Href } from "@/utils/constants";
+import CartContext from "@/context/cartContext";
 import ThemeOptionContext from "@/context/themeOptionsContext";
+import syncLocalCart from "@/utils/customFunctions/SyncLocalCart";
 import { YupObject, emailSchema, passwordSchema } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
@@ -17,6 +19,7 @@ const LoginForm = ({ setState }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation("common");
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
+  const { refetch: cartRefetch } = useContext(CartContext) || {};
   const router = useRouter();
 
   const handleSubmit = async (values) => {
@@ -34,6 +37,12 @@ const LoginForm = ({ setState }) => {
         Cookies.set("uat", token, { path: "/", expires: 7 });
         Cookies.set("account", JSON.stringify(data?.data || {}));
         localStorage.setItem("account", JSON.stringify(data?.data || {}));
+
+        // Merge the guest cart into the now-authenticated user's cart
+        // before we close the modal / navigate, so items persist.
+        await syncLocalCart();
+        cartRefetch && cartRefetch();
+
         setOpenAuthModal && setOpenAuthModal(false);
         const callbackUrl = Cookies.get("CallBackUrl");
         if (callbackUrl) {

@@ -1,12 +1,12 @@
 import { Form } from "formik";
-import { Col, ModalFooter, Row } from "reactstrap";
+import { Col, Input, Label, ModalFooter, Row } from "reactstrap";
 import Btn from "@/elements/buttons/Btn";
 import { useTranslation } from "react-i18next";
 import SearchableSelectInput from "@/utils/commonComponents/inputFields/SearchableSelectInput";
 import SimpleInputField from "@/components/widgets/inputFields/SimpleInputField";
 import { AllCountryCode } from "@/data/CountryCode";
 
-const SelectForm = ({ values, isLoading, data, setModal, isFooterDisplay = true }) => {
+const SelectForm = ({ values, setFieldValue, isLoading, data, setModal, isFooterDisplay = true }) => {
   const { t } = useTranslation("common");
   return (
     <Form>
@@ -74,6 +74,22 @@ const SelectForm = ({ values, isLoading, data, setModal, isFooterDisplay = true 
             { name: "pincode", placeholder: t("EnterPincode"), toplabel: "Pincode", colprops: { xxl: 6, lg: 12, sm: 6 }, require: "true" },
           ]}
         />
+
+        <Col xs={12}>
+          <div className="form-box form-checkbox">
+            <Input
+              id="address-is-default"
+              className="checkbox_animated check-box"
+              type="checkbox"
+              name="is_default"
+              checked={Boolean(values?.is_default)}
+              onChange={(e) => setFieldValue && setFieldValue("is_default", e.target.checked)}
+            />
+            <Label className="form-check-label ms-2" htmlFor="address-is-default">
+              {t("SaveAsDefault") || "Save as default address"}
+            </Label>
+          </div>
+        </Col>
 
         {isFooterDisplay && (
           <ModalFooter className="ms-auto justify-content-end save-back-button">

@@ -22,7 +22,9 @@ const CheckoutForm = ({ values, setFieldValue, errors }) => {
 
   const { data } = useFetchQuery([CountryAPI], () => request({ url: CountryAPI }, router), {
     refetchOnWindowFocus: false,
-    select: (res) => res.data.map((country) => ({ id: country.id, name: country.name, state: country.state })),
+    // request() returns { data: responseBody, ... } and the API returns { data: [...] },
+    // so the actual array lives at res.data.data.
+    select: (res) => (res?.data?.data ?? []).map((country) => ({ id: country.id, name: country.name, state: country.state || [] })),
   });
 
   return (

@@ -10,7 +10,8 @@ const AddAddressForm = ({ mutate, isLoading, type, editAddress, setModal, isFoot
 
   const { data } = useFetchQuery([CountryAPI], () => request({ url: CountryAPI }), {
     refetchOnWindowFocus: false,
-    select: (res) => res.data.map((country) => ({ id: country.id, name: country.name, state: country.state })),
+    // API responds with { data: [...] }; request() wraps as { data: responseBody, ... }
+    select: (res) => (res?.data?.data ?? []).map((country) => ({ id: country.id, name: country.name, state: country.state || [] })),
   });
 
   const { t } = useTranslation("common");
@@ -25,7 +26,8 @@ const AddAddressForm = ({ mutate, isLoading, type, editAddress, setModal, isFoot
         pincode: editAddress ? editAddress?.pincode : "",
         phone: editAddress ? editAddress?.phone : "",
         type: type ? type : null,
-        country_code: editAddress ? editAddress?.country_code : "1",
+        country_code: editAddress ? editAddress?.country_code : "57",
+        is_default: editAddress ? Boolean(editAddress?.is_default) : false,
       }}
       validationSchema={YupObject({
         title: nameSchema,

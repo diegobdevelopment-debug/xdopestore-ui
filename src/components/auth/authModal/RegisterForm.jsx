@@ -1,8 +1,10 @@
 "use client";
 import SearchableSelectInput from "@/components/widgets/inputFields/SearchableSelectInput";
+import CartContext from "@/context/cartContext";
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import { AllCountryCode } from "@/data/CountryCode";
 import Btn from "@/elements/buttons/Btn";
+import syncLocalCart from "@/utils/customFunctions/SyncLocalCart";
 import { YupObject, emailSchema, nameSchema, passwordConfirmationSchema, passwordSchema, phoneSchema } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
@@ -19,6 +21,7 @@ const RegisterForm = () => {
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const { t } = useTranslation("common");
   const { setOpenAuthModal } = useContext(ThemeOptionContext);
+  const { refetch: cartRefetch } = useContext(CartContext) || {};
   const router = useRouter();
 
   const handleSubmit = async (values) => {
@@ -46,6 +49,10 @@ const RegisterForm = () => {
           Cookies.set("uat", token, { path: "/", expires: 7 });
           Cookies.set("account", JSON.stringify(data?.data || {}));
           localStorage.setItem("account", JSON.stringify(data?.data || {}));
+
+          // Carry guest cart items over to the brand-new account.
+          await syncLocalCart();
+          cartRefetch && cartRefetch();
         }
         setOpenAuthModal && setOpenAuthModal(false);
         const callbackUrl = Cookies.get("CallBackUrl");

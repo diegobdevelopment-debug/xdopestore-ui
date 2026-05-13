@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Row } from 'reactstrap';
 import { RiAddLine, RiMapPinLine } from 'react-icons/ri';
 import { useTranslation } from "react-i18next";
@@ -7,12 +7,21 @@ import AddAddressForm from './common/AddAddressForm';
 import ShowAddress from './ShowAddress';
 import CustomModal from '@/components/widgets/CustomModal';
 
-const DeliveryAddress = ({ type, title, address, modal, mutate, isLoading, setModal, setFieldValue }) => {
+const DeliveryAddress = ({ type, title, address, modal, mutate, isLoading, setModal, setFieldValue, values }) => {
   const { t } = useTranslation('common');
 
+  // Pre-select the user's default address (the API sorts is_default first, so it's
+  // typically address[0], but we explicitly look for is_default to be safe).
   useEffect(() => {
-    address?.length > 0 && setFieldValue(`${type}_address_id`, address[0].id);
-  }, [address]);
+    if (!address?.length) return;
+    const currentSelection = values?.[`${type}_address_id`];
+    if (currentSelection) return; // user already picked something — respect it
+    const preferred = address.find((a) => a?.is_default) || address[0];
+    if (preferred?.id || preferred?._id) {
+      setFieldValue(`${type}_address_id`, preferred.id || preferred._id);
+    }
+  }, [address, type]);
+
   return (
     <>
       <CheckoutCard icon={<RiMapPinLine />}>
@@ -31,7 +40,7 @@ const DeliveryAddress = ({ type, title, address, modal, mutate, isLoading, setMo
               {address?.length > 0 ? (
                 <Row className='g-4'>
                   {address?.map((item, i) => (
-                    <ShowAddress item={item} key={i} type={type} index={i} />
+                    <ShowAddress item={item} key={item?.id || item?._id || i} type={type} index={i} />
                   ))}
                 </Row>
               ) : (
@@ -48,7 +57,7 @@ const DeliveryAddress = ({ type, title, address, modal, mutate, isLoading, setMo
           </CustomModal>
         </div>
       </CheckoutCard>
-    </> 
+    </>
   );
 };
 

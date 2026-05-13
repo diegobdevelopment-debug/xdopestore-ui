@@ -75,10 +75,11 @@ const BillingAddressForm = ({ values, setFieldValue, errors, data }) => {
               inputprops: {
                 name: "billing_address.state_id",
                 id: "billing_address.state_id",
-                options: values?.shipping_address?.country_id ? data?.filter((country) => Number(country.id) === Number(values?.shipping_address?.country_id))?.[0]?.["state"] : [],
+                // States must follow the billing country, not the shipping country.
+                options: values?.billing_address?.country_id ? data?.filter((country) => Number(country.id) === Number(values?.billing_address?.country_id))?.[0]?.["state"] : [],
                 defaultOption: t("SelectState"),
               },
-              disabled: values?.["country_id"] ? false : true,
+              disabled: values?.billing_address?.country_id ? false : true,
             },
           ]}
         />

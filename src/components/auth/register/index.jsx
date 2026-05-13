@@ -1,11 +1,13 @@
 "use client";
 import Btn from "@/elements/buttons/Btn";
+import CartContext from "@/context/cartContext";
 import Breadcrumbs from "@/utils/commonComponents/breadcrumb";
+import syncLocalCart from "@/utils/customFunctions/SyncLocalCart";
 import { YupObject, emailSchema, nameSchema, passwordConfirmationSchema, passwordSchema } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Col, Container, Row } from "reactstrap";
 
@@ -15,6 +17,7 @@ const RegisterContainer = () => {
   const { t } = useTranslation("common");
   const [showBoxMessage, setShowBoxMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { refetch: cartRefetch } = useContext(CartContext) || {};
   const router = useRouter();
 
   const handleSubmit = async (values) => {
@@ -38,6 +41,10 @@ const RegisterContainer = () => {
           Cookies.set("uat", token, { path: "/", expires: 7 });
           Cookies.set("account", JSON.stringify(data?.data || {}));
           localStorage.setItem("account", JSON.stringify(data?.data || {}));
+
+          // Persist guest cart items into the new account before navigating.
+          await syncLocalCart();
+          cartRefetch && cartRefetch();
         }
         router.push("/account/dashboard");
       } else {
