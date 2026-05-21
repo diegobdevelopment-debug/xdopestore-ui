@@ -13,7 +13,7 @@ const SelectForm = ({ values, setFieldValue, isLoading, data, setModal, isFooter
       <Row className="g-3">
         <SimpleInputField
           nameList={[
-            { name: "title", placeholder: t("EnterTitle"), toplabel: "Title", colprops: { xs: 12 }, require: "true" },
+            { name: "title", placeholder: t("AddressLabelPlaceholder"), toplabel: "AddressLabel", colprops: { xs: 12 }, require: "true" },
             { name: "street", placeholder: t("EnterAddress"), toplabel: "Address", colprops: { xs: 12 }, require: "true" },
           ]}
         />

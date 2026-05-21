@@ -633,6 +633,8 @@
   "RefundStatus": "Refund Status",
   "IsRequired": "Is required",
   "EnterTitle": "Enter Title",
+  "AddressLabel": "Label",
+  "AddressLabelPlaceholder": "e.g. Apartment, Residential complex, White house",
   "EnterAddress": "Enter Address",
   "EnterCity": "Enter City",
   "EnterPincode": "Enter Pincode",
