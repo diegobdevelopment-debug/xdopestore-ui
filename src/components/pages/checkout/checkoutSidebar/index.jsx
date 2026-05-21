@@ -53,17 +53,26 @@ const CheckoutSidebar = ({ values, setFieldValue, errors, addToCartData }) => {
     if (CartLoading) return;
     if (!cartProducts?.length) return;
 
+    // The /checkout endpoint reads `coupon_code` from the body, but Formik
+    // stores the input under `coupon`. Forward the currently-applied coupon
+    // (preferring the local `storeCoupon` state, which is the source of truth
+    // for "what the user just applied") on every recompute, so changing the
+    // payment method / address never silently drops the discount.
+    const recompute = (extra = {}) => {
+      const couponCode = storeCoupon || values["coupon"] || "";
+      mutate({ ...values, ...extra, coupon_code: couponCode });
+    };
+
     if (settingData?.activation?.guest_checkout && !access_token) {
       if (values["delivery_description"] && values["payment_method"]) {
-        values["products"] = cartProducts;
-        mutate(values);
+        recompute({ products: cartProducts });
       }
     } else {
       if (access_token && values["billing_address_id"] && values["shipping_address_id"] && values["delivery_description"] && values["payment_method"]) {
-        mutate(values);
+        recompute();
       }
     }
-  }, [CartLoading, cartTotal, cartProducts?.length, errors, values["points_amount"], values["wallet_balance"], values["billing_address_id"], values["delivery_description"], values["payment_method"], values["shipping_address_id"], values["delivery_interval"]]);
+  }, [CartLoading, cartTotal, cartProducts?.length, errors, values["points_amount"], values["wallet_balance"], values["billing_address_id"], values["delivery_description"], values["payment_method"], values["shipping_address_id"], values["delivery_interval"], storeCoupon]);
 
   return (
     <>

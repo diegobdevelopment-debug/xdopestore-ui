@@ -19,7 +19,7 @@ const RefundModal = ({ modal, setModal, storeData }) => {
   return (
     <CustomModal modal={modal ? true : false} setModal={setModal} classes={{ modalClass: "theme-modal-2 refund-modal", modalHeaderClass: "p-0", title: "Refund" }}>
       <Formik
-        initialValues={{ reason: "", payment_type: "wallet", product_id: storeData?.pivot?.product_id, order_id: storeData?.pivot?.order_id }}
+        initialValues={{ reason: "", payment_type: "original", product_id: storeData?.pivot?.product_id, order_id: storeData?.pivot?.order_id }}
         validationSchema={YupObject({
           reason: nameSchema,
           payment_type: nameSchema,
@@ -54,7 +54,7 @@ const RefundModal = ({ modal, setModal, storeData }) => {
                 {/* <Label htmlFor="address1">{t("PaymentOption")}</Label> */}
                 <select className="form-select" name="payment_type" value={values?.payment_type} onChange={(e) => setFieldValue("payment_type", e.target.value)}>
                   <option disabled>{t("SelectPaymentOption")}</option>
-                  <option value="wallet">{t("Wallet")}</option>
+                  <option value="original">{t("OriginalPaymentMethod", { defaultValue: "Original payment method" })}</option>
                   <option value="paypal">{t("Paypal")}</option>
                 </select>
                 {errors["payment_type"] && touched["payment_type"] && <div className="invalid-feedback d-block">{t("Paymenttypeisrequired")}</div>}

@@ -29,9 +29,6 @@ const SubLayout = ({ children }) => {
   const protectedRoutes = [
     `/account/dashboard`,
     `/account/notification`,
-    `/account/wallet`,
-    `/account/bank-details`,
-    `/account/bank-details`,
     `/account/point`,
     `/account/refund`,
     `/account/order`,
