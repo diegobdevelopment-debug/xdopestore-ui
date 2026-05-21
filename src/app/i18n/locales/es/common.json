@@ -638,6 +638,8 @@
   "RefundStatus": "Estado del reembolso",
   "IsRequired": "Es obligatorio",
   "EnterTitle": "Ingrese el título",
+  "AddressLabel": "Etiqueta",
+  "AddressLabelPlaceholder": "Ej. Apartamento, Conjunto residencial, Casa blanca",
   "EnterAddress": "Ingrese la dirección",
   "EnterCity": "Ingrese la ciudad",
   "EnterPincode": "Ingrese el código postal",
