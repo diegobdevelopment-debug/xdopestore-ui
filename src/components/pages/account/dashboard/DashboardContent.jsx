@@ -1,16 +1,19 @@
 import AccountContext from "@/context/accountContext";
+import SettingContext from "@/context/settingContext";
+import { ImagePath } from "@/utils/constants";
 import Image from "next/image";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Col, Row } from "reactstrap";
-import SettingContext from "@/context/settingContext";
-import { ImagePath } from "@/utils/constants";
 import ProfileInformation from "./ProfileInformation";
 
 const DashboardContent = () => {
   const { t } = useTranslation("common");
   const { accountData } = useContext(AccountContext);
-  const { convertCurrency } = useContext(SettingContext);
+  const { settingData } = useContext(SettingContext);
+
+  const showPoints = Boolean(settingData?.activation?.earning_points);
+  const orderColSize = showPoints ? 6 : 12;
 
   return (
     <div className="counter-section">
@@ -23,25 +26,18 @@ const DashboardContent = () => {
 
       <div className="total-box">
         <Row>
-          <Col md={4}>
-            <div className="counter-box">
-              <Image src={`${ImagePath}/icon/dashboard/account1.png`} alt="wallerSvg" height={50} width={50} className="img-fluid" />
-              <div>
-                <h3>{accountData?.wallet ? convertCurrency(accountData?.wallet?.balance) : 0?.toFixed(2)}</h3>
-                <h5>{t("Balance")}</h5>
+          {showPoints && (
+            <Col md={6}>
+              <div className="counter-box">
+                <Image src={`${ImagePath}/icon/dashboard/account2.png`} className="img-fluid" alt="coinSvg" height={50} width={50} />
+                <div>
+                  <h3>{Number(accountData?.point ? accountData?.point?.balance : 0)}</h3>
+                  <h5>{t("TotalPoints")}</h5>
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col md={4}>
-            <div className="counter-box">
-              <Image src={`${ImagePath}/icon/dashboard/account2.png`} className="img-fluid" alt="coinSvg" height={50} width={50} />
-              <div>
-                <h3>{Number(accountData?.point ? accountData?.point?.balance : 0)}</h3>
-                <h5>{t("TotalPoints")}</h5>
-              </div>
-            </div>
-          </Col>
-          <Col md={4}>
+            </Col>
+          )}
+          <Col md={orderColSize}>
             <div className="counter-box">
               <Image src={`${ImagePath}/icon/dashboard/account3.png`} className="img-fluid" alt="orderSvg" height={50} width={50} />
               <div>

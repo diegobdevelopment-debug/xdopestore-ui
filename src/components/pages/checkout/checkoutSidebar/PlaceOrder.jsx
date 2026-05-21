@@ -1,6 +1,7 @@
 import Btn from "@/elements/buttons/Btn";
 import CartContext from "@/context/cartContext";
 import request from "@/utils/axiosUtils";
+import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
@@ -57,10 +58,25 @@ const PlaceOrder = ({ values, addToCartData, errors }) => {
         return;
       }
 
-      // Anything else — surface to the user via the existing toast machinery.
-      console.error("[PlaceOrder] unexpected response:", res?.data);
+      // Anything else — bad request, gateway error, or auth issue. Surface a
+      // user-facing toast with whatever message the API gave us and keep a
+      // debug breadcrumb in the console. Using console.warn here (not error)
+      // so Next.js dev mode doesn't promote it to the runtime error overlay.
+      const apiMessage =
+        res?.data?.detail ||
+        res?.data?.message ||
+        (res?.status ? `Request failed with status ${res.status}` : "Could not place the order");
+      ToastNotification("error", apiMessage);
+      if (typeof console !== "undefined") {
+        console.warn("[PlaceOrder] unexpected response:", { status: res?.status, body: res?.data });
+      }
     } catch (err) {
-      console.error("[PlaceOrder] error:", err);
+      // Real exception (network drop, etc.). Same idea — toast + warn, no
+      // overlay-triggering console.error.
+      ToastNotification("error", err?.message || "Could not place the order");
+      if (typeof console !== "undefined") {
+        console.warn("[PlaceOrder] exception:", err);
+      }
     } finally {
       setLoading(false);
     }

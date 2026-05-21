@@ -5,6 +5,31 @@ import Cookies from "js-cookie";
 import { useCallback, useEffect, useState } from "react";
 import SettingContext from ".";
 
+// The storefront is restricted to two currencies. COP is the base / default —
+// product prices in the DB are stored in COP, so its exchange_rate is 1.
+export const SUPPORTED_CURRENCIES = {
+  COP: {
+    code: "COP",
+    name: "Colombian Peso",
+    symbol: "$",
+    no_of_decimal: 0,
+    exchange_rate: 1,
+    symbol_position: "before_price",
+    is_default: true,
+  },
+  USD: {
+    code: "USD",
+    name: "US Dollar",
+    symbol: "US$",
+    no_of_decimal: 2,
+    exchange_rate: 0.00024,
+    symbol_position: "before_price",
+    is_default: false,
+  },
+};
+
+export const DEFAULT_CURRENCY = SUPPORTED_CURRENCIES.COP;
+
 const SettingProvider = (props) => {
   const [menuLoader, setMenuLoader] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState({});
@@ -32,19 +57,29 @@ const SettingProvider = (props) => {
   useEffect(() => {
     isLoading && refetch();
   }, [isLoading]);
+
   const convertCurrency = useCallback(
     (value) => {
-      const currency = selectedCurrency?.code ? selectedCurrency : settingObj?.general?.default_currency;
+      // Resolution order: explicitly picked → settings.default_currency → COP fallback.
+      // Any unsupported code that sneaks in still gets coerced back to COP so we never
+      // render with a foreign currency the system isn't configured for.
+      let currency = selectedCurrency?.code ? selectedCurrency : settingObj?.general?.default_currency;
+      if (!currency?.code || !SUPPORTED_CURRENCIES[currency.code]) {
+        currency = DEFAULT_CURRENCY;
+      }
       const position = currency?.symbol_position || "before_price";
-      const symbol = currency?.symbol || "$";
+      const symbol = currency?.symbol || DEFAULT_CURRENCY.symbol;
       const rate = Number(currency?.exchange_rate) || 1;
       const amount = Number(value) * rate;
       if (isNaN(amount)) return `${symbol}0`;
-      // Currencies without decimals (COP, CLP, JPY, KRW, etc.)
-      const noDecimals = ["COP", "CLP", "JPY", "KRW", "VND", "IDR"].includes(currency?.code);
-      const formatted = noDecimals
-        ? Math.round(amount).toLocaleString("es-CO")
-        : amount.toFixed(2);
+      const decimals = Number.isFinite(Number(currency?.no_of_decimal))
+        ? Number(currency.no_of_decimal)
+        : 2;
+      // COP uses "es-CO" formatting (1.234.567); USD uses "en-US" (1,234,567.89).
+      const locale = currency.code === "COP" ? "es-CO" : "en-US";
+      const formatted = decimals === 0
+        ? Math.round(amount).toLocaleString(locale)
+        : amount.toLocaleString(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
       return position === "before_price" ? `${symbol}${formatted}` : `${formatted} ${symbol}`;
     },
     [settingObj, selectedCurrency]

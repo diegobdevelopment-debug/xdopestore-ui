@@ -57,9 +57,6 @@ export const StoreAPI = "/store";
 // Attributes API
 export const AttributesAPI = "/attribute";
 
-// Wallet API
-export const WalletConsumerAPI = "/wallet/consumer";
-
 // Address API
 export const AddressAPI = "/address";
 
@@ -89,9 +86,6 @@ export const UpdateProfilePasswordAPI = "/updatePassword";
 // Update Profile API
 export const NotificationAPI = "/notifications";
 export const MarkAsReadAPI = "/notifications/markAsRead";
-
-// Payment Account API
-export const PaymentAccountAPI = "/paymentAccount";
 
 // Points API
 export const PointAPI = "/points/consumer";

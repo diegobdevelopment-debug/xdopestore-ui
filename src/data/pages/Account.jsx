@@ -1,5 +1,8 @@
-import { RiBankLine, RiCoinLine, RiFileTextLine, RiHomeLine, RiNotificationLine, RiWalletLine, RiMapPinLine, RiDownload2Line, RiMoneyDollarCircleLine } from 'react-icons/ri';
+import { RiCoinLine, RiFileTextLine, RiHomeLine, RiMapPinLine, RiMoneyDollarCircleLine, RiNotificationLine } from 'react-icons/ri';
 
+// Static base of the account sidebar. Items that need to be conditionally
+// shown live in the `optional` list with a `flag` key — AccountSidebar reads
+// the storefront settings (settings.activation.<flag>) to decide visibility.
 export const sidebarMenu = [
   {
     title: 'Dashboard',
@@ -14,34 +17,17 @@ export const sidebarMenu = [
     path: '/account/notification',
   },
   {
-    title: 'BankDetails',
-    icon: <RiBankLine className='me-2'/>,
-    id: 'bank-details',
-    path: '/account/bank-details',
-  },
-  {
-    title: 'MyWallet',
-    icon: <RiWalletLine className='me-2'/>,
-    id: 'wallet',
-    path: '/account/wallet',
-  },
-  {
     title: 'EarningPoints',
     icon: <RiCoinLine className='me-2'/>,
     id: 'point',
     path: '/account/point',
+    flag: 'earning_points',
   },
   {
     title: 'MyOrders',
     icon: <RiFileTextLine className='me-2'/>,
     id: 'order',
     path: '/account/order',
-  },
-  {
-    title: 'Downloads',
-    icon: <RiDownload2Line className='me-2'/>,
-    id: 'downloads',
-    path: '/account/downloads',
   },
   {
     title: 'RefundHistory',
