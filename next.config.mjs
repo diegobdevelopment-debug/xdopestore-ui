@@ -10,6 +10,10 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "xdope-api.onrender.com",
+      },
+      {
         protocol: "http",
         hostname: "127.0.0.1",
       },
