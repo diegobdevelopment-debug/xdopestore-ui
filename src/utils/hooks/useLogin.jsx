@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
-import request from "../axiosUtils";
+import request, { saveSession } from "../axiosUtils";
 import { LoginAPI } from "../axiosUtils/API";
 import syncLocalCart from "../customFunctions/SyncLocalCart";
 import { YupObject, emailSchema, passwordSchema, recaptchaSchema } from "../validation/ValidationSchema";
@@ -19,8 +19,9 @@ export const LogInSchema = YupObject({
 
 const LoginHandle = async (responseData, router, refetch, CallBackUrl, cartRefetch, setShowBoxMessage, addToWishlist, setOpenAuthModal) => {
   if (responseData.status === 200 || responseData.status === 201) {
-    const token = responseData.data?.access_token || responseData.data?.token;
-    Cookies.set("uat", token, { path: "/", expires: new Date(Date.now() + 24 * 60 * 6000) });
+    // Save the whole session (access + refresh) in one place. saveSession
+    // normalises the key names the API returns and drops both cookies.
+    saveSession(responseData.data || {});
     if (typeof window !== "undefined") {
       Cookies.set("account", JSON.stringify(responseData.data));
       localStorage.setItem("account", JSON.stringify(responseData.data));
