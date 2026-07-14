@@ -5,6 +5,7 @@ import ThemeOptionContext from "@/context/themeOptionsContext";
 import { AllCountryCode } from "@/data/CountryCode";
 import Btn from "@/elements/buttons/Btn";
 import syncLocalCart from "@/utils/customFunctions/SyncLocalCart";
+import { saveSession } from "@/utils/axiosUtils";
 import { YupObject, emailSchema, nameSchema, passwordConfirmationSchema, passwordSchema, phoneSchema } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
@@ -44,12 +45,11 @@ const RegisterForm = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        const token = data?.access_token || data?.token;
-        if (token) {
-          Cookies.set("uat", token, { path: "/", expires: 7 });
+        // Store both access + refresh via shared helper.
+        saveSession(data || {});
+        if (data?.access_token || data?.token) {
           Cookies.set("account", JSON.stringify(data?.data || {}));
           localStorage.setItem("account", JSON.stringify(data?.data || {}));
-
           // Carry guest cart items over to the brand-new account.
           await syncLocalCart();
           cartRefetch && cartRefetch();
