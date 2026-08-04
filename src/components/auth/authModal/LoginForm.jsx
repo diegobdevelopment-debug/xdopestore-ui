@@ -4,6 +4,7 @@ import { Href } from "@/utils/constants";
 import CartContext from "@/context/cartContext";
 import ThemeOptionContext from "@/context/themeOptionsContext";
 import syncLocalCart from "@/utils/customFunctions/SyncLocalCart";
+import { saveSession } from "@/utils/axiosUtils";
 import { YupObject, emailSchema, passwordSchema } from "@/utils/validation/ValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
@@ -33,8 +34,9 @@ const LoginForm = ({ setState }) => {
       });
       const data = await res.json();
       if (res.ok) {
-        const token = data?.access_token || data?.token;
-        Cookies.set("uat", token, { path: "/", expires: 7 });
+        // Store both access + refresh via the shared helper so this modal
+        // and the page-based login stay in lock-step.
+        saveSession(data || {});
         Cookies.set("account", JSON.stringify(data?.data || {}));
         localStorage.setItem("account", JSON.stringify(data?.data || {}));
 
